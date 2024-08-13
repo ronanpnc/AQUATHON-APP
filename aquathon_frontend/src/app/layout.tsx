@@ -1,8 +1,8 @@
-import { TopNav } from '@/components/layouts/TopNav';
-import '@/styles/globals.css';
-
 import { type Metadata } from 'next';
 
+import '@/styles/globals.css';
+
+import { TopNav } from '@/components/layouts/TopNav';
 
 export const metadata: Metadata = {
   title: 'Aquathon App',

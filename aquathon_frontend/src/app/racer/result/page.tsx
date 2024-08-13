@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function ResultScreen() {
-  return (
-    <div>ResultScreen</div>
-  )
+  return <div>ResultScreen</div>;
 }
