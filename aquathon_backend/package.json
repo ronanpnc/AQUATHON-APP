@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . ",
-    "lint:fix": "eslint . --fix "   "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:fix": "eslint . --fix ",
     "dev": "tsc -w -p . & node --watch ./dist/"
   },
   "keywords": [],
