@@ -26,7 +26,7 @@ export function TopNav() {
 
   return (
     <NavigationMenu className='w-full bg-white shadow-md'>
-      <NavigationMenuList className='flex flex-row justify-start items-center space-x-4 py-4 px-6 h-16'>
+      <NavigationMenuList className='flex flex-row justify-start items-end space-x-4 px-6 h-14'>
         <NavigationMenuItem className='mr-48'>
           <Link href='/' passHref>
             <Image
@@ -34,7 +34,7 @@ export function TopNav() {
               alt='Logo'
               width={210}
               height={140}
-              className='cursor-pointer pl-4'
+              className='cursor-pointer pl-4 pb-2'
             />
           </Link>
         </NavigationMenuItem>
@@ -42,8 +42,8 @@ export function TopNav() {
           <NavigationMenuItem key={item.href} className='px-4'>
             <Link href={item.href} legacyBehavior passHref>
               <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} text-base ${
-                  pathname === item.href ? 'border-b-2 border-current' : ''
+                className={`${navigationMenuTriggerStyle()} pb-6 pt-8 text-lg ${
+                  pathname === item.href ? 'border-b-4 border-blue-500 rounded-none' : 'rounded-none border-transparent border-b-4'
                 }`}
               >
                 {item.label}
