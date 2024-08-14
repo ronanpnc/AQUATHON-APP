@@ -15,7 +15,7 @@
 4. **Run the App:**
     ```sh
     pnpm dev
-    ```### Frontend
+    ```
 
 ### Backend
 ### Setup Instructions
