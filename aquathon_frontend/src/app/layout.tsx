@@ -3,6 +3,7 @@ import '~/styles/globals.css';
 import { type Metadata } from 'next';
 
 import { TopNav } from '~/components/layouts/TopNav';
+import { Sidebar } from '~/components/layouts/sidebar';
 
 export const metadata: Metadata = {
   title: 'Aquathon App',
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang='en'>
       <body>
+        <Sidebar />
         <TopNav />
         <main>{children}</main>
       </body>
