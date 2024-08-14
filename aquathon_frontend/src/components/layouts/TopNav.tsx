@@ -43,7 +43,9 @@ export function TopNav() {
             <Link href={item.href} legacyBehavior passHref>
               <NavigationMenuLink
                 className={`${navigationMenuTriggerStyle()} pb-6 pt-8 text-lg ${
-                  pathname === item.href ? 'border-b-4 border-blue-500 rounded-none' : 'rounded-none border-transparent border-b-4'
+                  pathname === item.href
+                    ? 'border-b-4 border-primary rounded-none'
+                    : 'rounded-none border-transparent border-b-4'
                 }`}
               >
                 {item.label}
