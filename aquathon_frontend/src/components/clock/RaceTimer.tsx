@@ -16,6 +16,11 @@ export default function RaceTimer() {
     return () => clearInterval(intervalId);
   }, [isRunning]);
 
+  const startRace = () => setIsRunning(true);
+  const resetRace = () => {
+    setIsRunning(false);
+    setTime(0);
+  };
 
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor(milliseconds / 3600000);
