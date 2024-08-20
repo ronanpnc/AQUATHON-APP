@@ -1,16 +1,16 @@
 'use client';
 
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { Tooltip, TooltipContent,TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
 import { Ellipsis, PowerSquareIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { getMenuList } from '@/lib/menu-list';
+import { cn } from '@/lib/utils';
+
 import { CollapseMenuButton } from './collapse-menu-button';
 import { Button } from '../ui/button';
-
-import { getMenuList } from '~/lib/menu-list';
-import { cn } from '~/lib/utils';
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -94,7 +94,14 @@ export function Menu({ isOpen }: MenuProps) {
                     </span>
                     <div className=''>
                       <p className={cn('start-0 flex', isOpen === false ? 'opacity-0 hidden' : 'opacity-100')}>Admin</p>
-                      <p className={cn('text-slate-400 font-normal', isOpen === false ? 'opacity-0 hidden' : 'opacity-100')}>View profile</p>
+                      <p
+                        className={cn(
+                          'text-slate-400 font-normal',
+                          isOpen === false ? 'opacity-0 hidden' : 'opacity-100',
+                        )}
+                      >
+                        View profile
+                      </p>
                     </div>
                   </Button>
                 </TooltipTrigger>

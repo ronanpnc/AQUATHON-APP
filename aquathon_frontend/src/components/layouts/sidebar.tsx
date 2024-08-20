@@ -4,12 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useStore } from 'zustand';
 
+import { useSidebarToggle } from '@/hooks/use-sidebar-toggle';
+import { cn } from '@/lib/utils';
+
+import { Button } from '../ui/button';
 import { Menu } from './menu';
 import { SidebarToggle } from './sidebar-toggle';
-import { Button } from '../ui/button';
-
-import { useSidebarToggle } from '~/hooks/use-sidebar-toggle';
-import { cn } from '~/lib/utils';
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);
@@ -39,24 +39,24 @@ export function Sidebar() {
               alt='Logo'
               width={210}
               height={120}
-              className={cn('cursor-pointer', sidebar?.isOpen === true
-                ? "-translate-x-96 opacity-0 hidden"
-                : "translate-x-0 opacity-100")}
+              className={cn(
+                'cursor-pointer',
+                sidebar?.isOpen === true ? '-translate-x-96 opacity-0 hidden' : 'translate-x-0 opacity-100',
+              )}
             />
             <Image
               src='/assets/icons/ic_logo.svg'
               alt='Logo'
               width={210}
               height={120}
-              className={cn('cursor-pointer', sidebar?.isOpen === false
-                ? "-translate-x-96 opacity-0 hidden"
-                : "translate-x-0 opacity-100")}
+              className={cn(
+                'cursor-pointer',
+                sidebar?.isOpen === false ? '-translate-x-96 opacity-0 hidden' : 'translate-x-0 opacity-100',
+              )}
             />
           </Link>
         </Button>
-        <Menu
-          isOpen={sidebar?.isOpen}
-        />
+        <Menu isOpen={sidebar?.isOpen} />
       </div>
     </aside>
   );

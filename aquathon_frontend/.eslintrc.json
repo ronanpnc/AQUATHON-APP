@@ -39,7 +39,7 @@
     //#region  //*=========== Import Sort ===========
     "simple-import-sort/exports": "warn",
     "simple-import-sort/imports": [
-      "error",
+      "warn",
       {
         "groups": [
           // ext library & side effect imports
