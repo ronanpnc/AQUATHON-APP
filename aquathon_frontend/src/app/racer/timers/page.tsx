@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function TimerScreen() {
-  return (
-    <div>TimerScreen</div>
-  )
+  return <div>TimerScreen</div>;
 }

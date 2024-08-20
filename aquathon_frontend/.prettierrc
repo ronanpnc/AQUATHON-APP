@@ -3,5 +3,8 @@
   "printWidth": 120,
   "singleQuote": true,
   "arrowParens": "always",
-  "jsxSingleQuote": true
+  "jsxSingleQuote": true,
+  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
