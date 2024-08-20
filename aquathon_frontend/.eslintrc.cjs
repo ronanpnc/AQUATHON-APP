@@ -47,7 +47,15 @@ const config = {
         "newlines-between": "always",
         "alphabetize": { "order": "asc", "caseInsensitive": true }
       }
-    ]
+    ],
+    "import/resolver": {
+      // @ts-ignore
+      node: {
+        paths: ["src"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+      typescript: {},  // This ensures ESLint understands TypeScript paths
+    },
   }
 }
 module.exports = config;
