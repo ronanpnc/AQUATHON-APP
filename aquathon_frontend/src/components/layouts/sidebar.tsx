@@ -1,14 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useStore } from 'zustand';
-import { useSidebarToggle } from '~/hooks/use-sidebar-toggle';
 
-import { cn } from '~/lib/utils';
-import { Button } from '../ui/button';
-import { SidebarToggle } from './sidebar-toggle';
 import { Menu } from './menu';
+import { SidebarToggle } from './sidebar-toggle';
+import { Button } from '../ui/button';
+
+import { useSidebarToggle } from '~/hooks/use-sidebar-toggle';
+import { cn } from '~/lib/utils';
 
 export function Sidebar() {
   const sidebar = useStore(useSidebarToggle, (state) => state);

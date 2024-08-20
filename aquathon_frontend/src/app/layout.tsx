@@ -1,9 +1,9 @@
-import '~/styles/globals.css';
-
+import { Sidebar } from 'lucide-react';
 import { type Metadata } from 'next';
 
-import { TopNav } from '~/components/layouts/TopNav';
-import { Sidebar } from '~/components/layouts/sidebar';
+import '@/styles/globals.css';
+
+import { TopNav } from '@/components/layouts/TopNav';
 
 export const metadata: Metadata = {
   title: 'Aquathon App',

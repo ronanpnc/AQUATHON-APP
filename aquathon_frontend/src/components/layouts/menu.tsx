@@ -1,15 +1,16 @@
 'use client';
 
 import { ScrollArea } from '@radix-ui/react-scroll-area';
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@radix-ui/react-tooltip';
-import { Ellipsis, LogOut, PowerSquareIcon } from 'lucide-react';
+import { Tooltip, TooltipContent,TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
+import { Ellipsis, PowerSquareIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { cn } from '~/lib/utils';
-import { Button } from '../ui/button';
 import { CollapseMenuButton } from './collapse-menu-button';
+import { Button } from '../ui/button';
+
 import { getMenuList } from '~/lib/menu-list';
+import { cn } from '~/lib/utils';
 
 interface MenuProps {
   isOpen: boolean | undefined;
