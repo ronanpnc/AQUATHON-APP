@@ -23,7 +23,7 @@ const RaceCard: React.FC<RaceCardProps> = ({ id, name, date, time, status, parti
   const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM';
 
   return (
-    <Link href={`/race/${id}`} className='block'>
+    <Link href={`/races/${id}`} className='block'>
       <div className='flex items-center justify-between p-4 bg-white drop-shadow-xl rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200'>
         <div className='flex items-center'>
           <div className='mr-4 flex flex-col items-center justify-center'>
