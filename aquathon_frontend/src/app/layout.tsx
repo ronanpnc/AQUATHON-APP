@@ -1,4 +1,3 @@
-import { Sidebar } from 'lucide-react';
 import { type Metadata } from 'next';
 
 import '@/styles/globals.css';
@@ -15,9 +14,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang='en'>
       <body>
-        <Sidebar />
         <TopNav />
-        <main>{children}</main>
+        <main className='pt-20'>{children}</main>
       </body>
     </html>
   );
