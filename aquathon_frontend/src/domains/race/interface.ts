@@ -1,9 +1,3 @@
-export enum RaceStatus {
-  Finished = 'Finished',
-  Ongoing = 'Ongoing',
-  Pending = 'Pending',
-}
-
 export interface Race {
   id: string;
   name: string;
@@ -11,4 +5,10 @@ export interface Race {
   time: string;
   status: RaceStatus;
   participants: number;
+}
+
+export enum RaceStatus {
+  Finished = 'Finished',
+  Ongoing = 'Ongoing',
+  Pending = 'Pending',
 }

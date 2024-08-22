@@ -71,7 +71,7 @@ export default function MyRace() {
   ];
 
   return (
-    <div className='p-4'>
+    <div className='p-2'>
       {[...races, ...races, ...races, ...races, ...races].map((race) => (
         <RaceCard key={race.id} race={race} />
       ))}
