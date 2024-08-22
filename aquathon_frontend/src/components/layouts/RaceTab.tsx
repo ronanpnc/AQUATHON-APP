@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, Timer } from 'lucide-react';
+import { ChevronLeft, EllipsisVertical, LayoutDashboard, Timer } from 'lucide-react';
 import Head from 'next/head';
 import React, { useState } from 'react';
 
@@ -35,17 +35,32 @@ export function RaceTab() {
 
 function Header() {
   return (
-    <header className='flex items-center p-4 border-b border-gray-300'>
-      <BackButton />
-      <h1 className='text-xl font-semibold pl-10'>Race 1</h1>
-    </header>
+    <nav className='flex items-center justify-between p-4 border-b border-gray-300'>
+      <div className='flex items-center'>
+        <BackButton />
+        <h1 className='text-xl font-semibold ml-4'>Race 1</h1>
+      </div>
+      <MoreButton />
+    </nav>
   );
 }
 
 function BackButton() {
   return (
     <button className='text-2xl'>
-      <a href='/races'>←</a>
+      <a href='/races'>
+        <ChevronLeft />
+      </a>
+    </button>
+  );
+}
+
+function MoreButton() {
+  return (
+    <button className='text-2xl'>
+      <a href='/races'>
+        <EllipsisVertical />
+      </a>
     </button>
   );
 }
