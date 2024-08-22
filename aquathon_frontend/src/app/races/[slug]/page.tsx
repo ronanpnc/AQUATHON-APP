@@ -13,9 +13,7 @@ export default function Race() {
 
   return (
     <>
-     <div>
-      hi
-     </div>
+      <div>hi</div>
     </>
   );
 }

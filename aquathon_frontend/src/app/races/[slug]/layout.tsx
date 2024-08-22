@@ -43,7 +43,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             ))}
           </div>
         </div>
-
         <div className='flex-grow p-4'>{children}</div>
       </div>
     </>
