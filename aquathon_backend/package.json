@@ -7,7 +7,8 @@
     "format": "prettier --write .",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix ",
-    "dev": "tsc -w -p . & node --watch --env-file=.env ./dist/"
+    "dev": "NODE_ENV=development tsc -w & node --watch ./dist/",
+    "prod": "NODE_ENV=production tsc && node ./dist/"
   },
   "keywords": [],
   "author": "",

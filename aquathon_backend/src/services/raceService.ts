@@ -10,7 +10,7 @@ export const getRace = async (id:string) => {
 }
 
 export const createRace = async () => {
-    const new_race = new Race({name:"race1"});
+    const new_race = new Race();
     const res = await new_race.save().catch(error => {throw error});
     return res;
 }
