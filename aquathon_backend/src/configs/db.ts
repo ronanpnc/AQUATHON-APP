@@ -1,11 +1,9 @@
 import mongoose from 'mongoose'
-const db_url =
-  process.env.NODE_ENV === 'development'
-    ? process.env.NODE_MONGO_DB + process.env.NODE_DEV_DB + process.env.NODE_MONGO_DB_OPT
-    : process.env.NODE_MONGO_DB + process.env.NODE_PROD_DB+ process.env.NODE_MONGO_DB_OPT
+const db_url = process.env.NODE_MONGODB;
 export const db = mongoose.createConnection(
     db_url
 )
+//console.log(db_url);
 
 export function connectDB() {
   try {
