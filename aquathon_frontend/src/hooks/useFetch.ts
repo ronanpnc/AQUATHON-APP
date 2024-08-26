@@ -1,5 +1,6 @@
 "use client"
-import { useState, useEffect } from "react";
+import { Race } from "@/domains/race/interface";
+import { useEffect,useState } from "react";
 export const useFetch = <T,>(url: string) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,5 +27,9 @@ export const useFetch = <T,>(url: string) => {
   }, [url]);
 
   return { data, loading, error };
-
 };
+
+export const useFetchRace = () => {
+    const url = "http://localhost:4000/api/races/list";
+    return useFetch<Race[]>(url);
+}

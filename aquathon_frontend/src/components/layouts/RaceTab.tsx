@@ -23,7 +23,7 @@ export function RaceTab() {
   return (
     <>
       <Head>
-        <title>Race 1</title>
+        <title>Race</title>
       </Head>
       <div className='flex flex-col'>
         <Header />
@@ -38,7 +38,7 @@ function Header() {
     <nav className='flex items-center justify-between p-4 border-b border-gray-300'>
       <div className='flex items-center'>
         <BackButton />
-        <h1 className='text-xl font-semibold ml-4'>Race 1</h1>
+        <h1 className='text-xl font-semibold ml-4'>Race</h1>
       </div>
       <MoreButton />
     </nav>

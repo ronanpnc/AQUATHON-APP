@@ -1,8 +1,8 @@
-import { Flag, RefreshCw, Timer } from 'lucide-react';
+import { Flag, LucideIcon, RefreshCw, Timer } from 'lucide-react';
 
 import { Race } from './interface';
 
-export const STATUS_ICONS: Record<Race['status'], typeof Flag> = {
+export const STATUS_ICONS: Record<Race['status'], LucideIcon> = {
   Finished: Flag,
   Ongoing: RefreshCw,
   Pending: Timer,
