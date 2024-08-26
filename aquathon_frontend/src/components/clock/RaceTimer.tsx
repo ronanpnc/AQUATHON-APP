@@ -3,38 +3,44 @@
 import React, { useEffect, useState } from 'react';
 
 export default function RaceTimer() {
-  const [time, setTime] = useState(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     let intervalId: number;
     if (isRunning) {
       intervalId = window.setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
+        setElapsedTime(Date.now() - (startTime ?? Date.now()));
       }, 10);
     }
     return () => clearInterval(intervalId);
-  }, [isRunning]);
+  }, [isRunning, startTime]);
 
-  const startRace = () => setIsRunning(true);
+  const startRace = () => {
+    setStartTime(Date.now() - elapsedTime);
+    setIsRunning(true);
+  };
+
   const resetRace = () => {
     setIsRunning(false);
-    setTime(0);
+    setElapsedTime(0);
+    setStartTime(null);
   };
 
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor(milliseconds / 3600000);
     const minutes = Math.floor((milliseconds % 3600000) / 60000);
     const seconds = Math.floor((milliseconds % 60000) / 1000);
-    const ms = Math.floor((milliseconds % 1000) / 100);
+    const ms = Math.floor((milliseconds % 1000) / 10);
 
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className='bg-gray-800 p-8 rounded-lg shadow-lg text-center'>
+    <div className='p-8 rounded-lg shadow-lg text-center'>
       <h2 className='text-3xl font-bold mb-6 text-white'>Race Timer</h2>
-      <div className='text-5xl font-mono mb-8 text-green-400'>{formatTime(time)}</div>
+      <div className='text-5xl font-mono mb-8 text-green-400'>{formatTime(elapsedTime)}</div>
       <div className='space-x-4'>
         <button
           onClick={startRace}

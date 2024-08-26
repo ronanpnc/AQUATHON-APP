@@ -15,7 +15,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang='en'>
       <body>
         <TopNav />
-        <main>{children}</main>
+        <main className='pt-20'>{children}</main>
       </body>
     </html>
   );
