@@ -6,7 +6,7 @@ export const getRaces = async () => {
 }
 export const getRace = async (id:string) => {
     const data = await Race.find({_id:id}).catch(error => {throw error});
-    return data;
+    return data[0];
 }
 
 export const createRace = async () => {
@@ -22,7 +22,6 @@ export const getRaceStartTime = async (id:string) => {
 
 export const setRaceStartTime = async (id:string, status:"start" |"reset") => {
     const data = await Race.find({_id:id}).select("startTime").catch(error => {throw error});
-    console.log(status);
     if (status == "start"){
         data[0].startTime = new Date();
     }else if (status == "reset"){
