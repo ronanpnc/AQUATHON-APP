@@ -7,8 +7,8 @@
     "format": "prettier --write .",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix ",
-    "dev": "NODE_ENV=development concurrently \"tsc -w\" \"node --watch ./dist/\"",
-    "prod": "NODE_ENV=production tsc && node ./dist/"
+    "dev": "concurrently \"tsc -w\" \"node --watch ./dist/\"",
+    "start": "node ./dist/"
   },
   "keywords": [],
   "author": "",
