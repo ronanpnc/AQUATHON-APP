@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var timeRouter = require("./timeRouter");
+var raceRouter = require("./raceRouter");
+var competitorRouter = require("./competitorRouter");
+var router = (0, express_1.Router)();
+router.use("/api/time", timeRouter.default);
+router.use("/api/races", raceRouter.default);
+router.use("/api/competitor", competitorRouter.default);
+exports.default = router;
