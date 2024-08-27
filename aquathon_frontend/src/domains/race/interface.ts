@@ -1,7 +1,8 @@
 export interface Race {
-  id: string;
-  name: string;
+  _id: string;
+  title: string;
   date: string;
+  startTime: string;
   time: string;
   status: RaceStatus;
   participants: number;
