@@ -9,26 +9,27 @@ export default function RaceTimer({time, startTimer, resetTimer}:IRaceTimer) {
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    setElapsedTime(0);
     let intervalId: number;
     if (time !== null) {
       intervalId = window.setInterval(() => {
-          setIsRunning(true)
           setElapsedTime(Date.now() - time.getTime());
-      }, 10);
-      return () => clearInterval(intervalId);
-    }
-    setIsRunning(false)
+      }, 100);
+        setIsRunning(true);
+    } else {
+        setIsRunning(false);
+        setElapsedTime(0);
+    };
     return () => clearInterval(intervalId);
   }, [time]);
 
+  useEffect(() => {
+  }, []);
+
   const startRace = () => {
-    setElapsedTime(0);
     startTimer();
   };
 
   const resetRace = () => {
-    setElapsedTime(0);
     resetTimer();
   };
 
@@ -39,7 +40,7 @@ export default function RaceTimer({time, startTimer, resetTimer}:IRaceTimer) {
     const seconds = Math.floor((milliseconds % 60000) / 1000);
     const ms = Math.floor((milliseconds % 1000) / 10);
 
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().slice(0,1)}`;
   };
   return (
     <div className='p-8 rounded-lg shadow-lg text-center'>
