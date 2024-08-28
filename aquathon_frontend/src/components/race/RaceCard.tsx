@@ -5,7 +5,7 @@ import { STATUS_COLORS, STATUS_ICONS } from '@/domains/race/constants';
 import { Race } from '@/domains/race/interface';
 
 const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
-  const { _id, title,time, startTime, date, participants, status } = race;
+  const { _id, title,time, date, participants, status } = race;
   const [hours] = time.split(':');
   const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM';
   const StatusIcon = STATUS_ICONS[status];

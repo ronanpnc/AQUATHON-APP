@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 interface IRaceTimer {
     time: Date|null;
@@ -13,12 +11,14 @@ export default function RaceTimer({time, startTimer, resetTimer}:IRaceTimer) {
   useEffect(() => {
     setElapsedTime(0);
     let intervalId: number;
-    if (time !== null && time !== undefined) {
+    if (time !== null) {
       intervalId = window.setInterval(() => {
+          setIsRunning(true)
           setElapsedTime(Date.now() - time.getTime());
       }, 10);
       return () => clearInterval(intervalId);
     }
+    setIsRunning(false)
     return () => clearInterval(intervalId);
   }, [time]);
 
