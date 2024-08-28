@@ -5,8 +5,6 @@ import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Users 
 import Head from 'next/head';
 import React, { useState } from 'react';
 
-import { Button } from '../ui/button';
-
 // Define tab type
 type Tab = {
   id: string;
@@ -32,7 +30,7 @@ export function RaceTab() {
       </Head>
       <div className='flex flex-col'>
         <Header />
-        <TabNavigation tabs={tabs.slice(-2)} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabNavigation tabs={tabs.slice(0, 2)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </>
   );
@@ -69,16 +67,12 @@ function MoreButton() {
         </button>
       </PopoverTrigger>
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-2'>
-        <div className='p-4'>
+        <div className='p-1'>
           {tabs.slice(-2).map((tab) => (
-            <Button
-              variant='secondary'
-              key={tab.id}
-              className='flex items-center w-full text-left p-2 hover:bg-gray-100'
-            >
+            <div key={tab.id} className='flex items-center'>
               {tab.Icon}
-              <p className='m-2'>{tab.label}</p>
-            </Button>
+              <p className='ml-2'>{tab.label}</p>
+            </div>
           ))}
         </div>
       </PopoverContent>
