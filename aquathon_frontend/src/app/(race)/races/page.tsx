@@ -8,11 +8,11 @@ export default function MyRace() {
   const { data } = useFetchRaces();
 
   return (
-    <>
+    <div>
       <div className='p-2'>{data?.map((race) => <RaceCard key={race._id} race={race} />)}</div>
       <div className='fixed bottom-4 right-4'>
         <AddRaceButton />
       </div>
-    </>
+    </div>
   );
 }
