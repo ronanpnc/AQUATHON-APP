@@ -1,4 +1,5 @@
 'use client';
+
 import { useFetchRace as useFetchRaces } from '@/hooks/useFetch';
 
 import { AddRaceButton } from '@/components/race/AddRaceButton';
