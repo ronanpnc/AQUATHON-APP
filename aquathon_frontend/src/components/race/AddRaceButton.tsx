@@ -32,7 +32,7 @@ export function AddRaceButton() {
 function ActionButton() {
   return (
     <div className='rounded-full h-12 w-12 border-2 border-gray-300 flex items-center justify-center'>
-      <Plus strokeWidth={3} className='h-6 w-6' />
+      <Plus strokeWidth={2} className='h-8 w-8' />
     </div>
   );
 }
