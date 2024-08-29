@@ -26,7 +26,8 @@ const formSchema = z.object({
   ),
   time: z.string().refine(
     (value) => {
-      const selectedTime = new Date(`01/01/2000 ${value}`);
+      const selectedTime = new Date(value);
+      console.log({ value });
       const currentTime = new Date();
       return selectedTime > currentTime;
     },
@@ -57,9 +58,9 @@ export default function CreateRaceForm() {
   };
 
   return (
-    <main className='flex min-h-screen w-full flex-col items-center p-8'>
+    <main className='flex min-h-screen w-full justify-center p-8'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap'>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
             control={form.control}
             name='raceName'
@@ -75,6 +76,7 @@ export default function CreateRaceForm() {
               );
             }}
           />
+
           <FormField
             control={form.control}
             name='date'
@@ -90,6 +92,7 @@ export default function CreateRaceForm() {
               );
             }}
           />
+
           <FormField
             control={form.control}
             name='time'
@@ -105,6 +108,7 @@ export default function CreateRaceForm() {
               );
             }}
           />
+
           <FormField
             control={form.control}
             name='split'
