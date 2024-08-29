@@ -1,10 +1,8 @@
-"use client"
-import { useState, useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import socket from 'socket.io-client';
 
 
 const useSocket = (serverUrl:string) => {
-    const [socket, setSocket] = useState(0);
     const [isConnected, setConnected] = useState(false);
 
     useEffect(() => {
@@ -14,7 +12,7 @@ const useSocket = (serverUrl:string) => {
 
     }, [serverUrl, isConnected]);
 
-    return { temp, isConnected };
+    return {isConnected };
 }
 
 export default  useSocket;

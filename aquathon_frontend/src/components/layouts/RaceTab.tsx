@@ -1,6 +1,7 @@
 'use client';
 
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Timer } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
+import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Users } from 'lucide-react';
 import Head from 'next/head';
 import React, { useState } from 'react';
 
@@ -15,6 +16,8 @@ type Tab = {
 const tabs: Tab[] = [
   { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer /> },
   { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard /> },
+  { id: 'Setting', label: 'Setting', Icon: <Settings /> },
+  { id: 'Participants', label: 'Participants', Icon: <Users /> },
 ];
 
 export function RaceTab() {
@@ -27,7 +30,7 @@ export function RaceTab() {
       </Head>
       <div className='flex flex-col'>
         <Header />
-        <TabNavigation tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabNavigation tabs={tabs.slice(0, 2)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </>
   );
@@ -57,11 +60,24 @@ function BackButton() {
 
 function MoreButton() {
   return (
-    <button className='text-2xl'>
-      <a href='/races'>
-        <EllipsisVertical />
-      </a>
-    </button>
+    <Popover>
+      <PopoverTrigger asChild>
+        <button className='p-2'>
+          <EllipsisVertical className='h-6 w-6' />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-2'>
+        <div className='p-2'>
+          {tabs.slice(-2).map((tab, index) => (
+            <div key={tab.id} className={`flex items-center ${index === 1 ? 'mt-2' : ''}`}>
+              {tab.Icon}
+              <p className='ml-2 mr-4'>{tab.label}</p>
+              <div className='mt-1'></div>
+            </div>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 
