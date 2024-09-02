@@ -1,10 +1,11 @@
 
 import { Request, Response } from "express";
-import { createRace, getRace, getRaces, getRaceStartTime, setRaceStartTime } from "../services/raceService";
+import { createRace, deleteRace, getRace, getRaces, getRaceStartTime , updateRace } from "../services/raceService";
+import { IRace } from "../models/raceModel";
 
 class RaceController {
     static async getRace(req: Request, res: Response) {
-        const param = req.params['id'];
+        const param = req.params['raceId'];
         try {
             const data = await getRace(param);
             return res.status(200).send(data);
@@ -14,8 +15,10 @@ class RaceController {
         }
     }
     static async getMyRaces(req: Request, res: Response) {
+        const page = req.query.page as string;
+        const limit = req.query.limit as string;
         try {
-            const data = await getRaces();
+            const data = await getRaces(parseInt(page),parseInt(limit));
             return res.status(200).send(data);
         } catch (error) {
             console.log(error);
@@ -24,8 +27,17 @@ class RaceController {
     }
     static async createRace(req: Request, res: Response) {
         try {
-            const data = await createRace();
-            return res.status(200).send(data);
+            const data : IRace = {
+                title: req.body.title,
+                date: req.body.date,
+                startTime: null,
+                swimDistance: req.body.swimDistance,
+                runDistance: req.body.runDistance,
+                timeRaceConfigs: req.body.timeRaceConfigs,
+                status: "upcoming"
+            };
+            const result = await createRace(data);
+            return res.status(200).send(result);
         } catch (error) {
             console.log(error);
             return res.status(500).send({ "msg": "unable to create the race" });
@@ -33,7 +45,7 @@ class RaceController {
     }
 
     static async getRaceStartTime(req: Request, res: Response) {
-        const param = req.params['id'];
+        const param = req.params['raceId'];
         try {
             const data = await getRaceStartTime(param);
             return res.status(200).send(data);
@@ -43,11 +55,11 @@ class RaceController {
         }
     }
 
-    static async setRaceStartTime(req: Request, res: Response) {
-        const param = req.params['id'];
+    static async updateRace(req: Request, res: Response) {
+        const param = req.params['raceId'];
 
         try {
-            const data = await setRaceStartTime(param,req.body?.status);
+            const data = await updateRace(param,req.body);
             return res.status(200).send(data);
         } catch (error) {
             console.log(error);
@@ -56,8 +68,9 @@ class RaceController {
     }
 
     static async deleteRace(req: Request, res: Response) {
+        const param = req.params['raceId'];
         try {
-            const data = await createRace();
+            const data = await deleteRace(param);
             return res.status(200).send(data);
         } catch (error) {
             console.log(error);

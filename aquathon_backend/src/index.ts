@@ -26,7 +26,7 @@ const swaggerOptions = {
       description: ''
     }
   },
-  apis: ['./src/routes/api/*.ts'] // files containing annotations as above
+  apis: [ './src/models/*.ts','./src/routes/api/*.ts'] // files containing annotations as above
 }
 
 app.use(

@@ -1,13 +1,42 @@
-import { Document, Schema } from 'mongoose'
+import  mongoose, { Document, Schema } from 'mongoose'
+import { db } from '../configs/db'
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     TimeRaceConfig:
+ *       type: object
+ *       required:
+ *         - _id
+ *         - type
+ *         - mode
+ *       properties:
+ *         _id:
+ *           type: string
+ *           format: objectId
+ *           description: Unique identifier for the time race configuration.
+ *         type:
+ *           type: string
+ *           description: The type of the time race configuration.
+ *         mode:
+ *           type: string
+ *           description: The mode of the time race.
+ *         timeTrack:
+ *           type: string
+ *           description: The track or path associated with the time race (optional).
+ *       example:
+ *         _id: "60d0fe4f5311236168a109ca"
+ *         type: "sprint"
+ *         mode: "competitive"
+ *         timeTrack: []
+ */
 
-// Step mongooe1: Define the Interface
+
 export interface ITimeRaceConfig extends Document {
   type: string
   mode: string
-  timeTrack: string
+  timeTrackId: string[]
 }
-
-// Step 2: Define the Schema
 const timeRaceConfigSchema = new Schema<ITimeRaceConfig>(
   {
     type: {
@@ -18,13 +47,10 @@ const timeRaceConfigSchema = new Schema<ITimeRaceConfig>(
       type: String,
       required: true
     },
-    timeTrack: {
-      type: String,
-      required: true
-    }
+    timeTrackId: [
+        String
+    ],
   },
-  { timestamps: true, collection: 'timeConfigs' }
 )
-
-// Step 3: Define and Export the Model
+export const TimeRaceConfig = db.model("TimeRaceConfig", timeRaceConfigSchema)
 export default timeRaceConfigSchema
