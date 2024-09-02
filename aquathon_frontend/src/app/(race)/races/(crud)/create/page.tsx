@@ -14,7 +14,7 @@ export default function CreateRacePage() {
           <span className='ml-4'>Create New Race</span>
         </div>
       </nav>
-      <div className='mt-12'>
+      <div className='mt-16'>
         <CreateRaceForm />
       </div>
     </div>
