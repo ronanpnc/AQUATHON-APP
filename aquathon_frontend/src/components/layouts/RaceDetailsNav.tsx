@@ -20,7 +20,7 @@ const tabs: Tab[] = [
   { id: 'Participants', label: 'Participants', Icon: <Users /> },
 ];
 
-export function RaceTab() {
+export function RaceDetailsNav() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
