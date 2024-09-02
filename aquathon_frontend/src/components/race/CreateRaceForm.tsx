@@ -9,47 +9,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 
 const formSchema = z.object({
-  raceName: z.string().refine((value) => value.trim() !== '', {
-    message: 'Race Name cannot be empty',
-    path: ['raceName'],
-  }),
-  date: z.string().refine(
-    (value) => {
-      const selectedDate = new Date(value);
-      const currentDate = new Date();
-      return selectedDate > currentDate;
-    },
-    {
-      message: 'Invalid date',
-      path: ['date'],
-    },
-  ),
-  time: z.string().refine(
-    (value) => {
-      const selectedTime = new Date(`01/01/2000 ${value}`);
-      const currentTime = new Date();
-      return selectedTime > currentTime;
-    },
-    {
-      message: 'Invalid time',
-      path: ['time'],
-    },
-  ),
-  split: z.string().refine((value) => value.trim() !== '', {
-    message: 'Split cannot be empty',
-    path: ['split'],
-  }),
+  raceName: z.string(),
+  date: z.date(),
+  time: z.string(),
+  split: z.string(),
 });
 
 export default function CreateRaceForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      raceName: '',
-      date: '',
-      time: '',
-      split: '',
-    },
   });
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
@@ -57,9 +25,9 @@ export default function CreateRaceForm() {
   };
 
   return (
-    <main className='flex min-h-screen w-full flex-col items-center p-8'>
+    <main className='flex min-h-screen w-full justify-center p-8'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap'>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
             control={form.control}
             name='raceName'
@@ -75,6 +43,7 @@ export default function CreateRaceForm() {
               );
             }}
           />
+
           <FormField
             control={form.control}
             name='date'
@@ -82,7 +51,7 @@ export default function CreateRaceForm() {
               return (
                 <FormItem>
                   <FormLabel>Date</FormLabel>
-                  <FormControl>
+                  <FormControl className='mb-4'>
                     <Input placeholder='Date' type='date' {...field} />
                   </FormControl>
                   <FormMessage />
@@ -90,6 +59,7 @@ export default function CreateRaceForm() {
               );
             }}
           />
+
           <FormField
             control={form.control}
             name='time'
@@ -105,6 +75,7 @@ export default function CreateRaceForm() {
               );
             }}
           />
+
           <FormField
             control={form.control}
             name='split'

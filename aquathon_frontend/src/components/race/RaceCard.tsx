@@ -56,7 +56,7 @@ const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS; StatusIcon: 
   StatusIcon,
 }) => {
   return (
-    <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'Finished' ? 'currentColor' : 'none'} />
+    <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'finished' ? 'currentColor' : 'none'} />
   );
 };
 
