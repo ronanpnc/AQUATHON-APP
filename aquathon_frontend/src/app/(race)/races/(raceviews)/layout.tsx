@@ -10,3 +10,4 @@ export default function RaceViewLayout({ children }: Readonly<{ children: React.
     </div>
   );
 }
+  
