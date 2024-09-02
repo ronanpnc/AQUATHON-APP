@@ -2,8 +2,6 @@ import { type Metadata } from 'next';
 
 import '@/styles/globals.css';
 
-import { TopNav } from '@/components/layouts/TopNav';
-
 export const metadata: Metadata = {
   title: 'Aquathon App',
   description: 'Race Time Tracker',
@@ -14,8 +12,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang='en'>
       <body>
-        <TopNav />
-        <main className='pt-20'>{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   );

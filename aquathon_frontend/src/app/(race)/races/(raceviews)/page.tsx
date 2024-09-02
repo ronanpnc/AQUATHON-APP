@@ -5,7 +5,7 @@ import { useFetchRace as useFetchRaces } from '@/hooks/useFetch';
 import { AddRaceButton } from '@/components/race/AddRaceButton';
 import RaceCard from '@/components/race/RaceCard';
 
-export default function MyRace() {
+export default function MyRacePage() {
   const { data } = useFetchRaces();
 
   return (
