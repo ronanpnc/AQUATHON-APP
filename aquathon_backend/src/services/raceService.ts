@@ -1,7 +1,12 @@
-import { Race } from '../models/raceModel'
+import { IRace, Race } from '../models/raceModel'
 
-export const getRaces = async () => {
-  const data = await Race.find({}).catch((error) => {
+export const getRaces = async (limit:number = 2, page: number = 1) => {
+  //
+  const data = await Race
+  .find({},{participants:0, timeRaceConfigs:0, startTime:0})
+  .skip((page - 1) * limit)
+  .limit(limit)
+  .catch((error) => {
     throw error
   })
   return data
@@ -14,14 +19,12 @@ export const getRace = async (id: string) => {
 }
 
 // delete the race with new obj
-export const createRace = async () => {
+export const createRace = async (data:IRace) => {
   const new_race = new Race({
-    title: 'testing',
-    time: new Date(),
-    status: 'upcoming',
-    swimDistance: 1,
-    runDistance: 10,
-    startTime: null
+      startTime:null,
+      status:"upcoming",
+      date: new Date(data.date),
+      ...data,
   })
   const res = await new_race.save().catch((error) => {
     throw error
@@ -30,8 +33,8 @@ export const createRace = async () => {
 }
 
 // update the race with corresponding id
-export const updateRace = async (id: string, data) => {
-  const res = await Race.findOneAndUpdate({ _id: id }, data, { new: true })
+export const updateRace = async (id: string, data:Partial<IRace>) => {
+  const res = await Race.findOneAndUpdate({ _id: id },data, { new: true })
   return res
 }
 
