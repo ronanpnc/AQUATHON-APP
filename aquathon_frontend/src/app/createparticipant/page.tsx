@@ -1,11 +1,17 @@
 'use client';
 
-import { ChevronLeft, X } from 'lucide-react';
-import { useState } from 'react';
+import { X } from 'lucide-react';
+import React, { useState } from 'react';
 
-import '@/styles/globals.css';
-
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const CreateParticipant = () => {
   const [formValues, setFormValues] = useState({
@@ -28,15 +34,15 @@ const CreateParticipant = () => {
     console.log(formValues);
   };
 
-  const renderInputField = (label: string, name: string, type = 'text') => (
-    <div className=''>
+  const renderInputField = (label: string, name: string, type = 'text', placeholder: string) => (
+    <div>
       <label className='block text-sm font-medium text-gray-700'>{label}</label>
       <input
         type={type}
         name={name}
-        // value={formValues[name]}
+        placeholder={placeholder}
         onChange={handleChange}
-        className='mt-1 mb-5 h-10 block w-full border border-gray-300 rounded-md p-2 shadow-sm outline-none'
+        className='mt-1 mb-5 h-10 block w-full border border-gray-300 rounded-xl p-4 shadow-sm outline-none'
       />
     </div>
   );
@@ -44,35 +50,36 @@ const CreateParticipant = () => {
   return (
     <div>
       <nav className='flex items-center justify-between border-b p-4 border-gray-300 shadow-md shadow-[#F3F4F6] mb-4'>
-      <div className='flex items-center'>
-        <BackButton />
-        <h1 className='text-xl font-bold ml-4'>Create Participant</h1>
-      </div>
+        <div className='flex items-center'>
+          <BackButton />
+          <h1 className='text-xl font-bold ml-4'>Create New Participant</h1>
+        </div>
       </nav>
       <form onSubmit={handleSubmit} className='space-y-4 max-w-md mx-auto p-4'>
-        {renderInputField('First Name', 'firstName')}
-        {renderInputField('Last Name', 'lastName')}
-        {renderInputField('Bib', 'bib')}
+        {renderInputField('First Name', 'firstName', '', 'Koem')}
+        {renderInputField('Last Name', 'lastName', '', 'Socheata')}
+        {renderInputField('Bib', 'bib', '', '120')}
         <div>
-          <label className='block text-sm font-medium text-gray-700'>Gender</label>
+        <label className='block text-sm font-medium text-gray-700'>Gender</label>
           <Select>
-            <SelectTrigger className='mt-1 mb-5 border border-gray-300 rounded-md'>
-              <SelectValue placeholder='Choose Gender' />
+            <SelectTrigger className='mt-1 mb-5 h-10 w-full border border-gray-300 rounded-xl p-4'>
+              <SelectValue placeholder='Choose Your Gender' />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value='Male'>Male</SelectItem>
-                <SelectItem value='Female'>Female</SelectItem>
+                <SelectLabel>Gender</SelectLabel>
+                <SelectItem value='male'>Male</SelectItem>
+                <SelectItem value='female'>Female</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        {renderInputField('Date of Birth', 'dateOfBirth', 'date')}
-        {renderInputField('Age', 'age', 'number')}
-        {renderInputField('School', 'school')}
+        {renderInputField('Date of Birth', 'dateOfBirth', 'date', '')}
+        {renderInputField('Age', 'age', 'number', '21')}
+        {renderInputField('School', 'school', '', 'Phnom Penh')}
         <button
           type='submit'
-          className='w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600'
+          className='w-full bg-[#F3F4F6] text-gray-500 font-bold py-2 px-4 rounded-xl shadow-sm hover:bg-gray-200'
         >
           Add
         </button>
