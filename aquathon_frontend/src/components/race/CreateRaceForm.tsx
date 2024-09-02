@@ -9,48 +9,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 
 const formSchema = z.object({
-  raceName: z.string().refine((value) => value.trim() !== '', {
-    message: 'Race Name cannot be empty',
-    path: ['raceName'],
-  }),
-  date: z.string().refine(
-    (value) => {
-      const selectedDate = new Date(value);
-      const currentDate = new Date();
-      return selectedDate > currentDate;
-    },
-    {
-      message: 'Invalid date',
-      path: ['date'],
-    },
-  ),
-  time: z.string().refine(
-    (value) => {
-      const selectedTime = new Date(value);
-      console.log({ value });
-      const currentTime = new Date();
-      return selectedTime > currentTime;
-    },
-    {
-      message: 'Invalid time',
-      path: ['time'],
-    },
-  ),
-  split: z.string().refine((value) => value.trim() !== '', {
-    message: 'Split cannot be empty',
-    path: ['split'],
-  }),
+  raceName: z.string(),
+  date: z.date(),
+  time: z.string(),
+  split: z.string(),
 });
 
 export default function CreateRaceForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      raceName: '',
-      date: '',
-      time: '',
-      split: '',
-    },
   });
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
@@ -84,7 +51,7 @@ export default function CreateRaceForm() {
               return (
                 <FormItem>
                   <FormLabel>Date</FormLabel>
-                  <FormControl>
+                  <FormControl className='mb-4'>
                     <Input placeholder='Date' type='date' {...field} />
                   </FormControl>
                   <FormMessage />
