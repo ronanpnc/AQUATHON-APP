@@ -12,7 +12,6 @@ type Tab = {
   Icon: React.ReactNode;
 };
 
-// Define tabs outside the component
 const tabs: Tab[] = [
   { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer /> },
   { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard /> },
@@ -52,7 +51,7 @@ function BackButton() {
   return (
     <button className='text-2xl'>
       <a href='/races'>
-        <ChevronLeft />
+        <ChevronLeft strokeWidth={3} />
       </a>
     </button>
   );

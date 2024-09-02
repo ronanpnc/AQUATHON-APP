@@ -9,7 +9,7 @@ export interface Race {
 }
 
 export enum RaceStatus {
-  Finished = 'Finished',
-  Ongoing = 'Ongoing',
-  Pending = 'Pending',
+  Finished = 'finished',
+  Ongoing = 'ongoing',
+  Upcoming = 'upcoming',
 }
