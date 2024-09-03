@@ -39,7 +39,7 @@ const RaceInfo: React.FC<{ name: string; date: string; participants: number }> =
     <h3 className='text-lg font-semibold pb-2'>{name}</h3>
     <div className='flex items-center text-sm text-gray-500 space-x-4'>
       <InfoItem icon={CalendarClock} text={date} />
-      <InfoItem icon={User} text={participants} />
+      <InfoItem icon={User} text={participants.toString()} />
     </div>
   </div>
 );
