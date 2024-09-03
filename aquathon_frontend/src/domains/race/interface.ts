@@ -10,6 +10,10 @@ export interface Race {
   runDistance?: number;
 }
 
+export type CreateRaceData = Omit<Race, '_id'>;
+
+export type UpdateRaceData = Partial<CreateRaceData> & { id: string };
+
 export enum RaceStatus {
   Finished = 'finished',
   Ongoing = 'ongoing',
