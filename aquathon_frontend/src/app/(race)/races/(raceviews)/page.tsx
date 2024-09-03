@@ -1,12 +1,20 @@
 'use client';
 
-import { useFetchRace as useFetchRaces } from '@/hooks/useFetch';
-
 import { AddRaceButton } from '@/components/race/AddRaceButton';
 import RaceCard from '@/components/race/RaceCard';
 
+import { useFetchRaces } from '@/services/race.services';
+
 export default function MyRacePage() {
-  const { data } = useFetchRaces();
+  const { isLoading, isError, data, error } = useFetchRaces();
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return (
     <div>

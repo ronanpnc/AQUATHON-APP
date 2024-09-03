@@ -2,7 +2,6 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
 import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Users } from 'lucide-react';
-import Head from 'next/head';
 import React, { useState } from 'react';
 
 // Define tab type
@@ -24,9 +23,6 @@ export function RaceDetailsNav() {
 
   return (
     <>
-      <Head>
-        <title>Race</title>
-      </Head>
       <div className='flex flex-col'>
         <Header />
         <TabNavigation tabs={tabs.slice(0, 2)} activeTab={activeTab} setActiveTab={setActiveTab} />
