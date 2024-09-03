@@ -5,7 +5,9 @@ export interface Race {
   startTime: string;
   time: string;
   status: RaceStatus;
-  participants: number;
+  participants?: number;
+  swimDistance?: number;
+  runDistance?: number;
 }
 
 export enum RaceStatus {
