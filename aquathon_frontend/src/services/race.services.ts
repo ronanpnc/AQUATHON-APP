@@ -69,7 +69,7 @@ export const useUpdateRace = () => {
     mutationFn: updateRace,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['races'] });
-      queryClient.invalidateQueries({ queryKey: ['race', data.id] });
+      queryClient.invalidateQueries({ queryKey: ['race', data._id] });
     },
   });
 };
