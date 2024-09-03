@@ -2,6 +2,7 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
 import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Users } from 'lucide-react';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 // Define tab type
@@ -46,9 +47,9 @@ function Header() {
 function BackButton() {
   return (
     <button className='text-2xl'>
-      <a href='/races'>
+      <Link href='/races'>
         <ChevronLeft strokeWidth={3} />
-      </a>
+      </Link>
     </button>
   );
 }
