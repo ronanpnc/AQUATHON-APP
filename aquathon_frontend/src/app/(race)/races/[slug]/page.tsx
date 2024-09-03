@@ -4,33 +4,30 @@ import { useEffect, useState } from 'react';
 
 import RaceTimer from '@/components/clock/RaceTimer';
 
+import { useRace } from '@/services/race.services';
 import { socket } from '@/socket';
 
 export default function RaceDetailPage() {
+  const { slug: id } = useParams();
+  const { data: race, isLoading, error } = useRace(id as string);
   const [time, setTime] = useState<Date | null>(null);
-  const id = useParams().slug;
 
   const startTime = () => {
     socket.emit('startTime', id);
   };
+
   const resetTime = () => {
     socket.emit('resetTime', id);
   };
 
   useEffect(() => {
-    const fetchRaceData = async () => {
-      try {
-        const response = await fetch(`http://localhost:4000/api/races/${id}`);
-        const data = await response.json();
-        const startTime = data?.startTime === null ? null : new Date(data?.startTime);
-        setTime(startTime);
-      } catch (error) {
-        //console.error("Failed to fetch race data:", error);
-      }
-    };
+    if (race) {
+      const startTime = race.startTime ? new Date(race.startTime) : null;
+      setTime(startTime);
+    }
+  }, [race]);
 
-    fetchRaceData();
-
+  useEffect(() => {
     socket.on('connect', () => {
       socket.emit('subscribe', id);
     });
@@ -40,14 +37,22 @@ export default function RaceDetailPage() {
         const startTime = value === null ? null : new Date(value);
         setTime(startTime);
       });
-      return () => {
-        socket.off('poolChanged');
-      };
     });
+
+    return () => {
+      socket.off('poolChanged');
+    };
   }, [id]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
+      <h1>{race?.title}</h1>
+      <p>Run Distance: {race?.runDistance} km</p>
+      <p>Swim Distance: {race?.swimDistance} km</p>
+      <p>Status: {race?.status}</p>
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
     </div>
   );
