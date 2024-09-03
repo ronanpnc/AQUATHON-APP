@@ -6,8 +6,9 @@ export const getRaces = async (limit:number = 2, page: number = 1) => {
   .find({},{participants:0, timeRaceConfigs:0, startTime:0})
   .skip((page - 1) * limit)
   .limit(limit)
+  .sort({"updatedAt": -1})
   .catch((error) => {
-    throw error
+    throw erro
   })
   return data
 }
