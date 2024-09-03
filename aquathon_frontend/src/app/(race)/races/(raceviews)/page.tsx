@@ -3,12 +3,10 @@
 import { AddRaceButton } from '@/components/race/AddRaceButton';
 import RaceCard from '@/components/race/RaceCard';
 
-import { useFetchRaces } from '@/services/race.services';
+import { useRaceList } from '@/services/race.services';
 
 export default function MyRacePage() {
-  const { isLoading, isError, data, error } = useFetchRaces();
-
-  if (isLoading) {
+  const { isLoading, isError, data, error } = useRaceList();
     return <span>Loading...</span>;
   }
 

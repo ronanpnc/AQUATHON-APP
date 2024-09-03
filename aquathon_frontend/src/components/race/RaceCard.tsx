@@ -17,7 +17,7 @@ const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
       <div className='flex items-center justify-between p-4 bg-white drop-shadow-xl rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200'>
         <div className='flex items-center'>
           <TimeDisplay time={formattedTime} ampm={ampm} />
-          <RaceInfo name={title} date={formattedDate} participants={participants} />
+          <RaceInfo name={title} date={formattedDate} participants={participants ?? 0} />
         </div>
         <StatusDisplay status={status} StatusIcon={StatusIcon} />
       </div>
