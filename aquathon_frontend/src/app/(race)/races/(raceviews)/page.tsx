@@ -7,6 +7,8 @@ import { useRaceList } from '@/services/race.services';
 
 export default function MyRacePage() {
   const { isLoading, isError, data, error } = useRaceList();
+
+  if (isLoading) {
     return <span>Loading...</span>;
   }
 
