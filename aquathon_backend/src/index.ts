@@ -9,7 +9,7 @@ import { connectDB } from './configs/db'
 import router from './routes/api'
 import { RaceHandler } from './sockets'
 
-const port = 4000
+const port = process.env.NODE_PORT ?? 4000;
 export const app = express()
 app.use(express.json())
 app.use(cors())
