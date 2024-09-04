@@ -33,4 +33,8 @@
     pnpm dev
     ```
 
+<<<<<<< HEAD
 // Deploy to DOCKER
+=======
+// Deploy to docker
+>>>>>>> da10614593fc7ebc3c6e14d468721c815324bfbe
