@@ -1,14 +1,13 @@
-import express from 'express'
-import 'dotenv/config'
-import { connectDB } from './configs/db'
-import swaggerUi from 'swagger-ui-express'
 import cors from 'cors'
-import swaggerJsdoc from 'swagger-jsdoc'
-import router from './routes/api'
+import 'dotenv/config'
+import express from 'express'
 import { createServer } from 'http'
-import { Server } from 'socket.io'
+import { Server, Socket } from 'socket.io'
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
+import { connectDB } from './configs/db'
+import router from './routes/api'
 import { RaceHandler } from './sockets'
-import { Socket } from 'socket.io'
 
 const port = 4000
 export const app = express()
@@ -26,7 +25,7 @@ const swaggerOptions = {
       description: ''
     }
   },
-  apis: ['./src/routes/api/*.ts'] // files containing annotations as above
+  apis: ['./src/models/*.ts', './src/routes/api/*.ts'] // files containing annotations as above
 }
 
 app.use(

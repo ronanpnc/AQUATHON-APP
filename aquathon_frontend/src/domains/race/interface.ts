@@ -5,11 +5,17 @@ export interface Race {
   startTime: string;
   time: string;
   status: RaceStatus;
-  participants: number;
+  participants?: number;
+  swimDistance?: number;
+  runDistance?: number;
 }
 
+export type CreateRaceData = Omit<Race, '_id'>;
+
+export type UpdateRaceData = Partial<CreateRaceData> & { id: string };
+
 export enum RaceStatus {
-  Finished = 'Finished',
-  Ongoing = 'Ongoing',
-  Pending = 'Pending',
+  Finished = 'finished',
+  Ongoing = 'ongoing',
+  Upcoming = 'upcoming',
 }

@@ -13,11 +13,11 @@ const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
   const ampm = format(new Date(date), 'a');
 
   return (
-    <Link href={`/races/${_id}`} className='block'>
+    <Link href={`/races/${_id}/`} className='block'>
       <div className='flex items-center justify-between p-4 bg-white drop-shadow-xl rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200'>
         <div className='flex items-center'>
           <TimeDisplay time={formattedTime} ampm={ampm} />
-          <RaceInfo name={title} date={formattedDate} participants={participants} />
+          <RaceInfo name={title} date={formattedDate} participants={participants ?? 0} />
         </div>
         <StatusDisplay status={status} StatusIcon={StatusIcon} />
       </div>
@@ -56,7 +56,7 @@ const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS; StatusIcon: 
   StatusIcon,
 }) => {
   return (
-    <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'Finished' ? 'currentColor' : 'none'} />
+    <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'finished' ? 'currentColor' : 'none'} />
   );
 };
 
