@@ -33,4 +33,4 @@
     pnpm dev
     ```
 
-// Deploy to Kubernetes
+// Deploy to docker
