@@ -2,116 +2,140 @@ import { Router } from 'express'
 import RaceController from '../../controllers/RaceController'
 
 const router = Router()
-
+// get all race
 /**
- * @openapi
- * /api/races/list:
+ * @swagger
+ * /api/races:
  *   get:
- *     summary: Get List of Race for user
- *     description: Returns the list of races that the user has.
  *     tags:
- *       - Race
+ *      - Race
+ *     summary: Retrieve a list of races.
+ *     description: Retrieve a list of race all race in the database
  *     responses:
  *       200:
- *         description: Successful response. Returns the Race.
+ *         description: A list of race.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 time:
- *                   type: string
- *                   format: time(number)
- *                   example: 10483920123
+ *              type: array
+ *              items:
+ *                 $ref: '#/components/schemas/Race'
  */
-router.get('/list', RaceController.getMyRaces)
+router.get('', RaceController.getMyRaces)
 
-/**
- * @openapi
- * /api/races/{id}:
- *   get:
- *     summary: Get the Race for user
- *     description: Returns the race .
- *     parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: Numeric ID of the user to get races that the user has.
- *     tags:
- *       - Race
- *     responses:
- *       200:
- *         description: Successful response. Returns the Race.
- *
- */
-router.get('/:id', RaceController.getRace)
 
+
+// create race
 /**
- * @openapi
- * /api/races/{id}/start-time:
- *   get:
- *     summary: Get the Race time
- *     description: Returns the race .
- *     parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: Numeric ID of the user to get races that the user has.
- *     tags:
- *       - Race
- *     responses:
- *       200:
- *         description: Successful response. Returns the Race.
- *
- */
-router.get('/:id/start-time', RaceController.getRaceStartTime)
-/**
- * @openapi
- * /api/races/{id}/start-time:
- *   put:
- *     summary: Update Race Time
- *     description: Returns the race .
- *     requestBody:
- *      content:
- *        application/json:
- *          schema:
- *              type: object
- *              properties:
- *                  status:
- *                      type: string
- *                      enum: ["start", "reset"]
- *
- *     parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: Numeric ID of the user to get races that the user has.
- *     tags:
- *       - Race
- *     responses:
- *       200:
- *         description: Successful response. Returns the Race.
- *
- */
-router.put('/:id/start-time', RaceController.setRaceStartTime)
-/**
- * @openapi
- * /api/races/create:
+ * @swagger
+ * /api/races:
  *   post:
- *     summary: Get List of Race for user
- *     description: Returns the Race
  *     tags:
- *       - Race
+ *      - Race
+ *     summary: create race.
+ *     description: create Race
+ *     requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *                $ref: '#/components/requestBodies/Race'
  *     responses:
  *       200:
- *         description: Successful response. Returns the Race.
+ *         description: A list of race.
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/Race'
  */
-router.post('/create', RaceController.createRace)
+router.post('', RaceController.createRace)
+
+
+
+// get race
+/**
+ * @swagger
+ * /api/races/{raceId}:
+ *   get:
+ *     tags:
+ *      - Race
+ *     summary: get race by id.
+ *     description: get a Race with id
+ *     parameters:
+ *      - name: raceId
+ *        in: path
+ *        description: ID of race to return
+ *        required: true
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: A list of race.
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/Race'
+ */
+router.get('/:raceId', RaceController.getRace)
+
+
+
+// Update race
+/**
+ * @swagger
+ * /api/races/{raceId}:
+ *   put:
+ *     tags:
+ *      - Race
+ *     summary: update race by id.
+ *     description: get a Race with id
+ *     parameters:
+ *      - name: raceId
+ *        in: path
+ *        description: ID of race to return
+ *        required: true
+ *        schema:
+ *          type: string
+ *     requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *                $ref: '#/components/requestBodies/Race'
+ *     responses:
+ *       200:
+ *         description: updated race.
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/Race'
+ */
+router.put('/:raceId', RaceController.updateRace)
+
+
+
+// Delete race
+/**
+ * @swagger
+ * /api/races/{raceId}:
+ *   delete:
+ *     tags:
+ *      - Race
+ *     summary: delete race by id.
+ *     description: get a Race with id
+ *     parameters:
+ *      - name: raceId
+ *        in: path
+ *        description: ID of race to return
+ *        required: true
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: successful delete race.
+ *         content:
+ *           application/json:
+ *             schema:
+ */
+
+router.delete('/:raceId', RaceController.deleteRace)
 
 export default router

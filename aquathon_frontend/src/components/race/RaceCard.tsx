@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { CalendarClock, LucideIcon, User } from 'lucide-react';
 import Link from 'next/link';
 
@@ -5,17 +6,18 @@ import { STATUS_COLORS, STATUS_ICONS } from '@/domains/race/constants';
 import { Race } from '@/domains/race/interface';
 
 const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
-  const { _id, title,time, date, participants, status } = race;
-  const [hours] = time.split(':');
-  const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM';
+  const { _id, title, date, participants, status } = race;
   const StatusIcon = STATUS_ICONS[status];
+  const formattedDate = format(new Date(date), 'dd MMM yyyy');
+  const formattedTime = format(new Date(date), 'hh:mm');
+  const ampm = format(new Date(date), 'a');
 
   return (
-    <Link href={`/races/${_id}`} className='block'>
+    <Link href={`/races/${_id}/`} className='block'>
       <div className='flex items-center justify-between p-4 bg-white drop-shadow-xl rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200'>
         <div className='flex items-center'>
-          <TimeDisplay time={time} ampm={ampm} />
-          <RaceInfo name={title} date={date} participants={participants} />
+          <TimeDisplay time={formattedTime} ampm={ampm} />
+          <RaceInfo name={title} date={formattedDate} participants={participants ?? 0} />
         </div>
         <StatusDisplay status={status} StatusIcon={StatusIcon} />
       </div>
@@ -53,8 +55,9 @@ const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS; StatusIcon: 
   status,
   StatusIcon,
 }) => {
-  return <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'Finished' ? 'currentColor' : 'none'} />
+  return (
+    <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'finished' ? 'currentColor' : 'none'} />
+  );
 };
 
 export default RaceCard;
-
