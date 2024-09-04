@@ -33,4 +33,4 @@
     pnpm dev
     ```
 
-// Deploy to docker
+// Deploy to docker2
