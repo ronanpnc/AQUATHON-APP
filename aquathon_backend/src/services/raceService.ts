@@ -8,7 +8,7 @@ export const getRaces = async (limit:number = 2, page: number = 1) => {
   .limit(limit)
   .sort({"updatedAt": -1})
   .catch((error) => {
-    throw erro
+    throw error
   })
   return data
 }

@@ -13,10 +13,12 @@ export default function RaceDetailClient({ raceId }: { raceId: string }) {
   const [time, setTime] = useState<Date | null>(null);
 
   const startTime = () => {
+    console.log("start-time");
     socket.emit('startTime', raceId);
   };
 
   const resetTime = () => {
+    console.log("reset-time");
     socket.emit('resetTime', raceId);
   };
 
