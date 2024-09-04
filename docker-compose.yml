@@ -1,0 +1,11 @@
+version: '3'
+services:
+  frontend:
+    image: vm0077/aquathon_frontend
+    ports:
+      - "3000:3000"
+  backend:
+    image: vm0077/aquathon_backend
+    ports:
+      - "4000:4000"
+
