@@ -32,3 +32,5 @@
     ```sh
     pnpm dev
     ```
+
+// Deploy to Kubernetes
