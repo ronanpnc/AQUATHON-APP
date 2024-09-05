@@ -33,5 +33,5 @@
     pnpm dev
     ```
 
-// Deploy to DOCKER
+// Deploy to DOCKER in aws ec2 on cloud
 
