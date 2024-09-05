@@ -22,6 +22,7 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
     };
 
     const subscribe = (payload) => {
+        console.log(payload);
         socket.join(payload);
         raceID = payload;
         raceRoom = io.to(raceID);
