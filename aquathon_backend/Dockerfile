@@ -11,6 +11,9 @@ COPY package.json pnpm-lock.yaml* ./app
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
+
+# Compile
+RUN pnpm build
 # Copy the rest of the application code
 COPY . .
 
@@ -21,4 +24,4 @@ COPY . .
 EXPOSE 4000
 
 # Define the command to run the app
-CMD ["pnpm", "start"]
+CMD ["pnpm", start"]
