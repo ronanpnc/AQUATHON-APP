@@ -32,11 +32,9 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Pull Frontend Image from Docker Hub
-        run: docker pull vm0077/aquathon_app:frontend
-        
-      - name: Pull Backend Image from Docker Hub
-        run: docker pull vm0077/aquathon_app:backend
-        
+     - name: Pull Docker Compose
+        run: docker compose pull
+     - name: Run Docker Compose Down
+        run: docker compose down
       - name: Run Docker Compose
-        run: docker-compose up -d
+        run: docker compose up -d
