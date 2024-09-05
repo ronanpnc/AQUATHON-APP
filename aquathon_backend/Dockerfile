@@ -12,8 +12,6 @@ COPY package.json pnpm-lock.yaml* ./app
 RUN pnpm install --frozen-lockfile
 
 
-# Compile
-RUN pnpm build
 # Copy the rest of the application code
 COPY . .
 
@@ -23,5 +21,7 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 4000
 
+# Compile
+RUN pnpm build
 # Define the command to run the app
-CMD ["pnpm", start"]
+CMD ["pnpm", "start"]
