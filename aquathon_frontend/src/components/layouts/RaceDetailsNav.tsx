@@ -2,7 +2,8 @@
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
 import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Users } from 'lucide-react';
-import Head from 'next/head';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
 // Define tab type
@@ -12,38 +13,34 @@ type Tab = {
   Icon: React.ReactNode;
 };
 
-// Define tabs outside the component
 const tabs: Tab[] = [
   { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer /> },
   { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard /> },
-  { id: 'Setting', label: 'Setting', Icon: <Settings /> },
+  { id: 'Settings', label: 'Settings', Icon: <Settings /> },
   { id: 'Participants', label: 'Participants', Icon: <Users /> },
 ];
 
-export function RaceTab() {
+export function RaceDetailsNav({ raceId }: { raceId: string }) {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
     <>
-      <Head>
-        <title>Race</title>
-      </Head>
       <div className='flex flex-col'>
-        <Header />
+        <Header raceId={raceId} />
         <TabNavigation tabs={tabs.slice(0, 2)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </>
   );
 }
 
-function Header() {
+function Header({ raceId }: { raceId: string }) {
   return (
     <nav className='flex items-center justify-between p-4 border-b border-gray-300'>
       <div className='flex items-center'>
         <BackButton />
         <h1 className='text-xl font-semibold ml-4'>Race</h1>
       </div>
-      <MoreButton />
+      <MoreButton raceId={raceId} />
     </nav>
   );
 }
@@ -51,14 +48,16 @@ function Header() {
 function BackButton() {
   return (
     <button className='text-2xl'>
-      <a href='/races'>
-        <ChevronLeft />
-      </a>
+      <Link href='/races'>
+        <ChevronLeft strokeWidth={3} />
+      </Link>
     </button>
   );
 }
 
-function MoreButton() {
+function MoreButton({ raceId }: { raceId: string }) {
+  const pathname = usePathname();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -68,12 +67,13 @@ function MoreButton() {
       </PopoverTrigger>
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-2'>
         <div className='p-2'>
-          {tabs.slice(-2).map((tab, index) => (
-            <div key={tab.id} className={`flex items-center ${index === 1 ? 'mt-2' : ''}`}>
-              {tab.Icon}
-              <p className='ml-2 mr-4'>{tab.label}</p>
-              <div className='mt-1'></div>
-            </div>
+          {tabs.slice(-2).map((tab) => (
+            <Link key={tab.id} href={`/races/${raceId}/${tab.id.toLowerCase()}`} className='block'>
+              <div className={`flex items-center hover:bg-gray-100 p-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}>
+                {tab.Icon}
+                <p className='ml-2'>{tab.label}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </PopoverContent>
@@ -98,7 +98,6 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     </div>
   );
 }
-
 type TabButtonProps = {
   tab: Tab;
   isActive: boolean;

@@ -1,21 +1,25 @@
 import { type Metadata } from 'next';
+import { Inter } from 'next/font/google';
 
 import '@/styles/globals.css';
 
-import { TopNav } from '@/components/layouts/TopNav';
+import ReactQueryProvider from '@/utils/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
-  title: 'Aquathon App',
+  title: 'Aquathon DEV App',
   description: 'Race Time Tracker',
   icons: [{ rel: 'icon', url: '/assets/icons/ic_logo.svg' }],
 };
 
+const inter = Inter({ subsets: ['latin'] });
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang='en'>
+    <html lang='en' className={inter.className}>
       <body>
-        <TopNav />
-        <main className='pt-20'>{children}</main>
+        <ReactQueryProvider>
+          <main>{children}</main>
+        </ReactQueryProvider>
       </body>
     </html>
   );
