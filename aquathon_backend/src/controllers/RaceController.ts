@@ -19,7 +19,10 @@ class RaceController {
       return res.status(error.statusCode).send(error)
     }
   }
+
+  // NOTED
   static async getMyRaces(req: Request, res: Response) {
+    // paginagination options
     const page = req.query.page as string
     const limit = req.query.limit as string
     try {
@@ -29,6 +32,7 @@ class RaceController {
       return res.status(error.statusCode).send(error.message)
     }
   }
+
   static async createRace(req: Request, res: Response) {
     try {
       const data: IRace = {
@@ -38,7 +42,10 @@ class RaceController {
         swimDistance: req.body.swimDistance,
         runDistance: req.body.runDistance,
         timeRaceConfigs: req.body.timeRaceConfigs,
-        status: 'upcoming'
+        status: 'upcoming',
+        // this will be re define later
+        // colours can be customize in the future
+        colours: []
       }
       const result = await createRace(data)
       return res.status(200).send(result)

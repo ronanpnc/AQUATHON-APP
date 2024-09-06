@@ -63,8 +63,9 @@ export const getRaceStartTime = async (id: string) => {
     .catch((error) => {
       throw handleMongooseError(error)
     })
-  return data[0]
+  return data[0].startTime;
 }
+
 
 export const setRaceStartTime = async (
   id: string,
