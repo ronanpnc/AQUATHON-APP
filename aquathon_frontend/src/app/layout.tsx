@@ -6,7 +6,7 @@ import '@/styles/globals.css';
 import ReactQueryProvider from '@/utils/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
-  title: 'Aquathon App',
+  title: 'Aquathon DEV App',
   description: 'Race Time Tracker',
   icons: [{ rel: 'icon', url: '/assets/icons/ic_logo.svg' }],
 };

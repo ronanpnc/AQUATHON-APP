@@ -4,7 +4,6 @@ import { Error } from 'mongoose'
 import { handleMongooseError } from '../utils/mongooseError'
 
 export const getRaces = async (limit: number = 2, page: number = 1) => {
-  //
   const data = await Race.find(
     {},
     { participants: 0, timeRaceConfigs: 0, startTime: 0 }

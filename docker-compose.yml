@@ -1,0 +1,16 @@
+services:
+  frontend:
+    image: vm0077/aquathon_app:frontend
+    build:
+      context: frontend
+      dockerfile: ./aquathon_frontend/Dockerfile
+    ports:
+      - "3000:3000"
+  backend:
+    image: vm0077/aquathon_app:backend
+    build:
+      context: backend
+      dockerfile: ./aquathon_backend/Dockerfile
+    ports:
+      - "4000:4000"
+
