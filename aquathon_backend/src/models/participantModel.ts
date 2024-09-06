@@ -30,10 +30,10 @@ export interface IParticipant {
   bib: number
   firstName: string
   lastName: string
-  colour: string
+  colour?: string
   dateOfBirth: Date
   school: string | null
-  splits: ISplit[]
+  splits?: ISplit[]
 }
 export const participantSchema = new mongoose.Schema<IParticipant>(
   {
@@ -46,3 +46,5 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
   },
   { timestamps: true }
 )
+
+export const Participant = mongoose.model('Participant', participantSchema);
