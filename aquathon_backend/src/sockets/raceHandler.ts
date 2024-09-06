@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../types/sockets/raceSocket";
+import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../types/sockets/race/race.socket";
 import { setRaceStartTime } from "../services/raceService";
 
 type ServerProp = Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents,SocketData>

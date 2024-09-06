@@ -29,6 +29,10 @@ import timeRaceConfigSchema, { ITimeRaceConfig } from './timeTrackConfigModel'
  *           type: integer
  *           description: distance of swim
  *           example: 10
+ *         colours:
+ *           type: array
+ *           description: list of colours for the participants
+ *           example: ["#FFFFF"]
  *         runDistance:
  *           type: integer
  *           description: distance of run
@@ -65,6 +69,10 @@ import timeRaceConfigSchema, { ITimeRaceConfig } from './timeTrackConfigModel'
  *           type: integer
  *           description: distance of run
  *           example: 20
+ *         colours:
+ *           type: array
+ *           description: list of colours for the participants (optional)
+ *           example: ["#FFFFFF"]
  *         timeRaceConfigs:
  *          type: array
  *          items:
@@ -79,6 +87,7 @@ export interface IRace {
     swimDistance: number
     runDistance: number
     participants?: IParticipant[]
+    colours:string[],
     timeRaceConfigs: ITimeRaceConfig[]
     status: 'finished' | 'upcoming' | 'ongoing'
 }
@@ -107,6 +116,7 @@ const raceSchema = new mongoose.Schema<IRace>(
             type: String,
             required: true
         },
+        colours:[String],
         participants: [participantSchema],
         timeRaceConfigs: [timeRaceConfigSchema]
     },
