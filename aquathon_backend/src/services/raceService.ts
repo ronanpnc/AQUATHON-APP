@@ -1,4 +1,7 @@
 import { IRace, Race } from '../models/raceModel'
+import { StatusError } from '../types/common'
+import { Error } from 'mongoose';
+import { handleMongooseError } from '../utils/mongooseError';
 
 export const getRaces = async (limit:number = 2, page: number = 1) => {
   //
@@ -8,7 +11,7 @@ export const getRaces = async (limit:number = 2, page: number = 1) => {
   .limit(limit)
   .sort({"updatedAt": -1})
   .catch((error) => {
-    throw erro
+    throw new StatusError(error.message);
   })
   return data
 }
@@ -27,15 +30,18 @@ export const createRace = async (data:IRace) => {
       date: new Date(data.date),
       ...data,
   })
-  const res = await new_race.save().catch((error) => {
-    throw error
+  const res = await new_race.save().catch((error:Error) => {
+       throw handleMongooseError(error);
   })
   return res
 }
 
 // update the race with corresponding id
 export const updateRace = async (id: string, data:Partial<IRace>) => {
-  const res = await Race.findOneAndUpdate({ _id: id },data, { new: true })
+  const res = await Race.findOneAndUpdate({ _id: id },data, { new: true }).catch((error:Error) => {
+       throw handleMongooseError(error);
+  })
+
   return res
 }
 
@@ -43,7 +49,7 @@ export const updateRace = async (id: string, data:Partial<IRace>) => {
 export const deleteRace = async (id: string) => {
   const race = Race.find({ _id: id })
   const res = await race.deleteOne().catch((error) => {
-    throw error
+       throw handleMongooseError(error);
   })
   return res
 }
@@ -51,7 +57,7 @@ export const getRaceStartTime = async (id: string) => {
   const data = await Race.find({ _id: id })
     .select('startTime')
     .catch((error) => {
-      throw error
+       throw handleMongooseError(error);
     })
   return data[0]
 }
@@ -71,7 +77,7 @@ export const setRaceStartTime = async (
     data[0].startTime = null
   }
   const res = await data[0].save().catch((error) => {
-    throw error
+       throw handleMongooseError(error);
   })
   return res
 }
