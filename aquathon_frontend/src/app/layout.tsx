@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 
 import '@/styles/globals.css';
 
+import { Toaster } from '@/components/ui/toaster';
+
 import ReactQueryProvider from '@/utils/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
@@ -19,6 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <ReactQueryProvider>
           <main>{children}</main>
+          <Toaster />
         </ReactQueryProvider>
       </body>
     </html>

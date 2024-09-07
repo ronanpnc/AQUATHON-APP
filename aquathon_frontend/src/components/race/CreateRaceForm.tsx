@@ -78,84 +78,90 @@ export default function CreateRaceForm() {
   };
 
   return (
-    <main className='flex min-h-screen w-full justify-center p-8'>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
-          <FormField
-            control={form.control}
-            name='raceName'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Race Name</FormLabel>
-                <FormControl>
-                  <Input placeholder='Race Name' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <main className='flex w-full items-center justify-center pt-8'>
+      <div className='w-full max-w-full bg-white px-4'>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
+            <FormField
+              control={form.control}
+              name='raceName'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Race Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Race Name' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='date'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <Input type='date' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='date'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input type='date' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='time'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Time</FormLabel>
-                <FormControl>
-                  <Input type='time' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='time'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time</FormLabel>
+                  <FormControl>
+                    <Input type='time' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='runDistance'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Run Distance (km)</FormLabel>
-                <FormControl>
-                  <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='runDistance'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Run Distance (km)</FormLabel>
+                  <FormControl>
+                    <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='swimDistance'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Swim Distance (km)</FormLabel>
-                <FormControl>
-                  <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='swimDistance'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Swim Distance (km)</FormLabel>
+                  <FormControl>
+                    <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type='submit' className='w-full' disabled={createRaceMutation.isPending}>
-            {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
-          </Button>
-        </form>
-      </Form>
+            <Button
+              type='submit'
+              className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white mt-6'
+              disabled={createRaceMutation.isPending}
+            >
+              {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
+            </Button>
+          </form>
+        </Form>
+      </div>
     </main>
   );
 }
