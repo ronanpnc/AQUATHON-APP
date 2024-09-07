@@ -1,49 +1,32 @@
 version: 2
+
+# Common configuration for all updates
+x-common-config: &common-config
+  schedule:
+    interval: "daily"
+    time: "00:00"
+    timezone: "Asia/Phnom_Penh"
+  open-pull-requests-limit: 10
+  reviewers:
+    - "TharoChan"
+  assignees:
+    - "TharoChan"
+  commit-message:
+    prefix: "chore"
+    include: "scope"
+
 updates:
   # Frontend dependencies
   - package-ecosystem: "npm"
     directory: "/aquathon_frontend"
-    schedule:
-      interval: "daily"
-      time: "00:00"
-      timezone: "Asia/Phnom_Penh"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "TharoChan"
-    assignees:
-      - "TharoChan"
-      commit-message:
-      prefix: "chore"
-      include: "scope"
+    <<: *common-config
 
   # Backend dependencies
   - package-ecosystem: "npm"
     directory: "/aquathon_backend"
-    schedule:
-      interval: "daily"
-      time: "00:00"
-      timezone: "Asia/Phnom_Penh"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "TharoChan"
-    assignees:
-      - "TharoChan"
-      commit-message:
-      prefix: "chore"
-      include: "scope"
+    <<: *common-config
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
-    schedule:
-      interval: "daily"
-      time: "00:00"
-      timezone: "Asia/Phnom_Penh"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "TharoChan"
-    assignees:
-      - "TharoChan"
-      commit-message:
-      prefix: "chore"
-      include: "scope"
+    <<: *common-config
