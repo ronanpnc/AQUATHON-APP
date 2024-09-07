@@ -99,7 +99,7 @@ router.get('/:raceId', RaceController.getRace)
  *        content:
  *          application/json:
  *            schema:
- *                $ref: '#/components/requestBodies/Race'
+ *                $ref: '#/components/schemas/Race'
  *     responses:
  *       200:
  *         description: updated race.
