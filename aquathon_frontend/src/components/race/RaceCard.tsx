@@ -1,23 +1,26 @@
 import { format } from 'date-fns';
-import { CalendarClock, LucideIcon, User } from 'lucide-react';
+import { Clock, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { STATUS_COLORS, STATUS_ICONS } from '@/domains/race/constants';
 import { Race } from '@/domains/race/interface';
+const calculateTotalDistance = (race: Race): number => {
+  return (race.swimDistance ?? 0) + (race.runDistance ?? 0);
+};
 
 const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
-  const { _id, title, date, participants, status } = race;
+  const { _id, title, date, status } = race;
   const StatusIcon = STATUS_ICONS[status];
-  const formattedDate = format(new Date(date), 'dd MMM yyyy');
-  const formattedTime = format(new Date(date), 'hh:mm');
-  const ampm = format(new Date(date), 'a');
+  const formattedTime = format(new Date(date), 'hh:mm a');
+  const totalDistance = calculateTotalDistance(race);
 
   return (
     <Link href={`/races/${_id}/`} className='block'>
-      <div className='flex items-center justify-between p-4 bg-white drop-shadow-xl rounded-lg mb-4 hover:bg-gray-50 transition-colors duration-200'>
-        <div className='flex items-center'>
-          <TimeDisplay time={formattedTime} ampm={ampm} />
-          <RaceInfo name={title} date={formattedDate} participants={participants ?? 0} />
+      <div className='flex items-center bg-white rounded-lg shadow-xl mb-4'>
+        <div className='flex-grow p-4'>
+          <TimeDisplay time={formattedTime} />
+          <RaceDetails title={title} distance={totalDistance.toString()} />
+          <ProgressBar progress={0} />
         </div>
         <StatusDisplay status={status} StatusIcon={StatusIcon} />
       </div>
@@ -25,29 +28,26 @@ const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
   );
 };
 
-const TimeDisplay: React.FC<{ time: string; ampm: string }> = ({ time, ampm }) => (
-  <div className='mr-4 flex flex-col items-center justify-center'>
-    <div className='w-16 h-16 rounded-full border-2 border-gray-200 flex flex-col items-center justify-center'>
-      <span className='text-md'>{time}</span>
-      <span className='text-xs'>{ampm}</span>
-    </div>
-  </div>
+const TimeDisplay: React.FC<{ time: string }> = ({ time }) => (
+  <span className='text-xs text-gray-500 font-medium'>{time}</span>
 );
 
-const RaceInfo: React.FC<{ name: string; date: string; participants: number }> = ({ name, date, participants }) => (
+const RaceDetails: React.FC<{ title: string; distance: string }> = ({ title, distance }) => (
   <div>
-    <h3 className='text-lg font-semibold pb-2'>{name}</h3>
-    <div className='flex items-center text-sm text-gray-500 space-x-4'>
-      <InfoItem icon={CalendarClock} text={date} />
-      <InfoItem icon={User} text={participants.toString()} />
+    <div className='flex items-center justify-between'>
+      <h3 className='text-lg font-bold truncate max-w-[70%]'>{title}</h3>
+      <span className='text-sm font-medium text-gray-700 ml-auto mr-4'>{distance} KM</span>
+    </div>
+    <div className='text-xs text-gray-600 flex items-center space-x-1 mt-1 mb-2'>
+      <Clock size={12} />
+      <span>00:00:00</span>
     </div>
   </div>
 );
 
-const InfoItem: React.FC<{ icon: React.ElementType; text: string }> = ({ icon: Icon, text }) => (
-  <div className='flex items-center'>
-    <Icon size={16} className='mr-1' />
-    {text}
+const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
+  <div className='relative w-full h-2 bg-gray-200 rounded-full mt-2'>
+    <div className='absolute top-0 left-0 h-full bg-blue-500 rounded-full' style={{ width: `${progress}%` }} />
   </div>
 );
 
@@ -55,8 +55,21 @@ const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS; StatusIcon: 
   status,
   StatusIcon,
 }) => {
+  const colorClass = STATUS_COLORS[status];
+  const bgColorClass = colorClass.replace('text-', 'bg-').replace('-500', '-100');
+
   return (
-    <StatusIcon className={`h-8 w-8 ${STATUS_COLORS[status]}`} fill={status === 'finished' ? 'currentColor' : 'none'} />
+    <div className='flex flex-col items-center'>
+      <div
+        className={`flex items-center justify-center w-16 h-16 rounded-full ${bgColorClass}`}
+        style={{ minWidth: '4rem', minHeight: '4rem' }}
+      >
+        <StatusIcon className={`w-8 h- ${colorClass}`} />
+      </div>
+      <span className={`text-xs mt-1 font-medium ${colorClass}`}>
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </span>
+    </div>
   );
 };
 
