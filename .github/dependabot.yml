@@ -1,7 +1,8 @@
 version: 2
 updates:
+  # Frontend dependencies
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/aquathon_frontend"
     schedule:
       interval: "daily"
       time: "00:00"
@@ -12,6 +13,20 @@ updates:
     assignees:
       - "TharoChan"
 
+  # Backend dependencies
+  - package-ecosystem: "npm"
+    directory: "/aquathon_backend"
+    schedule:
+      interval: "daily"
+      time: "00:00"
+      timezone: "Asia/Phnom_Penh"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "TharoChan"
+    assignees:
+      - "TharoChan"
+
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
