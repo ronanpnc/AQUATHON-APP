@@ -7,7 +7,7 @@ export default function HomePage() {
   const router = useRouter();
 
   return (
-    <main className='min-h-screen bg-gradient-to-b from-blue-400 to-blue-600 text-white pt-6'>
+    <main className='min-h-screen bg-gradient-to-b from-purple-400 to-purple-600 text-white pt-6'>
       <div className='container mx-auto px-4 py-12'>
         <header className='text-center mb-12'>
           <h1 className='text-5xl font-bold mb-4'>Welcome to Aquathon</h1>
@@ -19,15 +19,15 @@ export default function HomePage() {
             <h2 className='text-3xl font-semibold'>Upcoming Events</h2>
             <ul className='space-y-4'>
               {['Summer Splash', 'Ocean Challenge', 'Lake Marathon'].map((event, index) => (
-                <li key={index} className='bg-blue-500 bg-opacity-50 p-4 rounded-lg hover:bg-opacity-70 transition'>
+                <li key={index} className='bg-purple-500 bg-opacity-50 p-4 rounded-lg hover:bg-opacity-70 transition'>
                   {event}
                 </li>
               ))}
             </ul>
             <button
               onClick={() => router.push('/races')}
-              className='bg-white text-blue-600 font-semibold py-3 px-8 rounded-full 
-                         hover:bg-blue-100 transition duration-300 ease-in-out 
+              className='bg-white text-purple-600 font-semibold py-3 px-8 rounded-full 
+                         hover:bg-purple-100 transition duration-300 ease-in-out 
                          transform hover:scale-105 shadow-lg'
             >
               View All Races
@@ -43,7 +43,7 @@ export default function HomePage() {
               { title: 'Beautiful Venues', description: 'Compete in stunning locations around the world' },
               { title: 'Community', description: 'Join a global network of swimming enthusiasts' },
             ].map((feature, index) => (
-              <div key={index} className='bg-blue-500 bg-opacity-50 p-6 rounded-lg hover:bg-opacity-70 transition'>
+              <div key={index} className='bg-purple-500 bg-opacity-50 p-6 rounded-lg hover:bg-opacity-70 transition'>
                 <h3 className='text-xl font-semibold mb-2'>{feature.title}</h3>
                 <p>{feature.description}</p>
               </div>
