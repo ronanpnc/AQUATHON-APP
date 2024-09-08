@@ -37,8 +37,8 @@ const TimeDisplay: React.FC<{ time: string }> = ({ time }) => (
 const RaceDetails: React.FC<{ title: string; distance: string }> = ({ title, distance }) => (
   <div>
     <div className='flex items-center justify-between'>
-      <h3 className='text-lg font-bold truncate max-w-[70%]'>{title}</h3>
-      <span className='text-sm font-medium text-gray-700 ml-auto mr-4'>{distance} KM</span>
+      <h3 className='text-lg font-bold truncate max-w-[80%]'>{title}</h3>
+      <span className='text-sm font-medium text-gray-700 ml-auto'>{distance} KM</span>
     </div>
     <div className='text-xs text-gray-600 flex items-center space-x-1 mt-1 mb-2'>
       <Clock size={12} />
@@ -55,7 +55,7 @@ const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
 
 const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS }> = ({ status }) => {
   const StatusIcon = STATUS_ICONS[status];
-  const { bg: bgColorClass, text: textColorClass } = STATUS_COLORS[status];
+  const { bg: bgColorClass, text: textColorClass } = STATUS_COLORS[status]; 
 
   return (
     <div className='flex flex-col items-center p-4'>
