@@ -1,5 +1,6 @@
 'use client';
 
+import { AddParticipantButton } from '@/components/participant/AddParticipantButton';
 import { AddRaceButton } from '@/components/race/AddRaceButton';
 import RaceCard from '@/components/race/RaceCard';
 
@@ -20,7 +21,7 @@ export default function MyRacePage() {
     <div>
       <div className='p-2'>{data?.map((race) => <RaceCard key={race._id} race={race} />)}</div>
       <div className='fixed bottom-4 right-4'>
-        <AddRaceButton />
+        <AddParticipantButton />
       </div>
     </div>
   );

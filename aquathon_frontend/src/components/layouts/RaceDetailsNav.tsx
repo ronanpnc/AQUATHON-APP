@@ -1,7 +1,7 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Users } from 'lucide-react';
+import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
@@ -14,6 +14,7 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
+  { id: 'Participant', label: 'Participant', Icon: <User /> },
   { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer /> },
   { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard /> },
   { id: 'Settings', label: 'Settings', Icon: <Settings /> },
@@ -27,7 +28,7 @@ export function RaceDetailsNav({ raceId }: { raceId: string }) {
     <>
       <div className='flex flex-col'>
         <Header raceId={raceId} />
-        <TabNavigation tabs={tabs.slice(0, 2)} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <TabNavigation tabs={tabs.slice(0, 3)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </>
   );
@@ -90,7 +91,7 @@ type TabNavigationProps = {
 function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
   return (
     <div className='border-b border-gray-300 overflow-x-auto scrollbar-hide w-screen'>
-      <div className='grid grid-cols-2'>
+      <div className='grid grid-cols-3'>
         {tabs.map((tab) => (
           <TabButton key={tab.id} tab={tab} isActive={activeTab === tab.id} onClick={() => setActiveTab(tab.id)} />
         ))}
