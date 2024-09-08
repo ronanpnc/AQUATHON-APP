@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef,useState } from 'react';
 
 import RaceTimer from '@/components/clock/RaceTimer';
 
@@ -11,15 +11,14 @@ import { socket } from '@/socket';
 export default function RaceDetailClient({ raceId }: { raceId: string }) {
   const { data: race, isLoading, error } = useRace(raceId);
   const [time, setTime] = useState<Date | null>(null);
+  const socketRef = useRef(socket);
 
   const startTime = () => {
-    console.log("start-time");
-    socket.emit('startTime', raceId);
+    socketRef.current.emit('startTime', raceId);
   };
 
   const resetTime = () => {
-    console.log("reset-time");
-    socket.emit('resetTime', raceId);
+    socketRef.current.emit('resetTime', raceId);
   };
 
   useEffect(() => {
@@ -30,19 +29,28 @@ export default function RaceDetailClient({ raceId }: { raceId: string }) {
   }, [race]);
 
   useEffect(() => {
-    socket.on('connect', () => {
-      socket.emit('subscribe', raceId);
-    });
+    const currentSocket = socketRef.current;
 
-    socket.on('subscribeAccepted', () => {
-      socket.on('poolChanged', (value) => {
-        const startTime = value === null ? null : new Date(value);
-        setTime(startTime);
-      });
-    });
+    const handleConnect = () => {
+      currentSocket.emit('subscribe', raceId);
+    };
+
+    const handleSubscribeAccepted = () => {
+      currentSocket.on('poolChanged', handlePoolChanged);
+    };
+
+    const handlePoolChanged = (value: string | null) => {
+      const startTime = value === null ? null : new Date(value);
+      setTime(startTime);
+    };
+
+    currentSocket.on('connect', handleConnect);
+    currentSocket.on('subscribeAccepted', handleSubscribeAccepted);
 
     return () => {
-      socket.off('poolChanged');
+      currentSocket.off('connect', handleConnect);
+      currentSocket.off('subscribeAccepted', handleSubscribeAccepted);
+      currentSocket.off('poolChanged', handlePoolChanged);
     };
   }, [raceId]);
 
