@@ -1,5 +1,3 @@
-'use client';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
 import { useRouter } from 'next/navigation';
@@ -12,8 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { RaceStatus } from '@/domains/race/interface';
-import { useCreateRace } from '@/services/race.services';
+import { Race, RaceStatus } from '@/domains/race/interface';
+import { useUpdateRace } from '@/services/race.services';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -26,19 +24,23 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function CreateRaceForm() {
+interface EditRaceFormProps {
+  race: Race;
+}
+
+export default function EditRaceForm({ race }: EditRaceFormProps) {
   const router = useRouter();
-  const createRaceMutation = useCreateRace();
+  const updateRaceMutation = useUpdateRace();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      raceName: '',
-      date: '',
-      time: '',
-      runDistance: 0,
-      swimDistance: 0,
-      status: RaceStatus.Upcoming,
+      raceName: race.title,
+      date: format(new Date(race.date), 'yyyy-MM-dd'),
+      time: format(new Date(race.date), 'HH:mm'),
+      runDistance: race.runDistance || 0,
+      swimDistance: race.swimDistance || 0,
+      status: race.status,
     },
   });
 
@@ -46,31 +48,31 @@ export default function CreateRaceForm() {
     const raceDateTime = parse(`${values.date} ${values.time}`, 'yyyy-MM-dd HH:mm', new Date());
     const formattedDate = format(raceDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
-    createRaceMutation.mutate(
+    updateRaceMutation.mutate(
       {
+        id: race._id,
         title: values.raceName,
         date: formattedDate,
         time: values.time,
         runDistance: values.runDistance,
         swimDistance: values.swimDistance,
-        status: values.status,
         startTime: formattedDate,
       },
       {
         onSuccess: () => {
           toast({
-            title: 'Race created successfully',
-            description: 'Your new race has been added.',
+            title: 'Race updated successfully',
+            description: 'Your race has been updated.',
           });
           router.push('/races');
         },
         onError: (error) => {
           toast({
             title: 'Error',
-            description: 'Failed to create race. Please try again.',
+            description: 'Failed to update race. Please try again.',
             variant: 'destructive',
           });
-          console.error('Error creating race:', error);
+          console.error('Error updating race:', error);
         },
       },
     );
@@ -154,9 +156,9 @@ export default function CreateRaceForm() {
             <Button
               type='submit'
               className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white mt-6'
-              disabled={createRaceMutation.isPending}
+              disabled={updateRaceMutation.isPending}
             >
-              {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
+              {updateRaceMutation.isPending ? 'Updating...' : 'Update Race'}
             </Button>
           </form>
         </Form>

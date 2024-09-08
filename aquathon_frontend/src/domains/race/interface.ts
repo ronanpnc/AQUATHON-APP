@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react';
+
 export interface Race {
   _id: string;
   title: string;
@@ -18,4 +20,9 @@ export enum RaceStatus {
   Finished = 'finished',
   Ongoing = 'ongoing',
   Upcoming = 'upcoming',
+}
+
+export interface ComponentProps extends PropsWithChildren {
+  className?: string;
+  races?: Race[];
 }

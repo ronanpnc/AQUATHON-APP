@@ -22,10 +22,12 @@ const config = {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          purple: '#7E83DE',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          purple: '#A3A6E7',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
