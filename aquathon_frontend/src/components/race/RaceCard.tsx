@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { format } from 'date-fns';
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
@@ -54,15 +55,14 @@ const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
 
 const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS }> = ({ status }) => {
   const StatusIcon = STATUS_ICONS[status];
-  const bgColorClass = `bg-${STATUS_COLORS[status]}`;
-  const textColorClass = `text-${STATUS_COLORS[status]}`;
+  const { bg: bgColorClass, text: textColorClass } = STATUS_COLORS[status];
 
   return (
     <div className='flex flex-col items-center p-4'>
-      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-1 ${bgColorClass}`}>
+      <div className={clsx('w-16 h-16 rounded-full flex items-center justify-center mb-1', bgColorClass)}>
         <Image src={StatusIcon.icon} alt={StatusIcon.text} className='w-8 h-8' width={24} height={24} />
       </div>
-      <span className={`text-xs font-medium ${textColorClass}`}>{status}</span>
+      <span className={clsx('text-xs font-medium', textColorClass)}>{status}</span>
     </div>
   );
 };

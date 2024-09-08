@@ -15,8 +15,8 @@ export const STATUS_ICONS: Record<Race['status'], { text: string; icon: string }
   },
 };
 
-export const STATUS_COLORS: Record<Race['status'], string> = {
-  finished: 'blue-500',
-  ongoing: 'green-500',
-  upcoming: 'orange-500',
+export const STATUS_COLORS: Record<Race['status'], { bg: string; text: string }> = {
+  ongoing: { bg: 'bg-green-500', text: 'text-green-500' },
+  upcoming: { bg: 'bg-orange-500', text: 'text-orange-500' },
+  finished: { bg: 'bg-blue-500', text: 'text-blue-500' },
 };
