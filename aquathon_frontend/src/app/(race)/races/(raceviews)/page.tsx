@@ -10,7 +10,7 @@ export default function MyRacePage() {
   const { isLoading, isError, data, error } = useRaceList();
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <span>LOADING...</span>;
   }
 
   if (isError) {
