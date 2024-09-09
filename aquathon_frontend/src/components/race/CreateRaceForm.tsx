@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
 import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -15,6 +16,8 @@ import { Input } from '@/components/ui/input';
 
 import { RaceStatus } from '@/domains/race/interface';
 import { useCreateRace } from '@/services/race.services';
+
+import { Segment, SegmentsList } from './SegmentsList';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -30,6 +33,7 @@ type FormValues = z.infer<typeof formSchema>;
 export default function CreateRaceForm() {
   const router = useRouter();
   const createRaceMutation = useCreateRace();
+  const [segments, setSegments] = useState<Segment[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -56,6 +60,7 @@ export default function CreateRaceForm() {
         swimDistance: values.swimDistance,
         status: values.status,
         startTime: formattedDate,
+        segments: segments,
       },
       {
         onSuccess: () => {
@@ -75,6 +80,15 @@ export default function CreateRaceForm() {
         },
       },
     );
+  };
+
+  const addSegment = () => {
+    const newSegment: Segment = {
+      id: `segment-${segments.length + 1}`,
+      name: `Segment ${segments.length + 1}`,
+      type: 'swimming', // Default to swimming, can be changed by user
+    };
+    setSegments([...segments, newSegment]);
   };
 
   return (
@@ -152,20 +166,25 @@ export default function CreateRaceForm() {
               )}
             />
 
-            <div className='fixed bottom-0 left-0 right-0 p-4 bg-white'>
-              <div className='max-w-md mx-auto space-y-4'>
+            <div className='space-y-4'>
+              <h3 className='text-lg font-semibold'>Segments</h3>
+              <SegmentsList segments={segments} onSegmentsChange={setSegments} />
+            </div>
+
+            <div className='bottom-0 left-0 right-0 p-4 bg-white'>
+              <div className='max-w-md mx-auto space-y-6'>
                 <Button
                   type='button'
-                  className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-6 text-lg'
-                  disabled={createRaceMutation.isPending}
+                  className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-8 text-xl font-semibold'
+                  onClick={addSegment}
                 >
-                  <PlusIcon className='w-4 h-4 mr-2' />
+                  <PlusIcon className='w-6 h-6 mr-3' />
                   Create Segment
                 </Button>
 
                 <Button
                   type='submit'
-                  className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-6 text-lg'
+                  className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-8 text-xl font-semibold'
                   disabled={createRaceMutation.isPending}
                 >
                   {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
