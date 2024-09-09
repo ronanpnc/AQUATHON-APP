@@ -3,8 +3,6 @@
 import { notFound } from 'next/navigation';
 import { useEffect, useRef,useState } from 'react';
 
-import RaceTimer from '@/components/clock/RaceTimer';
-
 import { useRace } from '@/services/race.services';
 import { socket } from '@/socket';
 
@@ -65,7 +63,7 @@ export default function RaceDetailClient({ raceId }: { raceId: string }) {
       <p>Run Distance: {race.runDistance} km</p>
       <p>Swim Distance: {race.swimDistance} km</p>
       <p>Status: {race.status}</p>
-      <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
+      {/* <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} /> */}
     </div>
   );
 }

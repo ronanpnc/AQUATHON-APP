@@ -58,14 +58,19 @@ export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle className='text-primary-purple'>Confirm Deletion</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the race and remove all associated data.
+            Are you sure you want to delete this race? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          <AlertDialogAction
+            onClick={handleDelete}
+            className='w-full sm:w-auto bg-primary-purple hover:bg-primary-purple/90'
+          >
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -26,13 +26,13 @@ export default function RaceSettingsPage({ params }: { params: { slug: string } 
         <p className='mb-2'>
           <strong>Date:</strong> {new Date(race.date).toLocaleDateString()}
         </p>
-        <p>
+        <p className='mb-4'>
           <strong>Status:</strong> {race.status}
         </p>
       </div>
-      <div className='flex justify-between'>
+      <div className='flex flex-col space-y-4'>
         <Link href={`/races/${params.slug}/settings/edit`} passHref>
-          <Button variant='outline'>
+          <Button variant='outline' className='w-full'>
             <Edit className='mr-2 h-4 w-4' />
             Edit Race
           </Button>
