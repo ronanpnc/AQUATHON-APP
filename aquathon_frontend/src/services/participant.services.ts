@@ -76,15 +76,15 @@ export const useUpdateParticipant = () => {
 };
 
 // Delete a participant
-const deleteParticipant = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/participants/${id}`, {
+async function deleteParticipant({ raceId , id }:{raceId:string, id:string}): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/races/${raceId}/participants/${id}`, {
     method: 'DELETE',
   });
 
   if (!response.ok) {
     throw new Error('Failed to delete participant');
   }
-};
+}
 
 export const useDeleteParticipant = () => {
   const queryClient = useQueryClient();

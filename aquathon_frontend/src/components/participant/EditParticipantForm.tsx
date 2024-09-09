@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 import { Participant } from '@/domains/participant/interface';
 import { useCreateParticipant, useDeleteParticipant, useParticipant, useUpdateParticipant } from '@/services/participant.services';
+import { DeleteParticipantButton } from './DeleteParticipantButton';
 
 // Schema definition
 const formSchema = z.object({
@@ -103,9 +104,6 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
   if (participant.isLoading) return <div></div>;
   return (
     <main className='flex h-screen w-full justify-center p-8'>
-      <div className='fixed top-5 right-2'>
-        <Trash/>
-      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField

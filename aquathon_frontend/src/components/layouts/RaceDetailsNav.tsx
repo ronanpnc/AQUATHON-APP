@@ -1,7 +1,7 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, User } from 'lucide-react';
+import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, User, UserRound, UsersRound } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
@@ -15,7 +15,7 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
-  { id: 'Participant', label: 'Participant', Icon: <User />, path: '/participants' },
+  { id: 'Participant', label: 'Participant', Icon: <UsersRound />, path: '/participants' },
   { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
   { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
   { id: 'Settings', label: 'Settings', Icon: <Settings /> },
@@ -125,7 +125,7 @@ function TabButton({ tab, isActive, onClick }: TabButtonProps) {
     <Link
       href={`/races/${param?.slug}/${tab.path}`}
       className={`flex-shrink-0 text-center py-3 ${
-        isActive ? 'text-white border-b-2 border-purple-600' : 'text-gray-300'
+        isActive ? 'text-white border-b-4 border-primary-purple' : 'text-gray-300'
       }`}
       onClick={onClick}
     >
