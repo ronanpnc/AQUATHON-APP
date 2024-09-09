@@ -76,9 +76,11 @@ export const setRaceStartTime = async (
       throw error
     })
   if (status == 'start') {
-    data[0].startTime = new Date()
+    data[0].startTime = new Date();
+    data[0].status = "ongoing";
   } else if (status == 'reset') {
     data[0].startTime = null
+    data[0].status = "upcoming";
   }
   const res = await data[0].save().catch((error) => {
     throw handleMongooseError(error)

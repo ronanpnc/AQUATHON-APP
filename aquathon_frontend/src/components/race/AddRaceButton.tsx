@@ -6,9 +6,9 @@ export function AddRaceButton() {
     <div key='add-race-button'>
       <Link
         href='/races/create'
-        className='rounded-full h-12 w-12 border-2 border-gray-300 flex items-center justify-center shadow-md'
+        className='rounded-full h-16 w-16 flex items-center justify-center bg-[#7E83DE]'
       >
-        <Plus className='h-8 w-8' />
+        <Plus className='size-7 text-white' />
       </Link>
     </div>
   );

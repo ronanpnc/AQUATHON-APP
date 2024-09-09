@@ -1,44 +1,40 @@
 'use client';
 
-import { Edit } from 'lucide-react';
+import { X } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
+import { useParams } from 'next/navigation';
 
+import Container from '@/components/Container';
 import { DeleteRaceButton } from '@/components/race/DeleteRaceButton';
-import { Button } from '@/components/ui/button';
+import EditRaceForm from '@/components/race/EditRaceForm';
 
 import { useRace } from '@/services/race.services';
 
-export default function RaceSettingsPage({ params }: { params: { slug: string } }) {
-  const { data: race, isLoading, error } = useRace(params.slug);
+export default function EditRacePage() {
+  const params = useParams();
+  const raceId = params.slug as string;
+  const { data: race, isLoading, error } = useRace(raceId);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!race) return <div>Race not found</div>;
 
   return (
-    <div className='max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md'>
-      <h1 className='text-2xl font-bold mb-4'>Race Settings</h1>
-      <div className='mb-6'>
-        <p className='mb-2'>
-          <strong>Title:</strong> {race.title}
-        </p>
-        <p className='mb-2'>
-          <strong>Date:</strong> {new Date(race.date).toLocaleDateString()}
-        </p>
-        <p>
-          <strong>Status:</strong> {race.status}
-        </p>
+    <Container>
+      <nav className='w-full bg-primary-purple shadow-md fixed top-0 left-0 right-0 z-10'>
+        <div className='flex items-center justify-between h-16 px-6 text-xl font-bold'>
+          <div className='flex items-center'>
+            <Link href={`/races/${raceId}/`}>
+              <X strokeWidth={3} className='text-white' />
+            </Link>
+            <span className='ml-4 text-white'>Edit Race</span>
+          </div>
+          <DeleteRaceButton raceId={race._id} />
+        </div>
+      </nav>
+      <div className='mt-16'>
+        <EditRaceForm race={race} />
       </div>
-      <div className='flex justify-between'>
-        <Link href={`/races/${params.slug}/settings/edit`} passHref>
-          <Button variant='outline'>
-            <Edit className='mr-2 h-4 w-4' />
-            Edit Race
-          </Button>
-        </Link>
-        <DeleteRaceButton raceId={race._id} />
-      </div>
-    </div>
+    </Container>
   );
 }

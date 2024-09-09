@@ -2,7 +2,9 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
+import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -14,6 +16,8 @@ import { Input } from '@/components/ui/input';
 
 import { RaceStatus } from '@/domains/race/interface';
 import { useCreateRace } from '@/services/race.services';
+
+import { Segment, SegmentsList } from './SegmentsList';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -29,6 +33,8 @@ type FormValues = z.infer<typeof formSchema>;
 export default function CreateRaceForm() {
   const router = useRouter();
   const createRaceMutation = useCreateRace();
+  const [segments, setSegments] = useState<Segment[]>([]);
+  const [showSegments, setShowSegments] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -44,7 +50,6 @@ export default function CreateRaceForm() {
 
   const handleSubmit = (values: FormValues) => {
     const raceDateTime = parse(`${values.date} ${values.time}`, 'yyyy-MM-dd HH:mm', new Date());
-
     const formattedDate = format(raceDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
     createRaceMutation.mutate(
@@ -56,6 +61,7 @@ export default function CreateRaceForm() {
         swimDistance: values.swimDistance,
         status: values.status,
         startTime: formattedDate,
+        segments: segments,
       },
       {
         onSuccess: () => {
@@ -77,85 +83,120 @@ export default function CreateRaceForm() {
     );
   };
 
+  const addSegment = () => {
+    const newSegment: Segment = {
+      id: `segment-${segments.length + 1}`,
+      type: 'swimming', 
+    };
+    setSegments([...segments, newSegment]);
+    setShowSegments(true); 
+  };
+
   return (
-    <main className='flex min-h-screen w-full justify-center p-8'>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
-          <FormField
-            control={form.control}
-            name='raceName'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Race Name</FormLabel>
-                <FormControl>
-                  <Input placeholder='Race Name' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <main className='flex w-full items-center justify-center pt-8 pb-20'>
+      <div className='w-full max-w-full px-4'>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
+            <FormField
+              control={form.control}
+              name='raceName'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Race Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder='Race Name' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='date'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date</FormLabel>
-                <FormControl>
-                  <Input type='date' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='date'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input type='date' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='time'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Time</FormLabel>
-                <FormControl>
-                  <Input type='time' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='time'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time</FormLabel>
+                  <FormControl>
+                    <Input type='time' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='runDistance'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Run Distance (km)</FormLabel>
-                <FormControl>
-                  <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='runDistance'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Run Distance (km)</FormLabel>
+                  <FormControl>
+                    <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name='swimDistance'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Swim Distance (km)</FormLabel>
-                <FormControl>
-                  <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name='swimDistance'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Swim Distance (km)</FormLabel>
+                  <FormControl>
+                    <Input type='number' {...field} onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type='submit' className='w-full' disabled={createRaceMutation.isPending}>
-            {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
-          </Button>
-        </form>
-      </Form>
+            {showSegments && (
+              <div className='space-y-4'>
+                <h3 className='text-lg font-semibold'>Segments</h3>
+                <SegmentsList segments={segments} onSegmentsChange={setSegments} />
+              </div>
+            )}
+
+            <div className='bottom-0 left-0 right-0 p-4'>
+              <div className='max-w-md mx-auto space-y-6'>
+                <Button
+                  type='button'
+                  className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-8 text-xl font-semibold'
+                  onClick={addSegment}
+                >
+                  <PlusIcon className='w-6 h-6 mr-3' />
+                  Create Segment
+                </Button>
+
+                <Button
+                  type='submit'
+                  className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-8 text-xl font-semibold'
+                  disabled={createRaceMutation.isPending}
+                >
+                  {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Form>
+      </div>
     </main>
   );
 }

@@ -8,7 +8,8 @@ const router = Router();
 
 router.use("/api/time", timeRouter.default);
 router.use("/api/races", raceRouter.default);
-router.use("/api/participant", participantRouter.default);
+//NOTE
+router.use("/api/races", participantRouter.default);
 
 
 export default router;

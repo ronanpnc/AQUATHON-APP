@@ -2,15 +2,29 @@ services:
   frontend:
     image: vm0077/aquathon_app:frontend
     build:
-      context: frontend
-      dockerfile: ./aquathon_frontend/Dockerfile
+      context: aquathon_frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    networks:
+      - mern
+    restart: always
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: '0.0.0.0:4000/api'
+      NEXT_PUBLIC_WS_BASE_URL: '0.0.0.0:4000'
   backend:
     image: vm0077/aquathon_app:backend
     build:
-      context: backend
-      dockerfile: ./aquathon_backend/Dockerfile
+      context: aquathon_backend
+      dockerfile: Dockerfile
+    networks:
+      - mern
     ports:
       - "4000:4000"
-
+    environment:
+      - NODE_MONGODB=${MONGO_DB_URL}
+      - NODE_PORT=4000
+    restart: always
+networks:
+  mern:
+    driver: bridge
