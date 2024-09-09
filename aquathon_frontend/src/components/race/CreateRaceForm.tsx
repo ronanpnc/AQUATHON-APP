@@ -86,10 +86,10 @@ export default function CreateRaceForm() {
   const addSegment = () => {
     const newSegment: Segment = {
       id: `segment-${segments.length + 1}`,
-      type: 'swimming', // Default to swimming, can be changed by user
+      type: 'swimming', 
     };
     setSegments([...segments, newSegment]);
-    setShowSegments(true); // Show the segments section after adding the first segment
+    setShowSegments(true); 
   };
 
   return (

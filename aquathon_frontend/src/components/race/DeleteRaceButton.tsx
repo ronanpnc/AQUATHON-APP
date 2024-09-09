@@ -51,9 +51,8 @@ export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='destructive'>
-          <Trash2 className='mr-2 h-4 w-4' />
-          Delete Race
+        <Button variant='ghost' size='icon'>
+          <Trash2 className='h-6 w-6 text-red-500' />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='rounded-lg max-w-max'>
