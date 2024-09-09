@@ -1,13 +1,13 @@
 export interface Participant {
   _id: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   bib: number;
   gender: string;
   // status: ParticipantStatus;
   dateofbirth?: string;
   school: string;
-  color: string;
+  colour: string;
 }
 
 export type CreateParticipantData = Omit<Participant, '_id'>;

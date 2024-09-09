@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { useCreateParticipant } from '@/services/participant.services';
+import { useState } from 'react';
+import { CheckIcon } from 'lucide-react';
 
 // Schema definition
 const formSchema = z.object({
@@ -33,6 +35,7 @@ interface CreateParticipantFormProps {
 }
 
 export default function CreateParticipantForm({ raceId }: CreateParticipantFormProps) {
+  const [colorState,setColor] = useState<string>("");
   const router = useRouter();
   const createParticipantMutation = useCreateParticipant();
 
@@ -54,13 +57,13 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
 
     createParticipantMutation.mutate(
       {
-        firstname: values.firstName,
-        lastname: values.lastName,
+        firstName: values.firstName,
+        lastName: values.lastName,
         bib: Number(values.bib),
         gender: values.gender,
         dateofbirth: formattedDate,
         school: values.school,
-        color: values.color || '',
+        colour: values.color || '',
       },
       {
         onSuccess: () => {
@@ -84,10 +87,11 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
 
   const handleColorChange = (color: string) => {
     form.setValue('color', color);
+    setColor(color);
   };
 
   return (
-    <main className='flex min-h-screen w-full justify-center p-8'>
+    <main className='flex h-screen w-full justify-center p-8'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
@@ -195,7 +199,9 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
                   }`}
                   style={{ backgroundColor: color }}
                   onClick={() => handleColorChange(color)}
-                />
+                >
+                    {colorState === color && <CheckIcon color='white'/> }
+                </button>
               ))}
             </div>
           </div>
@@ -207,4 +213,5 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
       </Form>
     </main>
   );
+
 }

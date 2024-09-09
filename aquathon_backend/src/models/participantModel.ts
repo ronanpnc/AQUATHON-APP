@@ -41,10 +41,10 @@ import { ISplit, splitSchema } from './splitModel'
  *           example: "Springfield High"
  *           nullable: true
  *         splits:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/split'
- *           description: Array of split times for the participant.
+ *           type: string
+ *         gender:
+ *           type: enum[""
+ *           description: sex of the pala
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -56,6 +56,7 @@ import { ISplit, splitSchema } from './splitModel'
  */
 export interface IParticipant {
   bib: number
+  gender: "Male"|"Female"
   firstName: string
   lastName: string
   colour?: string
@@ -79,6 +80,10 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
       unique: true
     },
     colour: String,
+    gender: {
+      type: mongoose.SchemaTypes.String,
+      required: [true, 'gender is required']
+    },
     dateOfBirth: {
       type: mongoose.SchemaTypes.Date,
       required: [true, 'Date of birth is required']

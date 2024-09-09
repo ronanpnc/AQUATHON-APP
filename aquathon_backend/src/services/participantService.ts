@@ -7,7 +7,7 @@ export const getParticipants =
     async (raceId: string) => {
   const data = await Race.find({_id : raceId}, {participants : 1})
                    .catch((error) => {throw new StatusError(error.message)})
-  return data[0]
+  return data[0].participants;
 }
 
 // NOTE maybe for future work

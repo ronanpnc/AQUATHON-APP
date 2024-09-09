@@ -1,9 +1,9 @@
-'use client';
+import { Metadata } from 'next';
 
 import '@/styles/globals.css';
 
 import { RaceDetailsNav } from '@/components/layouts/RaceDetailsNav';
-
+export const metadata : Metadata = {};
 export default function RaceDetailLayout({
   children,
   params,
@@ -13,7 +13,6 @@ export default function RaceDetailLayout({
 }) {
   return (
     <div>
-      <RaceDetailsNav raceId={params.slug} />
       <main>{children}</main>
     </div>
   );

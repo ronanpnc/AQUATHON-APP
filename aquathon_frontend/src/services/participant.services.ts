@@ -7,8 +7,8 @@ import { CreateParticipantData, Participant, UpdateParticipantData } from '@/dom
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Fetch all participants
-export const useParticipantList = () => {
-  const url = `${API_BASE_URL}/participants/`;
+export const useParticipantList = (raceId:string) => {
+  const url = `${API_BASE_URL}/races/${raceId}/participants`;
   return useFetch<Participant[]>('participants', url);
 };
 
