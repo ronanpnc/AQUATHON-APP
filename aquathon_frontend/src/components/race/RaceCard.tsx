@@ -36,9 +36,9 @@ const TimeDisplay: React.FC<{ time: string }> = ({ time }) => (
 
 const RaceDetails: React.FC<{ title: string; distance: string }> = ({ title, distance }) => (
   <div>
-    <div className='flex items-center justify-between'>
-      <h3 className='text-lg font-bold truncate max-w-[80%]'>{title}</h3>
-      <span className='text-sm font-medium text-gray-700 ml-auto'>{distance} KM</span>
+    <div className='grid grid-cols-4 items-center justify-between'>
+      <h3 className='text-lg font-bold truncate col-span-3'>{title}</h3>
+      <span className='text-sm font-bold text-gray-700 ml-auto'>{distance} KM</span>
     </div>
     <div className='text-xs text-gray-600 flex items-center space-x-1 mt-1 mb-2'>
       <Clock size={12} />
