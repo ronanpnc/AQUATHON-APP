@@ -13,13 +13,13 @@ export const useParticipantList = (raceId:string) => {
 };
 
 // Fetch a single participant by ID
-export const useParticipant = (id: string) => {
-  const url = `${API_BASE_URL}/participants/${id}`;
+export const useParticipant = (raceId: string,id: string) => {
+  const url = `${API_BASE_URL}/races/${raceId}/participants/${id}`;
   return useFetch<Participant>(`participant-${id}`, url);
 };
 
 const createParticipant = async (participantData: CreateParticipantData): Promise<Participant> => {
-  const response = await fetch(`${API_BASE_URL}/participants/`, {
+  const response = await fetch(`${API_BASE_URL}/races/${participantData.raceId}/participants`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export const useCreateParticipant = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createParticipant,
+    mutationFn : createParticipant,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['participants'] });
     },
@@ -46,8 +46,9 @@ export const useCreateParticipant = () => {
 };
 
 // Update an existing participant
-const updateParticipant = async ({ id, ...updateData }: UpdateParticipantData): Promise<Participant> => {
-  const response = await fetch(`${API_BASE_URL}/participants/${id}`, {
+const updateParticipant = async ({raceId,id, ...updateData }: UpdateParticipantData): Promise<Participant> => {
+  const url = `${API_BASE_URL}/races/${raceId}/participants/${id}`;
+  const response = await fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

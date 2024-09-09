@@ -43,6 +43,7 @@ class ParticipantController {
         dateOfBirth: new Date(req.body.dateOfBirth),
         colour: req.body.colour,
         school: req.body.school,
+        gender: req.body.gender,
         splits: []
       };
       const result = await createParticipant(raceId, participantData);

@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-import { CalendarClock } from 'lucide-react';
 import Link from 'next/link';
 
 import { Participant } from '@/domains/participant/interface';

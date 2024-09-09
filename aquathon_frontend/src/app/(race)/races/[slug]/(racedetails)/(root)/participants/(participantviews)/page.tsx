@@ -1,11 +1,12 @@
 'use client';
 
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+
 import { AddParticipantButton } from '@/components/participant/AddParticipantButton';
 import ParticipantCard from '@/components/participant/ParticipantCard';
 
 import { useParticipantList } from '@/services/participant.services';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
 
 export default function MyParticipantPage() {
   const param = useParams()

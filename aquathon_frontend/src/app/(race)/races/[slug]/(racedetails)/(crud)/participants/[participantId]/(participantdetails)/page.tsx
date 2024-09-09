@@ -1,11 +1,24 @@
-import { Suspense } from 'react';
+"use client"
+import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import RaceDetailClient from '@/components/clock/RaceDetailClient';
+import EditParticipantForm from '@/components/participant/EditParticipantForm';
 
-export default function RaceDetailPage({ params }: { params: { slug: string } }) {
+export default function ParticipantDetailPage({ params }: { params: { slug: string } }) {
+  const router = useRouter();
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <RaceDetailClient raceId={params.slug} />
-      </Suspense>
+    <div className='bg-[#F3F6FB] h-full'>
+      <nav className='flex items-center justify-between sticky top-0 bg-[#7E83DE] text-white border-b p-4 border-gray-300 shadow-md mb-4'>
+        <div className='flex items-center'>
+          <button onClick={() => router.back()}>
+            <X />
+          </button>
+          <h1 className='text-xl font-bold ml-4'>Edit Participant</h1>
+        </div>
+      </nav>
+      <div>
+        <EditParticipantForm raceId="" />
+      </div>
+    </div>
   );
 }

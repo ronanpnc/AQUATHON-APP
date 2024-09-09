@@ -3,8 +3,6 @@
 import { notFound } from 'next/navigation';
 import { useEffect, useRef,useState } from 'react';
 
-import RaceTimer from '@/components/clock/RaceTimer';
-
 import { useRace } from '@/services/race.services';
 import { socket } from '@/socket';
 

@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 
+import { AddRaceButton } from '@/components/race/AddRaceButton';
 import RaceCard from '@/components/race/RaceCard';
 import SectionTitle from '@/components/SectionTitle';
 
 import { useRaceList } from '@/services/race.services';
-import { AddRaceButton } from '@/components/race/AddRaceButton';
 
 export default function MyRacePage() {
   const { isLoading, isError, data, error } = useRaceList();

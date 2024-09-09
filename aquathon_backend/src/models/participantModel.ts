@@ -56,7 +56,7 @@ import { ISplit, splitSchema } from './splitModel'
  */
 export interface IParticipant {
   bib: number
-  gender: "Male"|"Female"
+  gender: "male"|"female"
   firstName: string
   lastName: string
   colour?: string

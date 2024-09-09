@@ -1,11 +1,12 @@
 export interface Participant {
   _id: string;
+  raceId?: string;
   firstName: string;
   lastName: string;
   bib: number;
   gender: string;
   // status: ParticipantStatus;
-  dateofbirth?: string;
+  dateOfBrith?: string;
   school: string;
   colour: string;
 }

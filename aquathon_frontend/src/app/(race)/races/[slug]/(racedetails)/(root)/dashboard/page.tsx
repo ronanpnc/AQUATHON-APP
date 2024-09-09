@@ -1,5 +1,5 @@
-import { AddParticipantButton } from '@/components/participant/AddParticipantButton';
 import { Suspense } from 'react';
+
 import { metadata } from './layout';
 
 //import RaceDetailClient from '@/components/clock/RaceDetailClient';

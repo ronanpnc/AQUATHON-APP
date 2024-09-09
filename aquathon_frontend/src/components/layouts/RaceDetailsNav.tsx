@@ -1,9 +1,9 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, User, Users } from 'lucide-react';
+import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, User } from 'lucide-react';
 import Link from 'next/link';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
 // Define tab type

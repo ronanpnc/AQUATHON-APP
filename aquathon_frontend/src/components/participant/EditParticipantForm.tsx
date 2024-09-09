@@ -1,8 +1,9 @@
+'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -13,7 +14,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-import { useCreateParticipant } from '@/services/participant.services';
+import { Participant } from '@/domains/participant/interface';
+import { useCreateParticipant, useDeleteParticipant, useParticipant, useUpdateParticipant } from '@/services/participant.services';
 
 // Schema definition
 const formSchema = z.object({
@@ -34,30 +36,36 @@ interface CreateParticipantFormProps {
   raceId: string; // Pass raceId as a prop
 }
 
-export default function CreateParticipantForm({ raceId }: CreateParticipantFormProps) {
+export default function EditParticipantForm({ raceId }: CreateParticipantFormProps) {
   const [colorState, setColor] = useState<string>('');
   const param = useParams();
   const router = useRouter();
-  const createParticipantMutation = useCreateParticipant();
+  const participant = useParticipant(param.slug as string, param.participantId as string);
+  const editParticipantMutation = useUpdateParticipant();
+  const deleteParticipant = useDeleteParticipant();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      bib: 0,
-      gender: '',
-      dateOfBirth: '',
-      school: '',
-      color: '',
-    },
+    defaultValues:{
+        gender: "male"
+    }
   });
+  useEffect(() => {
+    if (participant.data) {
+      form.reset({
+        ...participant.data,
+        gender: participant.data?.gender,
+        dateOfBirth: participant.data?.dateOfBirth,
+      });
+    }
+  }, [participant.isFetched]);
 
   const handleSubmit = (values: FormValues) => {
     const formattedDate = format(values.dateOfBirth, 'yyyy-MM-dd');
 
-    createParticipantMutation.mutate(
+    editParticipantMutation.mutate(
       {
+        id: param.participantId as string,
         raceId: param.slug as string,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -92,8 +100,12 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
     setColor(color);
   };
 
+  if (participant.isLoading) return <div></div>;
   return (
     <main className='flex h-screen w-full justify-center p-8'>
+      <div className='fixed top-5 right-2'>
+        <Trash/>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
@@ -145,7 +157,7 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
               <FormItem>
                 <FormLabel>Gender</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange}>
+                  <Select onValueChange={field.onChange} >
                     <SelectTrigger>
                       <SelectValue placeholder='Select Gender' />
                     </SelectTrigger>
@@ -167,7 +179,7 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
               <FormItem>
                 <FormLabel>Date of Birth</FormLabel>
                 <FormControl>
-                  <Input type='date' {...field} />
+                  <Input type='date' {...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -209,7 +221,7 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
           </div>
 
           <Button type='submit' className='w-full bg-[#7E83DE] text-white font-bold p-5 rounded-xl shadow-sm'>
-            Create Participant
+            Update Participant
           </Button>
         </form>
       </Form>
