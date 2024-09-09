@@ -6,7 +6,7 @@ export interface Participant {
   bib: number;
   gender: string;
   // status: ParticipantStatus;
-  dateOfBrith?: string;
+  dateOfBirth: string;
   school: string;
   colour: string;
 }
