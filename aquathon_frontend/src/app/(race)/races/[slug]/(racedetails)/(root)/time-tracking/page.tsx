@@ -1,43 +1,57 @@
 'use client';
-
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 
 import RaceTimer from '@/components/clock/RaceTimer';
 
-import { RaceContext } from '../layout';
+import { socket } from '@/socket';
 
+export default function RaceDetailPage() {
+  const [time, setTime] = useState<Date | null>(null);
+  const id = useParams().slug;
 
+  const startTime = () => {
+    socket.emit('startTime', id);
+  };
+  const resetTime = () => {
+    socket.emit('resetTime', id);
+  };
+  useEffect(() => {
+    socket.emit('subscribe', id);
+  }, []);
 
-export default function MyParticipantPage() {
-  const param = useParams()
-  const race = useContext(RaceContext)
+  useEffect(() => {
+    const fetchRaceData = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/api/races/${id}`);
+        const data = await response.json();
+        const startTime = data?.startTime === null ? null : new Date(data?.startTime);
+        setTime(startTime);
+      } catch (error) {
+        //console.error("Failed to fetch race data:", error);
+      }
+    };
 
+    fetchRaceData();
+
+    socket.emit('subscribe', id);
+
+    socket.on('subscribeAccepted', () => {
+      socket.on('poolChanged', (value) => {
+        const startTime = value === null ? null : new Date(value);
+        setTime(startTime);
+      });
+      return () => {
+        socket.off('poolChanged');
+        socket.off('subscribeAccepted');
+        socket.off('connect');
+      };
+    });
+  }, [id]);
 
   return (
     <div>
-      <div>
-      </div>
+      <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
     </div>
   );
-}
-
-
-const EmptyDataDisplay = () => {
-    return (
-        <div className='flex-grow flex items-center justify-center'>
-          <div className='flex flex-col items-center'>
-            <Image
-              src='/assets/icons/ic_cross_race.svg'
-              alt='Logo'
-              width={250}
-              height={250}
-              className='cursor-pointer'
-            />
-            <span className='text-xl font-medium italic mt-4'>"No participant! Create First"</span>
-          </div>
-        </div>
-
-    );
 }

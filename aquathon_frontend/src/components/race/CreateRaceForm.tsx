@@ -61,7 +61,7 @@ export default function CreateRaceForm() {
         swimDistance: values.swimDistance,
         status: values.status,
         startTime: formattedDate,
-        segments: segments,
+        timeRaceConfigs: [],
       },
       {
         onSuccess: () => {
@@ -86,10 +86,10 @@ export default function CreateRaceForm() {
   const addSegment = () => {
     const newSegment: Segment = {
       id: `segment-${segments.length + 1}`,
-      type: 'swimming', 
+      type: 'swimming',
     };
     setSegments([...segments, newSegment]);
-    setShowSegments(true); 
+    setShowSegments(true);
   };
 
   return (
