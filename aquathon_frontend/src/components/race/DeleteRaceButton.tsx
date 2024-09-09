@@ -51,24 +51,18 @@ export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='destructive'>
-          <Trash2 className='mr-2 h-4 w-4' />
-          Delete Race
+        <Button variant='ghost' size='icon'>
+          <Trash2 className='h-6 w-6 text-red-500' />
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className='rounded-lg max-w-max'>
         <AlertDialogHeader>
-          <AlertDialogTitle className='text-primary-purple'>Confirm Deletion</AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to delete this race? This action cannot be undone.
-          </AlertDialogDescription>
+          <AlertDialogTitle className='text-primary-purple'>Are you sure want to delete this Race?</AlertDialogTitle>
+          <AlertDialogDescription>All current race data will be lost. </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className='grid grid-cols-2 gap-2 justify-center items-center'>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleDelete}
-            className='w-full sm:w-auto bg-primary-purple hover:bg-primary-purple/90'
-          >
+          <AlertDialogAction onClick={handleDelete} className='bg-red-500 hover:bg-primary-purple/90 mt-2'>
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
