@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
+import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -77,7 +78,7 @@ export default function CreateRaceForm() {
   };
 
   return (
-    <main className='flex w-full items-center justify-center pt-8'>
+    <main className='flex w-full items-center justify-center pt-8 pb-20'>
       <div className='w-full max-w-full bg-white px-4'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
@@ -151,13 +152,26 @@ export default function CreateRaceForm() {
               )}
             />
 
-            <Button
-              type='submit'
-              className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white mt-6'
-              disabled={createRaceMutation.isPending}
-            >
-              {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
-            </Button>
+            <div className='fixed bottom-0 left-0 right-0 p-4 bg-white'>
+              <div className='max-w-md mx-auto space-y-4'>
+                <Button
+                  type='button'
+                  className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-6 text-lg'
+                  disabled={createRaceMutation.isPending}
+                >
+                  <PlusIcon className='w-4 h-4 mr-2' />
+                  Create Segment
+                </Button>
+
+                <Button
+                  type='submit'
+                  className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-6 text-lg'
+                  disabled={createRaceMutation.isPending}
+                >
+                  {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
+                </Button>
+              </div>
+            </div>
           </form>
         </Form>
       </div>
