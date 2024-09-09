@@ -6,11 +6,6 @@ import React from 'react';
 export default function HomePage() {
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push('/races');
-  };
-  console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
-
   return (
     <main className='min-h-screen bg-gradient-to-b from-purple-400 to-purple-600 text-white pt-6'>
       <div className='container mx-auto px-4 py-12'>
