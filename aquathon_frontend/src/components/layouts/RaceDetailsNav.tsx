@@ -37,10 +37,10 @@ export function RaceDetailsNav({ raceId, title }: { raceId: string; title: strin
 
 function Header({ raceId, title }: { raceId: string; title: string }) {
   return (
-    <nav className='flex items-center justify-between p-4 border-b border-gray-300 bg-primary-purple'>
+    <nav className='flex items-center justify-between p-4  bg-primary-purple text-white'>
       <div className='flex items-center'>
         <BackButton />
-        <h1 className='text-xl font-semibold ml-4 text-white'>{title}</h1>
+        <h1 className='text-xl font-semibold ml-4'>{title}</h1>
       </div>
       <MoreButton raceId={raceId} />
     </nav>
@@ -67,16 +67,17 @@ function MoreButton({ raceId }: { raceId: string }) {
           <EllipsisVertical className='h-6 w-6' />
         </button>
       </PopoverTrigger>
-      <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-2'>
-        <div className='p-2'>
+      <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-5'>
+        <div className=' w-40'>
           {tabs.slice(-2).map((tab) => (
             <Link key={tab.id} href={`/races/${raceId}/${tab.id.toLowerCase()}`} className='block'>
               <div
-                className={`flex items-center hover:bg-gray-100 p-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
+                className={`flex items-center text-black hover:bg-gray-100 w-full px-3 py-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
               >
                 {tab.Icon}
-                <p className='ml-2'>{tab.label}</p>
+                <p className='ml-5'>{tab.label}</p>
               </div>
+              
             </Link>
           ))}
         </div>
@@ -96,7 +97,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     setActiveTab(id);
   };
   return (
-    <div className='border-b border-gray-300 overflow-x-auto scrollbar-hide w-screen bg-secondary-purple'>
+    <div className='overflow-x-auto scrollbar-hide w-screen bg-secondary-purple'>
       <div className='grid grid-cols-3'>
         {tabs.map((tab) => (
           <TabButton
@@ -124,7 +125,7 @@ function TabButton({ tab, isActive, onClick }: TabButtonProps) {
     <Link
       href={`/races/${param?.slug}/${tab.path}`}
       className={`flex-shrink-0 text-center py-3 ${
-        isActive ? 'text-white border-b-2 border-purple-600' : 'text-gray-500'
+        isActive ? 'text-white border-b-2 border-purple-600' : 'text-gray-300'
       }`}
       onClick={onClick}
     >
