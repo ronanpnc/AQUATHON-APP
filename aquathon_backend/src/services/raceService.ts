@@ -18,7 +18,7 @@ export const getRaces = async (limit: number = 2, page: number = 1) => {
 }
 export const getRace = async (id: string) => {
   const data = await Race.find({ _id: id }).catch((error) => {
-    throw error
+    throw handleMongooseError(error);
   })
   return data[0]
 }

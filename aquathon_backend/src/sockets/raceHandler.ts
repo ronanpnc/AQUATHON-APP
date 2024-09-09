@@ -18,6 +18,7 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
         if (payload === undefined ||  null ) return;
         setRaceStartTime(payload, "reset").then( (data) => {
             raceRoom.emit("poolChanged", data?.startTime)
+            console.log("hello");
         }).catch((e) => console.log(e))
     };
 
