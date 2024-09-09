@@ -34,6 +34,7 @@ export default function CreateRaceForm() {
   const router = useRouter();
   const createRaceMutation = useCreateRace();
   const [segments, setSegments] = useState<Segment[]>([]);
+  const [showSegments, setShowSegments] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -85,15 +86,15 @@ export default function CreateRaceForm() {
   const addSegment = () => {
     const newSegment: Segment = {
       id: `segment-${segments.length + 1}`,
-      name: `Segment ${segments.length + 1}`,
       type: 'swimming', // Default to swimming, can be changed by user
     };
     setSegments([...segments, newSegment]);
+    setShowSegments(true); // Show the segments section after adding the first segment
   };
 
   return (
     <main className='flex w-full items-center justify-center pt-8 pb-20'>
-      <div className='w-full max-w-full bg-white px-4'>
+      <div className='w-full max-w-full px-4'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
             <FormField
@@ -166,12 +167,14 @@ export default function CreateRaceForm() {
               )}
             />
 
-            <div className='space-y-4'>
-              <h3 className='text-lg font-semibold'>Segments</h3>
-              <SegmentsList segments={segments} onSegmentsChange={setSegments} />
-            </div>
+            {showSegments && (
+              <div className='space-y-4'>
+                <h3 className='text-lg font-semibold'>Segments</h3>
+                <SegmentsList segments={segments} onSegmentsChange={setSegments} />
+              </div>
+            )}
 
-            <div className='bottom-0 left-0 right-0 p-4 bg-white'>
+            <div className='bottom-0 left-0 right-0 p-4'>
               <div className='max-w-md mx-auto space-y-6'>
                 <Button
                   type='button'
