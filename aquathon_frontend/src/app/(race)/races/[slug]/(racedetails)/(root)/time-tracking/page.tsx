@@ -18,7 +18,6 @@ export default function MyParticipantPage() {
   return (
     <div>
       <div>
-        <RaceTimer resetTimer={() => {}} startTimer={() =>{}} time={race.data.starTime} />
       </div>
     </div>
   );
