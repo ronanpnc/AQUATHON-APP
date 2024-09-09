@@ -31,7 +31,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   }));
 
   const addSegment = () => {
-    append({ mode: '', type: 'swimming', timeTrackId: [] });
+    append({ mode: '1-step', type: 'swimming', timeTrackId: [] });
   };
   // eslint-disable-next-line no-use-before-define
   const onDragEnd = ({ source, destination }) => {
@@ -41,7 +41,6 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   };
 
   const updateSegment = (index: number, updates: Partial<Segment>) => {
-   console.log(number);
    form.setValue(`timeRaceConfigs.${index}`, { ...fields[index], ...updates } as Segment);
   };
 
