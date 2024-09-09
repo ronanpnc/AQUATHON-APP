@@ -46,23 +46,17 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
-        gender: "male"
-    }
+    defaultValues: {
+    },
   });
   useEffect(() => {
-    if (participant.data) {
       form.reset({
         ...participant.data,
-        gender: participant.data?.gender,
-        dateOfBirth: participant.data?.dateOfBirth,
       });
-    }
-  }, [participant.isFetched]);
+  }, [participant.data]);
 
   const handleSubmit = (values: FormValues) => {
     const formattedDate = format(values.dateOfBirth, 'yyyy-MM-dd');
-
     editParticipantMutation.mutate(
       {
         id: param.participantId as string,
@@ -70,8 +64,8 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
         firstName: values.firstName,
         lastName: values.lastName,
         bib: Number(values.bib),
-        gender: values.gender,
-        dateOfBirth: formattedDate,
+        gender: values.gender.toString(),
+        dateOfBrith: formattedDate,
         school: values.school,
         colour: values.color || '',
       },
@@ -106,7 +100,7 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
       <div className='fixed top-5 right-2'>
         <Trash/>
       </div>
-      <Form {...form}>
+      <Form {...form} key={form.watch("gender")}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
             control={form.control}
@@ -157,7 +151,7 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
               <FormItem>
                 <FormLabel>Gender</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} >
+                  <Select onValueChange={field.onChange} defaultValue={field.value?.toString()} >
                     <SelectTrigger>
                       <SelectValue placeholder='Select Gender' />
                     </SelectTrigger>
@@ -179,7 +173,7 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
               <FormItem>
                 <FormLabel>Date of Birth</FormLabel>
                 <FormControl>
-                  <Input type='date' {...field}/>
+                  <Input defaultValue={new Date().toString()} type='date' {...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
