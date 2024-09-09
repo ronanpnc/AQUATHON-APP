@@ -1,4 +1,4 @@
-import { IParticipant, Participant } from '../models/participantModel'
+import { IParticipant } from '../models/participantModel'
 import { Race } from '../models/raceModel'
 import { StatusError } from '../types/common'
 import { handleMongooseError } from '../utils/mongooseError'
@@ -45,21 +45,31 @@ export const getParticipantById = async (raceId: string, participantId: string) 
 
 export const createParticipant = async (raceId: string, data: IParticipant) => {
   try {
-    const race = await Race.findById(raceId)
-    if (!race) {
-      throw new StatusError('Race not found', 404)
+    const result = await Race.updateOne(
+      {
+        _id: raceId,
+        'participants.bib': { $ne: data.bib }
+      },
+      { $push: { participants: data } },
+      { runValidators: true }
+    );
+
+    if (result.matchedCount === 0) {
+      throw new StatusError('Race not found', 404);
     }
-    const newParticipant = new Participant(data)
-    race.participants.push(newParticipant)
-    await race.save()
-    return newParticipant
+
+    if (result.modifiedCount === 0) {
+      throw new StatusError('Participant with this bib number already exists', 400);
+    }
+
+    return data;  // Return the newly added participant data
   } catch (error) {
     if (error instanceof StatusError) {
-      throw error
+      throw error;
     }
-    throw handleMongooseError(error)
+    throw handleMongooseError(error);
   }
-}
+};
 
 export const deleteParticipant = async (raceId: string, participantId: string) => {
   try {
