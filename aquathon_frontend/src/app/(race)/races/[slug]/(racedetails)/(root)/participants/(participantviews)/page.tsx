@@ -22,7 +22,7 @@ export default function MyParticipantPage() {
 
   return (
     <div>
-      <div className='p-2'>{data?.map((participant) => <ParticipantCard key={participant._id} participant={participant} raceId={param.slug as string}  />)}</div>
+      <div className='pt-6'>{data?.map((participant) => <ParticipantCard key={participant._id} participant={participant} raceId={param.slug as string}  />)}</div>
       <div>
         {data?.length == 0 ?
             <EmptyDataDisplay/>:

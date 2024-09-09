@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 import { Participant } from '@/domains/participant/interface';
 import { useCreateParticipant, useDeleteParticipant, useParticipant, useUpdateParticipant } from '@/services/participant.services';
+import { DeleteParticipantButton } from './DeleteParticipantButton';
 
 // Schema definition
 const formSchema = z.object({

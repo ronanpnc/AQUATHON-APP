@@ -60,9 +60,9 @@ const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS }> = ({ statu
   return (
     <div className='flex flex-col items-center p-4'>
       <div className={clsx('w-16 h-16 rounded-full flex items-center justify-center mb-1', bgColorClass)}>
-        <Image src={StatusIcon.icon} alt={StatusIcon.text} className='w-8 h-8' width={24} height={24} />
+        <Image src={StatusIcon.icon} alt={StatusIcon.text} className='w-12 h-12' width={24} height={24} />
       </div>
-      <span className={clsx('text-xs font-medium', textColorClass)}>{status}</span>
+      <span className={clsx('text-xs font-medium', textColorClass)}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
     </div>
   );
 };

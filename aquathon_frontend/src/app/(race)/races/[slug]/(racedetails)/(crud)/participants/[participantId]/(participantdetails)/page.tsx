@@ -3,8 +3,9 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import EditParticipantForm from '@/components/participant/EditParticipantForm';
+import { DeleteParticipantButton } from '@/components/participant/DeleteParticipantButton';
 
-export default function ParticipantDetailPage({ params }: { params: { slug: string } }) {
+export default function ParticipantDetailPage({ params }: { params: { slug: string, participantId:string } }) {
   const router = useRouter();
   return (
     <div className='bg-[#F3F6FB] h-full'>
@@ -15,6 +16,8 @@ export default function ParticipantDetailPage({ params }: { params: { slug: stri
           </button>
           <h1 className='text-xl font-bold ml-4'>Edit Participant</h1>
         </div>
+          <DeleteParticipantButton raceId={params.slug} participantId={params.participantId}/>
+
       </nav>
       <div>
         <EditParticipantForm raceId="" />

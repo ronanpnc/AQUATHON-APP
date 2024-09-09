@@ -4,7 +4,7 @@ import { Edit } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-import { DeleteRaceButton } from '@/components/race/DeleteRaceButton';
+import { DeleteParticipantButton } from '@/components/participant/DeleteParticipantButton';
 import { Button } from '@/components/ui/button';
 
 import { useRace } from '@/services/race.services';
@@ -37,7 +37,7 @@ export default function RaceSettingsPage({ params }: { params: { slug: string } 
             Edit Race
           </Button>
         </Link>
-        <DeleteRaceButton raceId={race._id} />
+        <DeleteParticipantButton raceId={race._id} />
       </div>
     </div>
   );
