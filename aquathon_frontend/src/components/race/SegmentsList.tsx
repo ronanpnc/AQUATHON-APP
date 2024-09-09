@@ -1,5 +1,5 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { ChevronDown, GripVertical } from 'lucide-react';
+import { ChevronDown, GripVertical, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,11 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
     setOpenPopover(null);
   };
 
+  const deleteSegment = (index: number) => {
+    const newSegments = segments.filter((_, i) => i !== index);
+    onSegmentsChange(newSegments);
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId='segments'>
@@ -43,7 +48,7 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
                   <li
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    className={`flex items-center justify-between w-full p-2 bg-gray-500 rounded ${
+                    className={`flex items-center justify-between w-full p-2 bg-white rounded ${
                       snapshot.isDragging ? 'shadow-lg' : ''
                     }`}
                   >
@@ -61,15 +66,15 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
                             <ChevronDown className='ml-2 h-4 w-4' />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-2'>
+                        <PopoverContent className='w-full p-0 bg-white border border-gray-200 shadow-lg'>
                           <Button
-                            className='w-full justify-start rounded-none'
+                            className='w-full justify-start rounded-none bg-white text-black'
                             onClick={() => updateSegment(index, { type: 'swimming' })}
                           >
                             Swimming
                           </Button>
                           <Button
-                            className='w-full justify-start rounded-none'
+                            className='w-full justify-start rounded-none bg-white text-black'
                             onClick={() => updateSegment(index, { type: 'running' })}
                           >
                             Running
@@ -77,8 +82,18 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
                         </PopoverContent>
                       </Popover>
                     </div>
-                    <div {...provided.dragHandleProps} className='ml-2'>
-                      <GripVertical className='text-gray-400 flex-shrink-0' />
+                    <div className='flex items-center space-x-1'>
+                      <Button
+                        variant='ghost'
+                        size='icon'
+                        onClick={() => deleteSegment(index)}
+                        className='text-red-500 hover:text-red-700 hover:bg-red-100'
+                      >
+                        <Trash2 />
+                      </Button>
+                      <div {...provided.dragHandleProps}>
+                        <GripVertical className='text-gray-400 flex-shrink-0' />
+                      </div>
                     </div>
                   </li>
                 )}
