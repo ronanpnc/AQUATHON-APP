@@ -72,7 +72,10 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
           toast({
             title: 'Participant created successfully',
             description: 'Your new participant has been added.',
+            
           });
+          form.reset({});
+          setColor("")
           //router.push('/participants');
         },
         onError: (error) => {
@@ -94,7 +97,7 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
 
   return (
     <main className='flex h-screen w-full justify-center p-8'>
-      <Form {...form}>
+      <Form {...form} key={form.watch("bib")}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
             control={form.control}

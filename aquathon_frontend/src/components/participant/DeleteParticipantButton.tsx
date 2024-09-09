@@ -38,7 +38,8 @@ export function DeleteParticipantButton({ raceId, participantId }: DeletePartici
         title: 'Participant deleted',
         description: 'The participant has been successfully deleted.',
       });
-      router.push('/races');
+      //router.push(`/races/${raceId}/participants`);
+      router.back();
     } catch (error) {
       console.error('Failed to delete participant:', error);
       toast({
