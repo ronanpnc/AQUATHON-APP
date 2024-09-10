@@ -23,7 +23,7 @@ import { useDeleteParticipant } from '@/services/participant.services';
 
 interface DeleteParticipantButtonProps {
   raceId: string;
-  participantId:string;
+  participantId: string;
 }
 
 export function DeleteParticipantButton({ raceId, participantId }: DeleteParticipantButtonProps) {
@@ -33,7 +33,7 @@ export function DeleteParticipantButton({ raceId, participantId }: DeletePartici
 
   const handleDelete = async () => {
     try {
-      await deleteParticipantMutation.mutate({raceId,id: participantId});
+      await deleteParticipantMutation.mutate({ raceId, id: participantId });
       toast({
         title: 'Participant deleted',
         description: 'The participant has been successfully deleted.',
@@ -53,8 +53,8 @@ export function DeleteParticipantButton({ raceId, participantId }: DeletePartici
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='destructive'>
-          <Trash2 />
+        <Button variant='ghost' size='icon'>
+          <Trash2 className='h-6 w-6 text-red-500' />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

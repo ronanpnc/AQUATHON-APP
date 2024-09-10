@@ -36,7 +36,7 @@ type FormValues = z.infer<typeof formSchema>;
 const savedColors = ['#EC4899', '#F43F5E', '#84CC16', '#D946EF', '#8B5CF6', '#0EA5E9'];
 
 interface CreateParticipantFormProps {
-    raceId: string; // Pass raceId as a prop
+    raceId: string; 
 }
 
 export default function EditParticipantForm({ raceId }: CreateParticipantFormProps) {
