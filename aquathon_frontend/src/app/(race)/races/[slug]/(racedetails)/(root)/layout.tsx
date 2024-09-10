@@ -1,5 +1,6 @@
 'use client';
 
+import { UseQueryResult } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { createContext } from 'react';
 
@@ -7,10 +8,11 @@ import '@/styles/globals.css';
 
 import { RaceDetailsNav } from '@/components/layouts/RaceDetailsNav';
 
+import { Race } from '@/domains/race/interface';
 import { useRace } from '@/services/race.services';
 
-// note : not sure yet
-export const RaceContext = createContext({});
+
+export const RaceContext = createContext<UseQueryResult<Race, Error>>();
 export default function RaceDetailLayout({
   children,
   params,

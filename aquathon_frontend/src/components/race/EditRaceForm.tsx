@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
 import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Race, RaceStatus } from '@/domains/race/interface';
 import { useUpdateRace } from '@/services/race.services';
 
-import { Segment, SegmentsList } from './SegmentsList';
+import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -26,6 +26,7 @@ const formSchema = z.object({
   runDistance: z.number().min(0, 'Run distance must be a positive number'),
   swimDistance: z.number().min(0, 'Swim distance must be a positive number'),
   status: z.nativeEnum(RaceStatus),
+  timeRaceConfigs: z.array(TimeRaceConfigSchema),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -34,12 +35,14 @@ interface EditRaceFormProps {
   race: Race;
 }
 
+export type addSegmentHandle = {
+  addSegment: () => void;
+};
+
 export default function EditRaceForm({ race }: EditRaceFormProps) {
   const router = useRouter();
   const updateRaceMutation = useUpdateRace();
-  const [segments, setSegments] = useState<Segment[]>(race.segments || []);
-  const [showSegments, setShowSegments] = useState(race.segments && race.segments.length > 0);
-
+  const childRef = useRef<addSegmentHandle>();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,6 +52,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
       runDistance: race.runDistance || 0,
       swimDistance: race.swimDistance || 0,
       status: race.status,
+      timeRaceConfigs: race.timeRaceConfigs
     },
   });
 
@@ -65,7 +69,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
         runDistance: values.runDistance,
         swimDistance: values.swimDistance,
         startTime: formattedDate,
-        segments: segments,
+        timeRaceConfigs: values.timeRaceConfigs,
       },
       {
         onSuccess: () => {
@@ -81,19 +85,9 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
             description: 'Failed to update race. Please try again.',
             variant: 'destructive',
           });
-          console.error('Error updating race:', error);
         },
       },
     );
-  };
-
-  const addSegment = () => {
-    const newSegment: Segment = {
-      id: `segment-${segments.length + 1}`,
-      type: 'swimming',
-    };
-    setSegments([...segments, newSegment]);
-    setShowSegments(true);
   };
 
   return (
@@ -171,19 +165,17 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
               )}
             />
 
-            {showSegments && (
-              <div className='space-y-4'>
-                <h3 className='text-lg font-semibold'>Segments</h3>
-                <SegmentsList segments={segments} onSegmentsChange={setSegments} />
-              </div>
-            )}
+            <div className='space-y-4'>
+              {form.watch('timeRaceConfigs')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
+              <SegmentsList form={form} ref={childRef} />
+            </div>
 
             <div className='bottom-0 left-0 right-0 p-4'>
               <div className='max-w-md mx-auto space-y-6'>
                 <Button
                   type='button'
                   className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-8 text-xl font-semibold'
-                  onClick={addSegment}
+                  onClick={() => childRef?.current?.addSegment()}
                 >
                   <PlusIcon className='w-6 h-6 mr-3' />
                   Create Segment

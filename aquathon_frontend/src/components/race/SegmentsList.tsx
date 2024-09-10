@@ -1,40 +1,51 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ChevronDown, GripVertical, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-export interface Segment {
-  id: string;
-  type: 'swimming' | 'running';
-}
+import { CreateRaceData } from '@/domains/race/interface';
 
 interface SegmentsListProps {
-  segments: Segment[];
-  onSegmentsChange: (segments: Segment[]) => void;
+  form: UseFormReturn<CreateRaceData>;
 }
 
-export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) {
+export const TimeRaceConfigSchema = z.object({
+  type: z.string(),
+  mode: z.string(),
+  timeTrackId: z.array(z.string()),
+});
+export type Segment = z.infer<typeof TimeRaceConfigSchema>;
+export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   const [openPopover, setOpenPopover] = useState<string | null>(null);
+  const { fields, append, move, remove } = useFieldArray({
+    control: form.control,
+    name: 'timeRaceConfigs',
+  });
 
-  const onDragEnd = (result: any) => {
-    if (!result.destination) return;
-    const items = Array.from(segments);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    onSegmentsChange(items);
+  useImperativeHandle(ref, () => ({
+    addSegment,
+  }));
+
+  const addSegment = () => {
+    append({ mode: '1-step', type: 'swimming', timeTrackId: [] });
+  };
+
+  const onDragEnd = ({ source, destination }) => {
+    if (destination) {
+      move(source.index, destination.index);
+    }
   };
 
   const updateSegment = (index: number, updates: Partial<Segment>) => {
-    const newSegments = segments.map((segment, i) => (i === index ? { ...segment, ...updates } : segment));
-    onSegmentsChange(newSegments);
-    setOpenPopover(null);
+    form.setValue(`timeRaceConfigs.${index}`, { ...fields[index], ...updates } as Segment);
   };
 
   const deleteSegment = (index: number) => {
-    const newSegments = segments.filter((_, i) => i !== index);
-    onSegmentsChange(newSegments);
+    remove(index);
   };
 
   return (
@@ -42,8 +53,8 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
       <Droppable droppableId='segments'>
         {(provided) => (
           <ul {...provided.droppableProps} ref={provided.innerRef} className='space-y-2 w-full'>
-            {segments.map((segment, index) => (
-              <Draggable key={segment.id} draggableId={segment.id} index={index}>
+            {fields.map((segment, index) => (
+              <Draggable key={`timeRaceConfigs[${index}]`} draggableId={`timeRaceConfigs-${index}`} index={index}>
                 {(provided, snapshot) => (
                   <li
                     ref={provided.innerRef}
@@ -56,13 +67,18 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
                       <div className='w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0'>
                         <span className='font-medium text-white'>{index + 1}</span>
                       </div>
+                      <input
+                        hidden
+                        name={`timeRaceConfigs.${index}.type`}
+                        defaultValue={`${segment.type}`} // make sure to set up defaultValue
+                      />
                       <Popover
                         open={openPopover === segment.id}
                         onOpenChange={(open) => setOpenPopover(open ? segment.id : null)}
                       >
                         <PopoverTrigger asChild>
                           <Button variant='outline' className='w-full justify-between'>
-                            {segment.type || 'Select type'}
+                            {form.watch(`timeRaceConfigs.${index}`).type || 'Select type'}
                             <ChevronDown className='ml-2 h-4 w-4' />
                           </Button>
                         </PopoverTrigger>
@@ -105,4 +121,4 @@ export function SegmentsList({ segments, onSegmentsChange }: SegmentsListProps) 
       </Droppable>
     </DragDropContext>
   );
-}
+});
