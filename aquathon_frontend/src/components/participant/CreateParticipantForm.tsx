@@ -72,7 +72,7 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
           toast({
             title: 'Participant created successfully',
             description: 'Your new participant has been added.',
-            
+
           });
           form.reset({});
           setColor("")

@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
 import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { RaceStatus } from '@/domains/race/interface';
 import { useCreateRace } from '@/services/race.services';
 
-import { Segment, SegmentsList } from './SegmentsList';
+import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -25,27 +25,22 @@ const formSchema = z.object({
   time: z.string().min(1, 'Time is required'),
   runDistance: z.number().min(0, 'Run distance must be a positive number'),
   swimDistance: z.number().min(0, 'Swim distance must be a positive number'),
-  status: z.nativeEnum(RaceStatus),
+  status: z.nativeEnum(RaceStatus).optional(),
+  timeRaceConfigs: z.array(TimeRaceConfigSchema),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+export type addSegmentHandle = {
+  addSegment: () => void;
+};
+
 export default function CreateRaceForm() {
   const router = useRouter();
   const createRaceMutation = useCreateRace();
-  const [segments, setSegments] = useState<Segment[]>([]);
-  const [showSegments, setShowSegments] = useState(false);
-
+  const childRef = useRef<addSegmentHandle>();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      raceName: '',
-      date: '',
-      time: '',
-      runDistance: 0,
-      swimDistance: 0,
-      status: RaceStatus.Upcoming,
-    },
   });
 
   const handleSubmit = (values: FormValues) => {
@@ -59,37 +54,27 @@ export default function CreateRaceForm() {
         time: values.time,
         runDistance: values.runDistance,
         swimDistance: values.swimDistance,
-        status: values.status,
+        status: RaceStatus.Upcoming,
         startTime: formattedDate,
-        segments: segments,
+        timeRaceConfigs: values.timeRaceConfigs.map((item) => ({ ...item, mode: '1-step' })),
       },
       {
         onSuccess: () => {
           toast({
-            title: 'Race created successfully',
-            description: 'Your new race has been added.',
+            title: 'Race updated successfully',
+            description: 'Your race has been created.',
           });
           router.push('/races');
         },
-        onError: (error) => {
+        onError: () => {
           toast({
             title: 'Error',
             description: 'Failed to create race. Please try again.',
             variant: 'destructive',
           });
-          console.error('Error creating race:', error);
         },
       },
     );
-  };
-
-  const addSegment = () => {
-    const newSegment: Segment = {
-      id: `segment-${segments.length + 1}`,
-      type: 'swimming', 
-    };
-    setSegments([...segments, newSegment]);
-    setShowSegments(true); 
   };
 
   return (
@@ -167,19 +152,17 @@ export default function CreateRaceForm() {
               )}
             />
 
-            {showSegments && (
-              <div className='space-y-4'>
-                <h3 className='text-lg font-semibold'>Segments</h3>
-                <SegmentsList segments={segments} onSegmentsChange={setSegments} />
-              </div>
-            )}
+            <div className='space-y-4'>
+              {form.watch('timeRaceConfigs')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
+              <SegmentsList form={form} ref={childRef} />
+            </div>
 
             <div className='bottom-0 left-0 right-0 p-4'>
               <div className='max-w-md mx-auto space-y-6'>
                 <Button
                   type='button'
                   className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-8 text-xl font-semibold'
-                  onClick={addSegment}
+                  onClick={() => childRef?.current?.addSegment()}
                 >
                   <PlusIcon className='w-6 h-6 mr-3' />
                   Create Segment
@@ -190,7 +173,7 @@ export default function CreateRaceForm() {
                   className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-8 text-xl font-semibold'
                   disabled={createRaceMutation.isPending}
                 >
-                  {createRaceMutation.isPending ? 'Creating...' : 'Create Race'}
+                  {createRaceMutation.isPending ? 'Saving...' : 'Save'}
                 </Button>
               </div>
             </div>
