@@ -14,8 +14,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-import { Race, RaceStatus } from '@/domains/race/interface';
-import { useCreateRace, useUpdateRace } from '@/services/race.services';
+import { RaceStatus } from '@/domains/race/interface';
+import { useCreateRace } from '@/services/race.services';
 
 import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
 
@@ -31,21 +31,16 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface EditRaceFormProps {
-  race: Race;
-}
-
 export type addSegmentHandle = {
   addSegment: () => void;
 };
 
-export default function CreateRaceForm({ race }: EditRaceFormProps) {
+export default function CreateRaceForm() {
   const router = useRouter();
   const createRaceMutation = useCreateRace();
   const childRef = useRef<addSegmentHandle>();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-
   });
 
   const handleSubmit = (values: FormValues) => {
@@ -61,7 +56,7 @@ export default function CreateRaceForm({ race }: EditRaceFormProps) {
         swimDistance: values.swimDistance,
         status: RaceStatus.Upcoming,
         startTime: formattedDate,
-        timeRaceConfigs: values.timeRaceConfigs.map((item) => ({...item,mode: "1-step"})),
+        timeRaceConfigs: values.timeRaceConfigs.map((item) => ({ ...item, mode: '1-step' })),
       },
       {
         onSuccess: () => {
@@ -71,7 +66,7 @@ export default function CreateRaceForm({ race }: EditRaceFormProps) {
           });
           router.push('/races');
         },
-        onError: (error) => {
+        onError: () => {
           toast({
             title: 'Error',
             description: 'Failed to create race. Please try again.',

@@ -2,7 +2,7 @@ import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { ChevronDown, GripVertical, Trash2 } from 'lucide-react';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { number, z } from 'zod';
+import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -33,7 +33,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   const addSegment = () => {
     append({ mode: '1-step', type: 'swimming', timeTrackId: [] });
   };
-  // eslint-disable-next-line no-use-before-define
+
   const onDragEnd = ({ source, destination }) => {
     if (destination) {
       move(source.index, destination.index);
@@ -41,7 +41,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   };
 
   const updateSegment = (index: number, updates: Partial<Segment>) => {
-   form.setValue(`timeRaceConfigs.${index}`, { ...fields[index], ...updates } as Segment);
+    form.setValue(`timeRaceConfigs.${index}`, { ...fields[index], ...updates } as Segment);
   };
 
   const deleteSegment = (index: number) => {
@@ -77,7 +77,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
                         onOpenChange={(open) => setOpenPopover(open ? segment.id : null)}
                       >
                         <PopoverTrigger asChild>
-                          <Button key={form.watch(`timeRaceConfigs.${index}`)} variant='outline' className='w-full justify-between'>
+                          <Button variant='outline' className='w-full justify-between'>
                             {form.watch(`timeRaceConfigs.${index}`).type || 'Select type'}
                             <ChevronDown className='ml-2 h-4 w-4' />
                           </Button>

@@ -2,8 +2,8 @@
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import EditParticipantForm from '@/components/participant/EditParticipantForm';
 import { DeleteParticipantButton } from '@/components/participant/DeleteParticipantButton';
+import EditParticipantForm from '@/components/participant/EditParticipantForm';
 
 export default function ParticipantDetailPage({ params }: { params: { slug: string, participantId:string } }) {
   const router = useRouter();

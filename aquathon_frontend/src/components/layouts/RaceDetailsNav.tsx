@@ -1,7 +1,7 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, User, UserRound, UsersRound } from 'lucide-react';
+import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, UsersRound } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
