@@ -1,11 +1,16 @@
-# Aquathon App Monorepo
+# Aquathon App 
 
 This monorepo contains the frontend and backend applications for the Aquathon race tracking system.
 
 ## Project Structure
 
-
-
+```bash
+aquathon-app/
+├── aquathon_frontend/   # Next.js frontend application
+├── aquathon_backend/    # Node.js backend application
+├── package.json         # Root package.json for running both apps
+└── pnpm-workspace.yaml  # PNPM workspace configuration
+```
 
 ## Prerequisites
 
@@ -56,7 +61,7 @@ Refer to the individual README files in each application directory for specific 
 Make sure to set up the necessary environment variables:
 
 - For the frontend, create a `.env.local` file in the `aquathon_frontend` directory.
-- For the backend, create a `.env` file in the `aquathon_backend` directory.
+- For the backend, create a `.env.local` file in the `aquathon_backend` directory.
 
 Refer to the respective README files for the required environment variables.
 
