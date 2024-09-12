@@ -121,9 +121,9 @@ const raceSchema = new mongoose.Schema<IRace>(
         timeRaceConfigs: {
            type:[timeRaceConfigSchema],
            required : true
-        }
-    },
+        } },
     { timestamps: true, collection: 'races' }
 )
-raceSchema.index({_id:1, 'participants.bib': 1},{unique : true})
+// TODO : unique bib
+//raceSchema.index({_id:1, 'participants.bib': 1},{unique : true})
 export const Race = db.model('Race', raceSchema)
