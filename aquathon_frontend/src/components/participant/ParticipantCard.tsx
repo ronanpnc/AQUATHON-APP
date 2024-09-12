@@ -18,7 +18,7 @@ const ParticipantCard: React.FC<{ participant: Participant , raceId:string}> = (
 
 const ParticipantInfo: React.FC<{ firstname: string; lastname:string; number: number, colour:string }> = ({ firstname, lastname, number, colour }) => (
   <div className='flex gap-2 items-center'>
-    <h1 className='text-lg font-semibold pr-2' style={{color: colour}}>{number}</h1>
+    <h1 className='text-lg font-semibold pr-2' style={{color: colour}}>{String(number).padStart(3, '0')}</h1>
     <h3 className='text-lg font-semibold'>{firstname}</h3>
     <h3 className='text-lg font-semibold'>{lastname}</h3>
     {/*

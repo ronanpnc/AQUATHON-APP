@@ -97,7 +97,7 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
 
   return (
     <main className='flex h-screen w-full justify-center p-8'>
-      <Form {...form} key={form.watch("bib")}>
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
             control={form.control}
