@@ -40,7 +40,7 @@ export default function MyParticipantPage() {
 
 const EmptyDataDisplay = () => {
     return (
-        <div className='flex-grow flex items-center justify-center'>
+        <div className='flex items-center justify-center fixed inset-0'>
           <div className='flex flex-col items-center'>
             <Image
               src='/assets/icons/ic_cross_race.svg'
@@ -49,7 +49,7 @@ const EmptyDataDisplay = () => {
               height={250}
               className='cursor-pointer'
             />
-            <span className='text-xl font-medium italic mt-4'>"No participant! Create First"</span>
+            <span className='text-xl font-medium italic mt-4'>No participant! Create First</span>
           </div>
         </div>
 
