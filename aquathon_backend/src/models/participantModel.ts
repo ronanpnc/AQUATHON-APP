@@ -77,7 +77,6 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
     bib: {
       type: Number,
       required: [true, 'Bib number is required'],
-      unique: true
     },
     colour: String,
     gender: {
