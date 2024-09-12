@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
+import { DeleteRaceButton } from '../race/DeleteRaceButton';
+
 // Define tab type
 type Tab = {
   id: string;
@@ -68,18 +70,18 @@ function MoreButton({ raceId }: { raceId: string }) {
         </button>
       </PopoverTrigger>
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-5'>
-        <div className=' w-40'>
+        <div className='w-40'>
           {tabs.slice(-2).map((tab) => (
             <Link key={tab.id} href={`/races/${raceId}/${tab.id.toLowerCase()}`} className='block'>
               <div
-                className={`flex items-center text-black hover:bg-gray-100 w-full px-3 py-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
+                className={`flex items-center text-black hover:bg-gray-100 w-full px-4 py-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
               >
                 {tab.Icon}
                 <p className='ml-5'>{tab.label}</p>
               </div>
-              
             </Link>
           ))}
+          <DeleteRaceButton raceId={raceId} />
         </div>
       </PopoverContent>
     </Popover>
