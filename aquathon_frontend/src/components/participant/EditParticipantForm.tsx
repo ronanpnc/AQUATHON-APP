@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CheckIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -41,6 +41,7 @@ interface CreateParticipantFormProps {
 
 export default function EditParticipantForm({ raceId }: CreateParticipantFormProps) {
     const [colorState, setColor] = useState<string>('');
+    const router = useRouter();
     const param = useParams();
     const participant = useParticipant(param.slug as string, param.participantId as string);
     const editParticipantMutation = useUpdateParticipant();
@@ -79,6 +80,7 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
                         description: 'Your new participant has been added.',
                     });
                     //router.push('/participants');
+                    router.back();
                 },
                 onError: (error) => {
                     toast({
