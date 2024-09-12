@@ -21,7 +21,7 @@ export default function MyParticipantPage() {
   }
 
   return (
-    <div>
+    <div className=''>
       <div className='pt-6'>{data?.map((participant) => <ParticipantCard key={participant._id} participant={participant} raceId={param.slug as string}  />)}</div>
       <div>
         {data?.length == 0 ?
@@ -40,7 +40,7 @@ export default function MyParticipantPage() {
 
 const EmptyDataDisplay = () => {
     return (
-        <div className='flex items-center justify-center fixed inset-0'>
+        <div className='flex items-center justify-center fixed inset-36'>
           <div className='flex flex-col items-center'>
             <Image
               src='/assets/icons/ic_cross_race.svg'
