@@ -8,17 +8,17 @@ import { socket } from '@/socket';
 
 export default function RaceDetailClient({ raceId }: { raceId: string }) {
   const { data: race, isLoading, error } = useRace(raceId);
-  const [time, setTime] = useState<Date | null>(null);
+  const [, setTime] = useState<Date | null>(null);
   const socketRef = useRef(socket);
 
-  const startTime = () => {
-    socketRef.current.emit('startTime', raceId);
-  };
-
-  const resetTime = () => {
-    socketRef.current.emit('resetTime', raceId);
-  };
-
+//  const startTime = () => {
+//    socketRef.current.emit('startTime', raceId);
+//  };
+//
+//  const resetTime = () => {
+//    socketRef.current.emit('resetTime', raceId);
+//  };
+//
   useEffect(() => {
     if (race) {
       const startTime = race.startTime ? new Date(race.startTime) : null;
@@ -63,7 +63,6 @@ export default function RaceDetailClient({ raceId }: { raceId: string }) {
       <p>Run Distance: {race.runDistance} km</p>
       <p>Swim Distance: {race.swimDistance} km</p>
       <p>Status: {race.status}</p>
-      {/* <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} /> */}
     </div>
   );
 }

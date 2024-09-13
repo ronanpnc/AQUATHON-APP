@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 import { useRace } from '@/services/race.services';
 
-export default function RaceSettingsPage({ params }: { params: { slug: string } }) {
+export default function RaceSettingsPage({ params }: { params: { slug: string, participantId: string} }) {
   const { data: race, isLoading, error } = useRace(params.slug);
 
   if (isLoading) return <div>Loading...</div>;
@@ -37,7 +37,7 @@ export default function RaceSettingsPage({ params }: { params: { slug: string } 
             Edit Race
           </Button>
         </Link>
-        <DeleteParticipantButton raceId={race._id} participantId='string' />
+        <DeleteParticipantButton raceId={race._id} participantId={params.participantId}/>
       </div>
     </div>
   );

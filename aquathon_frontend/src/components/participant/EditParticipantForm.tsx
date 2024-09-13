@@ -31,11 +31,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const savedColors = ['#EC4899', '#F43F5E', '#84CC16', '#D946EF', '#8B5CF6', '#0EA5E9'];
 
-interface CreateParticipantFormProps {
-  raceId: string;
-}
-
-export default function EditParticipantForm({ raceId }: CreateParticipantFormProps) {
+export default function EditParticipantForm() {
   const [colorState, setColor] = useState<string>('');
   const router = useRouter();
   const param = useParams();
@@ -83,7 +79,6 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
             description: 'Failed to create participant. Please try again.',
             variant: 'destructive',
           });
-          console.error('Error creating participant:', error);
         },
       },
     );
@@ -191,7 +186,6 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
             )}
           />
 
-          {/* Color Selection */}
           <div>
             <FormLabel>Color (Optional)</FormLabel>
             <div className='grid grid-cols-6 gap-2 mt-2'>

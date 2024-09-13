@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CheckIcon } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -42,14 +42,14 @@ type FormValues = z.infer<typeof formSchema>;
 
 const savedColors = ['#EC4899', '#F43F5E', '#84CC16', '#D946EF', '#8B5CF6', '#0EA5E9'];
 
-interface CreateParticipantFormProps {
+export interface CreateParticipantFormProps {
   raceId: string; // Pass raceId as a prop
 }
 
-export default function CreateParticipantForm({ raceId }: CreateParticipantFormProps) {
+export default function CreateParticipantForm() {
   const [colorState, setColor] = useState<string>('');
   const param = useParams();
-  const router = useRouter();
+ // const router = useRouter();
   const createParticipantMutation = useCreateParticipant();
 
   const form = useForm<FormValues>({
@@ -89,13 +89,12 @@ export default function CreateParticipantForm({ raceId }: CreateParticipantFormP
           setColor('');
           router.back();
         },
-        onError: (error) => {
+        onError: () => {
           toast({
             title: 'Error',
             description: 'Failed to create participant. Please try again.',
             variant: 'destructive',
           });
-          console.error('Error creating participant:', error);
         },
       },
     );

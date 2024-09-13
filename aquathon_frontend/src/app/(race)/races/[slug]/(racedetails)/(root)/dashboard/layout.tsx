@@ -5,7 +5,6 @@ import '@/styles/globals.css';
 export const metadata : Metadata = {};
 export default function RaceDetailLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
   params: { slug: string };
