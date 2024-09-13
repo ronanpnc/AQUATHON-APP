@@ -39,7 +39,6 @@ export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
       });
       router.push('/races');
     } catch (error) {
-      console.error('Failed to delete race:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete the race. Please try again.',

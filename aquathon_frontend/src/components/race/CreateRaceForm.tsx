@@ -19,7 +19,7 @@ import { useCreateRace } from '@/services/race.services';
 
 import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
 
-const formSchema = z.object({
+ const raceformSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
   date: z.string().min(1, 'Date is required'),
   time: z.string().min(1, 'Time is required'),
@@ -29,7 +29,7 @@ const formSchema = z.object({
   timeRaceConfigs: z.array(TimeRaceConfigSchema),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+export type RaceFormValues = z.infer<typeof raceformSchema>;
 
 export type addSegmentHandle = {
   addSegment: () => void;
@@ -39,11 +39,11 @@ export default function CreateRaceForm() {
   const router = useRouter();
   const createRaceMutation = useCreateRace();
   const childRef = useRef<addSegmentHandle>();
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<RaceFormValues>({
+    resolver: zodResolver(raceformSchema),
   });
 
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = (values: RaceFormValues) => {
     const raceDateTime = parse(`${values.date} ${values.time}`, 'yyyy-MM-dd HH:mm', new Date());
     const formattedDate = format(raceDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 

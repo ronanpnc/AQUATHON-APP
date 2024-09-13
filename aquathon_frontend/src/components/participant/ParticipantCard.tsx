@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { Participant } from '@/domains/participant/interface';
 
-const ParticipantCard: React.FC<{ participant: Participant , raceId:string}> = ({ participant, raceId }) => {
+const ParticipantCard: React.FC<{ participant: Participant , raceId:string}> = ({ participant}) => {
   const { _id, firstName, lastName, bib ,colour} = participant;
 
   return (
@@ -29,7 +29,7 @@ const ParticipantInfo: React.FC<{ firstname: string; lastname:string; number: nu
   </div>
 );
 
-const InfoItem: React.FC<{ icon: React.ElementType; number: number }> = ({ icon: Icon, number }) => (
+export const InfoItem: React.FC<{ icon: React.ElementType; number: number }> = ({ icon: Icon, number }) => (
   <div className='flex items-center'>
     <Icon size={16} className='mr-1' />
     {number}

@@ -4,7 +4,7 @@ import { metadata } from './layout';
 
 //import RaceDetailClient from '@/components/clock/RaceDetailClient';
 
-export default function RaceDetailPage({ params }: { params: { slug: string } }) {
+export default function RaceDetailPage() {
   metadata.title = 'testing';
   return (
     <Suspense fallback={<div>Loading...</div>}>

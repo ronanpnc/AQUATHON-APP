@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { AddParticipantButton } from '@/components/participant/AddParticipantButton';
 
 
-export default function RaceDetailPage({ params }: { params: { slug: string } }) {
+export default function RaceDetailPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className='min-h-screen flex flex-col pb-24'>

@@ -7,7 +7,7 @@ await import('./src/env.js');
 /** @type {import("next").NextConfig} */
 const config = {
   output: 'standalone',
-  env: {
+  serverRuntimeConfig: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_WS_BASE_URL: process.env.NEXT_PUBLIC_WS_BASE_URL,
   },

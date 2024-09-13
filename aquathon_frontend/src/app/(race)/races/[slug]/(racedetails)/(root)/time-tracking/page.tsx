@@ -18,7 +18,7 @@ export default function RaceDetailPage() {
   };
   useEffect(() => {
     socket.emit('subscribe', id);
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const fetchRaceData = async () => {
