@@ -1,5 +1,8 @@
 import { Timer, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
+import { formatDuration } from '@/utils/clock';
+
 interface IRaceTimer {
   time: Date | null;
   startTimer: () => void;
@@ -33,15 +36,6 @@ export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) 
     resetTimer();
   };
 
-  const formatTime = (milliseconds: number) => {
-    const hours = Math.floor(milliseconds / 3600000);
-    const minutes = Math.floor((milliseconds % 3600000) / 60000);
-    const seconds = Math.floor((milliseconds % 60000) / 1000);
-    const ms = Math.floor((milliseconds % 1000) / 10);
-
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().slice(0, 1)}`;
-  };
-  
   return (
     <div className='fixed bottom-0 left-0 right-0'>
       <div className='relative'>
@@ -59,18 +53,20 @@ export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) 
           {isRunning ? 'Reset' : 'Start'}
         </button>
       </div>
-      <div className='bg-primary-purple text-white p-2 pt-6'>
+      <div className='bg-primary-purple text-white px-2 py-1 pt-4'>
         <div className='flex justify-between items-center mb-2'>
           <div className='text-md flex items-center'>
             <Timer className='mr-1' size={16} />
-            {formatTime(elapsedTime)}
+            {formatDuration(elapsedTime)}
           </div>
           <div className='text-md flex items-center'>
             <Users className='mr-1' size={16} />
             Participants: 999 {/* Add participant count here */}
           </div>
         </div>
-        <div className='text-center text-xs'>{isRunning ? 'Race in progress' : 'Tap to start the Race'}</div>
+        <div className='text-center text-xs font-semibold'>
+          {isRunning ? 'Race in progress' : 'Tap to start the Race'}
+        </div>
       </div>
     </div>
   );
