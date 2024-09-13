@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-import { CreateRaceData } from '@/domains/race/interface';
+import { CreateRaceData, segmentTypes } from '@/domains/race/interface';
 
 interface SegmentsListProps {
   form: UseFormReturn<CreateRaceData>;
@@ -83,18 +83,15 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className='w-full p-0 bg-white border border-gray-200 shadow-lg'>
-                          <Button
-                            className='w-full justify-start rounded-none bg-white text-black hover:bg-gray-100'
-                            onClick={() => updateSegment(index, { type: 'swimming' })}
-                          >
-                            Swimming
-                          </Button>
-                          <Button
-                            className='w-full justify-start rounded-none bg-white text-black hover:bg-gray-100'
-                            onClick={() => updateSegment(index, { type: 'running' })}
-                          >
-                            Running
-                          </Button>
+                          {segmentTypes.map((segmentType) => (
+                            <Button
+                              key={segmentType.value}
+                              className='w-full justify-start rounded-none bg-white text-black hover:bg-gray-100'
+                              onClick={() => updateSegment(index, { type: segmentType.value })}
+                            >
+                              {segmentType.label}
+                            </Button>
+                          ))}
                         </PopoverContent>
                       </Popover>
                     </div>

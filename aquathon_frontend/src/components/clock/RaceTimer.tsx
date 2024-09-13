@@ -1,10 +1,11 @@
+import { Timer, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 interface IRaceTimer {
-    time: Date|null;
-    startTimer:() => void;
-    resetTimer:() => void;
+  time: Date | null;
+  startTimer: () => void;
+  resetTimer: () => void;
 }
-export default function RaceTimer({time, startTimer, resetTimer}:IRaceTimer) {
+export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -12,18 +13,17 @@ export default function RaceTimer({time, startTimer, resetTimer}:IRaceTimer) {
     let intervalId: number;
     if (time !== null) {
       intervalId = window.setInterval(() => {
-          setElapsedTime(Date.now() - time.getTime());
+        setElapsedTime(Date.now() - time.getTime());
       }, 100);
-        setIsRunning(true);
+      setIsRunning(true);
     } else {
-        setIsRunning(false);
-        setElapsedTime(0);
-    };
+      setIsRunning(false);
+      setElapsedTime(0);
+    }
     return () => clearInterval(intervalId);
   }, [time]);
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const startRace = () => {
     startTimer();
@@ -33,38 +33,44 @@ export default function RaceTimer({time, startTimer, resetTimer}:IRaceTimer) {
     resetTimer();
   };
 
-
   const formatTime = (milliseconds: number) => {
     const hours = Math.floor(milliseconds / 3600000);
     const minutes = Math.floor((milliseconds % 3600000) / 60000);
     const seconds = Math.floor((milliseconds % 60000) / 1000);
     const ms = Math.floor((milliseconds % 1000) / 10);
 
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().slice(0,1)}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().slice(0, 1)}`;
   };
+  
   return (
-    <div className='p-8 rounded-lg shadow-lg text-center'>
-      <h2 className='text-3xl font-bold mb-6 text-white'>Race Timer</h2>
-      <div className='text-5xl font-mono mb-8 text-green-400'>{formatTime(elapsedTime)}</div>
-      <div className='space-x-4'>
+    <div className='fixed bottom-0 left-0 right-0'>
+      <div className='relative'>
         <button
-          onClick={startRace}
-          disabled={isRunning}
-          className={`px-6 py-2 rounded-full text-white font-semibold ${
-            isRunning ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'
+          onClick={isRunning ? resetRace : startRace}
+          className={`absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center text-white font-semibold text-lg border-4 ${
+            isRunning
+              ? 'bg-red-500 hover:bg-red-600 border-red-400'
+              : 'bg-green-500 hover:bg-green-600 border-green-400'
           }`}
+          style={{
+            borderColor: isRunning ? 'rgb(248 113 113)' : 'rgb(74 222 128)',
+          }}
         >
-          Start Race
+          {isRunning ? 'Reset' : 'Start'}
         </button>
-        <button
-          onClick={resetRace}
-          className='px-6 py-2 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600'
-        >
-          Reset Race
-        </button>
-        <div>
-            {time?.toString()}
+      </div>
+      <div className='bg-primary-purple text-white p-2 pt-6'>
+        <div className='flex justify-between items-center mb-2'>
+          <div className='text-md flex items-center'>
+            <Timer className='mr-1' size={16} />
+            {formatTime(elapsedTime)}
+          </div>
+          <div className='text-md flex items-center'>
+            <Users className='mr-1' size={16} />
+            Participants: 999 {/* Add participant count here */}
+          </div>
         </div>
+        <div className='text-center text-xs'>{isRunning ? 'Race in progress' : 'Tap to start the Race'}</div>
       </div>
     </div>
   );
