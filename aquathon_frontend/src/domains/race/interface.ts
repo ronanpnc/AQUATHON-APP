@@ -37,16 +37,3 @@ export interface ITimeRaceConfig {
 export interface RaceFormData extends Omit<Race, '_id' | 'timeRaceConfigs'> {
   timeRaceConfigs: ITimeRaceConfig[];
 }
-
-export interface SegmentType {
-  value: string;
-  label: string;
-  hasDistance: boolean;
-}
-
-export const segmentTypes: SegmentType[] = [
-  { value: 'Swimming', label: 'Swimming', hasDistance: true },
-  { value: 'Running', label: 'Running', hasDistance: true },
-  { value: 'Biking', label: 'Biking', hasDistance: true },
-  { value: 'Transition', label: 'Transition', hasDistance: false },
-];
