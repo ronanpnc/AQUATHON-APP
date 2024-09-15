@@ -2,7 +2,9 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import RaceTimer from '@/components/clock/RaceTimer';
+import Container from '@/components/Container';
+import RaceTimer from '@/components/TimeTracking/RaceTimer';
+import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
 import { socket } from '@/socket';
 
@@ -50,8 +52,14 @@ export default function RaceDetailPage() {
   }, [id]);
 
   return (
-    <div>
+    <Container>
+      <SegmentCard name='Swim Segment' status='inProgress' completionPercentage={75} />
+      <SegmentCard name='Swim Segment' status='inProgress' completionPercentage={75} />{' '}
+      <SegmentCard name='Swim Segment' status='inProgress' completionPercentage={75} />{' '}
+      <SegmentCard name='Swim Segment' status='inProgress' completionPercentage={75} />{' '}
+      <SegmentCard name='Swim Segment' status='inProgress' completionPercentage={75} />{' '}
+      <SegmentCard name='Swim Segment' status='inProgress' completionPercentage={75} />{' '}
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
-    </div>
+    </Container>
   );
 }
