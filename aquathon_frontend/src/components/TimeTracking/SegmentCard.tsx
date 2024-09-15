@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { SEGMENT_COLORS, SEGMENT_TYPES } from '@/domains/race/constants';
 import { ITimeRaceConfig } from '@/domains/race/interface';
@@ -11,14 +12,16 @@ const SegmentCard: React.FC<{ segment: ITimeRaceConfig }> = ({ segment }) => {
   const totalParticipants = 89;
 
   return (
-    <div className='flex flex-col bg-white rounded-lg shadow-xl mb-4 overflow-hidden'>
-      <CardHeader type={type} />
-      <CardBody
-        completionPercentage={0}
-        completedParticipants={completedParticipants}
-        totalParticipants={totalParticipants}
-      />
-    </div>
+    <Link href='/races/1/time-tracking/swimming' className='block'>
+      <div className='flex flex-col bg-white rounded-lg shadow-xl mb-4 overflow-hidden'>
+        <CardHeader type={type} />
+        <CardBody
+          completionPercentage={0}
+          completedParticipants={completedParticipants}
+          totalParticipants={totalParticipants}
+        />
+      </div>
+    </Link>
   );
 };
 
