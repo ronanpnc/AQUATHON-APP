@@ -27,14 +27,31 @@ import mongoose from 'mongoose'
  *           example: Jon
  */
 export interface ITimeTracking {
-  id: string
+  participantId: string,
+  timeRaceConfigId: string,
   startTime: Date
   endTime: Date
-  timeInMs: BigInteger
+  timeInMs?: BigInteger
 }
 export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>({
-  id: mongoose.Types.ObjectId,
-  startTime: mongoose.SchemaTypes.Date,
-  endTime: mongoose.SchemaTypes.Date,
-  timeInMs: Number
-})
+  participantId: {
+    type: String,
+    required: true
+  },
+  timeRaceConfigId: {
+    type: String,
+    required: true
+  },
+  startTime: {
+    type: mongoose.Schema.Types.Date,
+    required: true
+  },
+  endTime: {
+    type: mongoose.Schema.Types.Date,
+    required: true
+  },
+  timeInMs: {
+    type: Number,
+    required: true
+  }
+});

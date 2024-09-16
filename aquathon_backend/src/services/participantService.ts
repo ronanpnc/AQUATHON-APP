@@ -50,7 +50,7 @@ export const createParticipant = async (raceId: string, data: IParticipant) => {
         _id: raceId,
         'participants.bib': { $ne: data.bib }
       },
-      { $push: { participants: data } },
+      { $push: { participants: data } , $inc: { totalParticipants: 1 }},
       { runValidators: true }
     );
 
@@ -75,7 +75,7 @@ export const deleteParticipant = async (raceId: string, participantId: string) =
   try {
     const race = await Race.findOneAndUpdate(
       { _id: raceId },
-      { $pull: { participants: { _id: participantId } } },
+      { $pull: { participants: { _id: participantId } }, $inc: {totalParticipants: -1}},
       { new: true, projection: { participants: 1 } }
     )
     if (!race) {

@@ -1,4 +1,4 @@
-import  mongoose, { Document, Schema } from 'mongoose'
+import { Document, Schema } from 'mongoose'
 import { db } from '../configs/db'
 /**
  * @swagger
@@ -33,12 +33,14 @@ import { db } from '../configs/db'
 
 
 export interface ITimeRaceConfig extends Document {
+  name?: string
   type: string
   mode: string
   timeTrackId: string[]
 }
 const timeRaceConfigSchema = new Schema<ITimeRaceConfig>(
   {
+    name: String,
     type: {
       type: String,
       required: true
