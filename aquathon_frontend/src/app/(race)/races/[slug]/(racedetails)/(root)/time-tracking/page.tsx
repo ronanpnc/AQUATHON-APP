@@ -1,13 +1,37 @@
 'use client';
+
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import RaceTimer from '@/components/clock/RaceTimer';
+import Container from '@/components/Container';
+import RaceTimer from '@/components/TimeTracking/RaceTimer';
+import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
+import { ITimeRaceConfig } from '@/domains/race/interface';
 import { socket } from '@/socket';
+
+// Dummy data
+const dummySegments: ITimeRaceConfig[] = [
+  {
+    type: 'swimming',
+    mode: 'active',
+    timeTrackId: ['swim1'],
+  },
+  {
+    type: 'biking',
+    mode: 'upcoming',
+    timeTrackId: ['bike1'],
+  },
+  {
+    type: 'running',
+    mode: 'upcoming',
+    timeTrackId: ['run1'],
+  },
+];
 
 export default function RaceDetailPage() {
   const [time, setTime] = useState<Date | null>(null);
+  const [segments, setSegments] = useState<ITimeRaceConfig[]>(dummySegments);
   const id = useParams().slug;
 
   const startTime = () => {
@@ -27,8 +51,12 @@ export default function RaceDetailPage() {
         const data = await response.json();
         const startTime = data?.startTime === null ? null : new Date(data?.startTime);
         setTime(startTime);
+        // Uncomment the next line when your API is ready to provide real segment data
+        // setSegments(data?.segments || dummySegments);
       } catch (error) {
-        //console.error("Failed to fetch race data:", error);
+        console.error('Failed to fetch race data:', error);
+        // Use dummy data in case of an error
+        setSegments(dummySegments);
       }
     };
 
@@ -50,8 +78,11 @@ export default function RaceDetailPage() {
   }, [id]);
 
   return (
-    <div>
+    <Container>
+      {[...segments, ...segments, ...segments, ...segments, ...segments].map((segment, index) => (
+        <SegmentCard key={index} segment={segment} />
+      ))}
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
-    </div>
+    </Container>
   );
 }

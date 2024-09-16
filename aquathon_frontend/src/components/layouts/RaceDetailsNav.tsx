@@ -17,7 +17,7 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
-  { id: 'Participant', label: 'Participant', Icon: <UsersRound />, path: '/participants' },
+  { id: 'Participants', label: 'Participants', Icon: <UsersRound />, path: '/participants' },
   { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
   { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
   { id: 'Settings', label: 'Settings', Icon: <Settings /> },

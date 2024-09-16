@@ -10,7 +10,7 @@ export interface Race {
   participants?: number;
   swimDistance?: number;
   runDistance?: number;
-  timeRaceConfigs: ITimeRaceConfig[]
+  timeRaceConfigs: ITimeRaceConfig[];
 }
 
 export type CreateRaceData = Omit<Race, '_id'>;

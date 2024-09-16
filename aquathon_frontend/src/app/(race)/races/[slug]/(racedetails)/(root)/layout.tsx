@@ -9,6 +9,8 @@ import { RaceDetailsNav } from '@/components/layouts/RaceDetailsNav';
 import { useRace } from '@/services/race.services';
 
 
+export const RaceContext = createContext<UseQueryResult<Race, Error>>();
+
 export default function RaceDetailLayout({
   children,
   params,
