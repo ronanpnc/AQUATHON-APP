@@ -96,7 +96,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     setActiveTab(id);
   };
   return (
-    <div className='overflow-x-auto scrollbar-hide w-screen bg-secondary-purple'>
+    <div className='scrollbar-hide bg-secondary-purple'>
       <div className='grid grid-cols-3'>
         {tabs.map((tab) => (
           <TabButton

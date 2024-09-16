@@ -53,7 +53,7 @@ const CardBody: React.FC<{
 );
 
 const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
-  <div className='relative w-full h-2 bg-gray-200 rounded-full'>
+  <div className='w-full h-2 bg-gray-200 rounded-full'>
     <div className='absolute top-0 left-0 h-full bg-blue-500 rounded-full' style={{ width: `${progress}%` }} />
   </div>
 );
