@@ -112,6 +112,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     </div>
   );
 }
+
 type TabButtonProps = {
   tab: Tab;
   isActive: boolean;
