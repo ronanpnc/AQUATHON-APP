@@ -16,9 +16,45 @@ export const getRaces = async (limit: number = 2, page: number = 1) => {
     })
   return data
 }
+export const getRacesGroupy = async (limit = 2, page = 1) => {
+const races = await Race.aggregate([
+    {
+      $sort: { date: 1, startTime: 1 }
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+        races: {
+          $push: {
+            _id: "$_id",
+            title: "$title",
+            startTime: "$startTime",
+            date: "$date",
+            status: "$status",
+            location: "$location",
+            totatParticipants: "$totalParticipants",
+          }
+        }
+      }
+    },
+    {
+      $sort: { _id: 1 },
+    },
+    {
+      $skip:(page - 1 ) * limit || 0,
+    },
+    {
+      $limit: limit || 3,
+    }
+  ])
+  .catch((error: Error) => {
+    throw handleMongooseError(error)
+  });
+  return races;
+}
 export const getRace = async (id: string) => {
   const data = await Race.find({ _id: id }).catch((error) => {
-    throw handleMongooseError(error);
+    throw handleMongooseError(error)
   })
   return data[0]
 }
@@ -41,7 +77,8 @@ export const createRace = async (data: IRace) => {
 export const updateRace = async (id: string, data: Partial<IRace>) => {
   const res = await Race.findOneAndUpdate({ _id: id }, data, {
     new: true
-  }).catch((error: Error) => {
+  })
+  .catch((error: Error) => {
     throw handleMongooseError(error)
   })
 
@@ -62,9 +99,8 @@ export const getRaceStartTime = async (id: string) => {
     .catch((error) => {
       throw handleMongooseError(error)
     })
-  return data[0].startTime;
+  return data[0].startTime
 }
-
 
 export const setRaceStartTime = async (
   id: string,
@@ -76,14 +112,24 @@ export const setRaceStartTime = async (
       throw error
     })
   if (status == 'start') {
-    data[0].startTime = new Date();
-    data[0].status = "ongoing";
+    data[0].startTime = new Date()
+    data[0].status = 'ongoing'
   } else if (status == 'reset') {
     data[0].startTime = null
-    data[0].status = "upcoming";
+    data[0].status = 'upcoming'
   }
   const res = await data[0].save().catch((error) => {
     throw handleMongooseError(error)
   })
   return res
+}
+
+export const getRaceSegment  = async (id: string) => {
+  const segments = await Race.aggregate([
+
+  ])
+  .catch((error) => {
+    throw handleMongooseError(error)
+  })
+  return segments;
 }

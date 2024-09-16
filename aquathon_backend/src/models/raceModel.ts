@@ -2,83 +2,8 @@ import mongoose from 'mongoose'
 import { db } from '../configs/db'
 import { IParticipant, participantSchema } from './participantModel'
 import timeRaceConfigSchema, { ITimeRaceConfig } from './timeTrackConfigModel'
-/**
- * @swagger
- * components:
- *   schemas:
- *     Race:
- *       type: object
- *       properties:
- *         _id:
- *           type: integer
- *           description: The ID.
- *           example: 0
- *         title:
- *           type: string
- *           description: The race's name.
- *           example: Marathon
- *         date:
- *           type: Date
- *           description: date of race.
- *           example: 2015-01-22 9:30
- *         startTime:
- *           type: Date
- *           description: start time of the race.
- *           example: 2015-01-22 9:30
- *         swimDistance:
- *           type: integer
- *           description: distance of swim
- *           example: 10
- *         colours:
- *           type: array
- *           description: list of colours for the participants
- *           example: ["#FFFFF"]
- *         runDistance:
- *           type: integer
- *           description: distance of run
- *           example: 20
- *         participants:
- *          type: array
- *          items:
- *              $ref : '#/components/schemas/participant'
- *         timeRaceConfigs:
- *          type: array
- *          items:
- *              $ref : '#/components/schemas/TimeRaceConfig'
- *   requestBodies:
- *     Race:
- *       type: object
- *       properties:
- *         title:
- *           type: string
- *           description: The race's name.
- *           example: Marathon
- *         date:
- *           type: Date
- *           description: date of race.
- *           example: 2015-01-22 9:30
- *         startTime:
- *           type: Date
- *           description: start time of the race.
- *           example: 2015-01-22 9:30
- *         swimDistance:
- *           type: integer
- *           description: distance of swim
- *           example: 10
- *         runDistance:
- *           type: integer
- *           description: distance of run
- *           example: 20
- *         colours:
- *           type: array
- *           description: list of colours for the participants (optional)
- *           example: ["#FFFFFF"]
- *         timeRaceConfigs:
- *          type: array
- *          items:
- *              $ref : '#/components/schemas/TimeRaceConfig'
- *
- */
+import { ITimeTracking, timeTrackingSchema } from './timeTrackingModel'
+
 export interface IRace {
     _id?: string
     title: string
@@ -87,10 +12,15 @@ export interface IRace {
     swimDistance: number
     runDistance: number
     participants?: IParticipant[]
-    colours:string[],
+    colours: string[]
+    splitTotal?: number
+    splitCompleted?: number
+    timeTracking?: ITimeTracking[]
     timeRaceConfigs: ITimeRaceConfig[]
+    totalParticipants?: number
     status: 'finished' | 'upcoming' | 'ongoing'
 }
+
 const raceSchema = new mongoose.Schema<IRace>(
     {
         title: {
@@ -114,9 +44,14 @@ const raceSchema = new mongoose.Schema<IRace>(
         },
         status: {
             type: String,
-            required: true
+            required: true,
+            enum: ['finished', 'upcoming', 'ongoing']
         },
-        colours:[String],
+        colours: [String],
+        splitTotal: Number,
+        splitCompleted: Number,
+        totalParticipants:Number,
+        timeTracking: [timeTrackingSchema], // Using splitSchema directly
         participants: [participantSchema],
         timeRaceConfigs: [timeRaceConfigSchema]
     },
@@ -124,3 +59,116 @@ const raceSchema = new mongoose.Schema<IRace>(
 )
 
 export const Race = db.model('Race', raceSchema)
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Race:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The race ID.
+ *           example: "5f8a3456b23c1234567890ab"
+ *         title:
+ *           type: string
+ *           description: The race's name.
+ *           example: Marathon
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Date of race.
+ *           example: "2023-01-22T09:30:00Z"
+ *         startTime:
+ *           type: string
+ *           format: date-time
+ *           description: Start time of the race.
+ *           example: "2023-01-22T09:30:00Z"
+ *         swimDistance:
+ *           type: number
+ *           description: Distance of swim in meters.
+ *           example: 1000
+ *         runDistance:
+ *           type: number
+ *           description: Distance of run in meters.
+ *           example: 5000
+ *         colours:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of colours for the participants.
+ *           example: ["#FFFFFF", "#FF0000", "#00FF00"]
+ *         splitTotal:
+ *           type: number
+ *           description: Total number of splits.
+ *           example: 10
+ *         splitCompleted:
+ *           type: number
+ *           description: Number of completed splits.
+ *           example: 5
+ *         timeTracking:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Split'
+ *         participants:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/participant'
+ *         timeRaceConfigs:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/TimeRaceConfig'
+ *         status:
+ *           type: string
+ *           enum: [finished, upcoming, ongoing]
+ *           description: Current status of the race.
+ *           example: ongoing
+ *   requestBodies:
+ *     Race:
+ *       type: object
+ *       required:
+ *         - title
+ *         - date
+ *         - swimDistance
+ *         - runDistance
+ *         - status
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: The race's name.
+ *           example: Marathon
+ *         date:
+ *           type: string
+ *           format: date-time
+ *           description: Date of race.
+ *           example: "2023-01-22T09:30:00Z"
+ *         startTime:
+ *           type: string
+ *           format: date-time
+ *           description: Start time of the race.
+ *           example: "2023-01-22T09:30:00Z"
+ *         swimDistance:
+ *           type: number
+ *           description: Distance of swim in meters.
+ *           example: 1000
+ *         runDistance:
+ *           type: number
+ *           description: Distance of run in meters.
+ *           example: 5000
+ *         colours:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: List of colours for the participants (optional).
+ *           example: ["#FFFFFF", "#FF0000", "#00FF00"]
+ *         timeRaceConfigs:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/TimeRaceConfig'
+ *         status:
+ *           type: string
+ *           enum: [finished, upcoming, ongoing]
+ *           description: Current status of the race.
+ *           example: upcoming
+ */
