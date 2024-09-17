@@ -35,19 +35,7 @@ class RaceController {
 
   static async createRace(req: Request, res: Response) {
     try {
-      const data: IRace = {
-        title: req.body.title,
-        date: req.body.date,
-        startTime: null,
-        swimDistance: req.body.swimDistance,
-        runDistance: req.body.runDistance,
-        timeRaceConfigs: req.body.timeRaceConfigs,
-        status: 'upcoming',
-        // this will be re define later
-        // colours can be customize in the future
-        colours: []
-      }
-      const result = await createRace(data)
+      const result = await createRace(req.body)
       return res.status(200).send(result)
     } catch (error) {
       console.log(error);

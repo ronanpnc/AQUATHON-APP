@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Document, Types } from 'mongoose'
 import { db } from '../configs/db'
 import { IParticipant, participantSchema } from './participantModel'
 import timeRaceConfigSchema, { ITimeRaceConfig } from './timeTrackConfigModel'
@@ -79,8 +79,8 @@ import timeRaceConfigSchema, { ITimeRaceConfig } from './timeTrackConfigModel'
  *              $ref : '#/components/schemas/TimeRaceConfig'
  *
  */
-export interface IRace {
-    _id?: string
+export interface IRace extends Document{
+    _id: Types.ObjectId,
     title: string
     date: Date
     startTime: Date
@@ -118,9 +118,12 @@ const raceSchema = new mongoose.Schema<IRace>(
         },
         colours:[String],
         participants: [participantSchema],
-        timeRaceConfigs: [timeRaceConfigSchema]
-    },
+        timeRaceConfigs: {
+           type:[timeRaceConfigSchema],
+           required : true
+        } },
     { timestamps: true, collection: 'races' }
 )
-
+// TODO : unique bib
+//raceSchema.index({_id:1, 'participants.bib': 1},{unique : true})
 export const Race = db.model('Race', raceSchema)

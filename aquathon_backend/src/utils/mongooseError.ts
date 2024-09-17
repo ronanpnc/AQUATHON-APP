@@ -2,6 +2,7 @@ import { Error } from "mongoose";
 import { StatusError } from "../types/common";
 
 export const handleMongooseError = (error): StatusError => {
+  console.log(error);
   if (error instanceof Error.ValidationError) {
     return new StatusError('Validation error',400, { errors: error.errors });
   } else if (error instanceof Error.CastError) {
