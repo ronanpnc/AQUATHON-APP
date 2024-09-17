@@ -1,7 +1,9 @@
 'use client';
 
+import { Check } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import Container from '@/components/Container';
 import RaceTimer from '@/components/TimeTracking/RaceTimer';
@@ -32,7 +34,14 @@ const dummySegments: ITimeRaceConfig[] = [
 export default function RaceDetailPage() {
   const [time, setTime] = useState<Date | null>(null);
   const [segments, setSegments] = useState<ITimeRaceConfig[]>(dummySegments);
+  const [copied, setCopied] = useState(false);
   const id = useParams().slug;
+  const shareableLink = `${window.location.origin}/shared/${id}`;
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const startTime = () => {
     socket.emit('startTime', id);

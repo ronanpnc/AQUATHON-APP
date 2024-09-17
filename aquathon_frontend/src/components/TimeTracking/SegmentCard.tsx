@@ -1,18 +1,20 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 import { SEGMENT_COLORS, SEGMENT_TYPES } from '@/domains/race/constants';
 import { ITimeRaceConfig } from '@/domains/race/interface';
 
 const SegmentCard: React.FC<{ segment: ITimeRaceConfig }> = ({ segment }) => {
   const { type } = segment;
-  // Dummy values for completed and total participants
-  const completedParticipants = 0;
+  const completedParticipants = 45;
   const totalParticipants = 89;
+  const basePath = window.location.pathname.includes('/shared') ? '/shared' : '/races';
+  const { slug } = useParams();
 
   return (
-    <Link href='/races/1/time-tracking/swimming' className='block'>
+    <Link href={`${basePath}/${slug}/time-tracking/${segment.type}`} className='block'>
       <div className='flex flex-col bg-white rounded-lg shadow-xl mb-4 overflow-hidden'>
         <CardHeader type={type} />
         <CardBody
