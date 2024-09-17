@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 
 import { AddParticipantButton } from '@/components/participant/AddParticipantButton';
 
-
 export default function RaceDetailPage({ params }: { params: { slug: string } }) {
   return (
     <Suspense fallback={<div>Loading...</div>}>

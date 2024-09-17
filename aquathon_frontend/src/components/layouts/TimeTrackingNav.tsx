@@ -40,7 +40,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
             key={tab.id}
             tab={tab}
             isActive={activeTab === tab.id}
-            onClick={() => {
+            onClick={() => {    
               handleTabClick(tab.id, tab?.path);
             }}
           />
