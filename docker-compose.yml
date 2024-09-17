@@ -1,5 +1,7 @@
 services:
   frontend:
+    depends_on:
+    - backend
     image: vm0077/aquathon_app:frontend
     build:
       context: aquathon_frontend
@@ -10,9 +12,11 @@ services:
       - mern
     restart: always
     environment:
-      NEXT_PUBLIC_API_BASE_URL: '0.0.0.0:4000/api'
-      NEXT_PUBLIC_WS_BASE_URL: '0.0.0.0:4000'
+      NEXT_PUBLIC_API_BASE_URL: 'http://backend/api'
+      NEXT_PUBLIC_WS_BASE_URL: 'http://backend'
   backend:
+    depends_on:
+      - mongo
     image: vm0077/aquathon_app:backend
     build:
       context: aquathon_backend
@@ -22,9 +26,26 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - NODE_MONGODB=${MONGO_DB_URL}
+      - NODE_MONGODB=mongodb://root:example@mongo:27017
       - NODE_PORT=4000
     restart: always
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
 networks:
   mern:
     driver: bridge

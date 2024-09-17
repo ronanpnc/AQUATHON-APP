@@ -32,13 +32,13 @@ import { db } from '../configs/db'
  */
 
 
-export interface ITimeRaceConfig extends Document {
+export interface ISegment extends Document {
   name?: string
   type: string
   mode: string
   timeTrackId: string[]
 }
-const timeRaceConfigSchema = new Schema<ITimeRaceConfig>(
+const SegmentSchema = new Schema<ISegment>(
   {
     name: String,
     type: {
@@ -54,5 +54,5 @@ const timeRaceConfigSchema = new Schema<ITimeRaceConfig>(
     ],
   },
 )
-export const TimeRaceConfig = db.model("TimeRaceConfig", timeRaceConfigSchema)
-export default timeRaceConfigSchema
+export const Segment = db.model("TimeRaceConfig", SegmentSchema)
+export default SegmentSchema

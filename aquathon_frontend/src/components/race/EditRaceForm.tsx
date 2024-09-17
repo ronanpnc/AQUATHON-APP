@@ -167,7 +167,6 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
 
             <div className='space-y-4'>
               {form.watch('timeRaceConfigs')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
-              <SegmentsList form={form} ref={childRef} />
             </div>
 
             <div className='bottom-0 left-0 right-0 p-4'>

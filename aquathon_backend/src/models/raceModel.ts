@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { db } from '../configs/db'
 import { IParticipant, participantSchema } from './participantModel'
-import timeRaceConfigSchema, { ITimeRaceConfig } from './timeTrackConfigModel'
+import SegmentSchema, { ISegment } from './timeTrackConfigModel'
 import { ITimeTracking, timeTrackingSchema } from './timeTrackingModel'
 
 export interface IRace {
@@ -16,7 +16,7 @@ export interface IRace {
     splitTotal?: number
     splitCompleted?: number
     timeTracking?: ITimeTracking[]
-    timeRaceConfigs: ITimeRaceConfig[]
+    segments: ISegment[]
     totalParticipants?: number
     status: 'finished' | 'upcoming' | 'ongoing'
 }
@@ -53,7 +53,7 @@ const raceSchema = new mongoose.Schema<IRace>(
         totalParticipants:Number,
         timeTracking: [timeTrackingSchema], // Using splitSchema directly
         participants: [participantSchema],
-        timeRaceConfigs: [timeRaceConfigSchema]
+        segments: [SegmentSchema]
     },
     { timestamps: true, collection: 'races' }
 )
