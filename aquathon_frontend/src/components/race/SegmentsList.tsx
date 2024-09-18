@@ -1,4 +1,4 @@
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
 import { ChevronDown, GripVertical, Trash2 } from 'lucide-react';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
@@ -8,9 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { CreateRaceData, segmentTypes } from '@/domains/race/interface';
+import { RaceFormValues } from './CreateRaceForm';
+
+
 
 interface SegmentsListProps {
-  form: UseFormReturn<CreateRaceData>;
+    form: UseFormReturn<RaceFormValues,object>;
 }
 
 export const TimeRaceConfigSchema = z.object({
@@ -34,9 +37,9 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
     append({ mode: '1-step', type: 'swimming', timeTrackId: [] });
   };
 
-  const onDragEnd = ({ source, destination }) => {
-    if (destination) {
-      move(source.index, destination.index);
+  const onDragEnd = (value:DropResult) => {
+    if (value.destination) {
+      move(value.source.index, value?.destination.index);
     }
   };
 

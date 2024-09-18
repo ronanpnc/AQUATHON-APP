@@ -18,7 +18,7 @@ export default function CreateParticipant() {
         </div>
       </nav>
       <div>
-        <CreateParticipantForm raceId="" />
+        <CreateParticipantForm/>
       </div>
     </div>
   );

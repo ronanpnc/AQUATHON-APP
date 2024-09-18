@@ -33,7 +33,7 @@ export function DeleteParticipantButton({ raceId, participantId }: DeletePartici
 
   const handleDelete = async () => {
     try {
-      await deleteParticipantMutation.mutate({ raceId, id: participantId });
+      deleteParticipantMutation.mutate({ raceId, id: participantId });
       toast({
         title: 'Participant deleted',
         description: 'The participant has been successfully deleted.',
@@ -41,7 +41,7 @@ export function DeleteParticipantButton({ raceId, participantId }: DeletePartici
       //router.push(`/races/${raceId}/participants`);
       router.back();
     } catch (error) {
-      console.error('Failed to delete participant:', error);
+      //console.error('Failed to delete participant:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete the participant. Please try again.',

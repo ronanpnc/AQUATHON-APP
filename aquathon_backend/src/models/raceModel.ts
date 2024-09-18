@@ -57,7 +57,8 @@ const raceSchema = new mongoose.Schema<IRace>(
     },
     { timestamps: true, collection: 'races' }
 )
-
+// TODO : unique bib
+//raceSchema.index({_id:1, 'participants.bib': 1},{unique : true})
 export const Race = db.model('Race', raceSchema)
 
 /**

@@ -35,11 +35,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 const savedColors = ['#EC4899', '#F43F5E', '#84CC16', '#D946EF', '#8B5CF6', '#0EA5E9'];
 
-interface CreateParticipantFormProps {
-    raceId: string; 
-}
 
-export default function EditParticipantForm({ raceId }: CreateParticipantFormProps) {
+export default function EditParticipantForm() {
     const [colorState, setColor] = useState<string>('');
     const param = useParams();
     const participant = useParticipant(param.slug as string, param.participantId as string);
@@ -56,6 +53,7 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
                 dateOfBirth: format(participant.data.dateOfBirth, 'yyyy-MM-dd').toString(),
             });
         }
+    //eslint-disable-next-line
     }, [participant.data]);
 
     const handleSubmit = (values: FormValues) => {
@@ -80,13 +78,12 @@ export default function EditParticipantForm({ raceId }: CreateParticipantFormPro
                     });
                     //router.push('/participants');
                 },
-                onError: (error) => {
+                onError: () => {
                     toast({
                         title: 'Error',
                         description: 'Failed to create participant. Please try again.',
                         variant: 'destructive',
                     });
-                    console.error('Error creating participant:', error);
                 },
             },
         );

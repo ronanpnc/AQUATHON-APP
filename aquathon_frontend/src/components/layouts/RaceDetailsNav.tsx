@@ -92,7 +92,7 @@ type TabNavigationProps = {
 };
 
 function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
-  const handleTabClick = (id: string, path?: string) => {
+  const handleTabClick = (id: string) => {
     setActiveTab(id);
   };
   return (
@@ -104,7 +104,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
             tab={tab}
             isActive={activeTab === tab.id}
             onClick={() => {
-              handleTabClick(tab.id, tab?.path);
+              handleTabClick(tab.id);
             }}
           />
         ))}

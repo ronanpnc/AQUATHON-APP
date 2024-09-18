@@ -18,6 +18,7 @@ import { Race, RaceStatus } from '@/domains/race/interface';
 import { useUpdateRace } from '@/services/race.services';
 
 import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
+import { RaceFormValues } from './CreateRaceForm';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -29,7 +30,6 @@ const formSchema = z.object({
   timeRaceConfigs: z.array(TimeRaceConfigSchema),
 });
 
-type FormValues = z.infer<typeof formSchema>;
 
 interface EditRaceFormProps {
   race: Race;
@@ -43,7 +43,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
   const router = useRouter();
   const updateRaceMutation = useUpdateRace();
   const childRef = useRef<addSegmentHandle>();
-  const form = useForm<FormValues>({
+  const form = useForm<RaceFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       raceName: race.title,
@@ -56,7 +56,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
     },
   });
 
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = (values: RaceFormValues) => {
     const raceDateTime = parse(`${values.date} ${values.time}`, 'yyyy-MM-dd HH:mm', new Date());
     const formattedDate = format(raceDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
@@ -79,7 +79,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
           });
           router.push('/races');
         },
-        onError: (error) => {
+        onError: () => {
           toast({
             title: 'Error',
             description: 'Failed to update race. Please try again.',
