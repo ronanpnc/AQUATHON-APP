@@ -1,4 +1,4 @@
-import { ITimeRaceConfig, Race } from './interface';
+import {  ISegment, Race } from './interface';
 
 export const STATUS_ICONS: Record<Race['status'], { text: string; icon: string }> = {
   finished: {
@@ -21,7 +21,7 @@ export const STATUS_COLORS: Record<Race['status'], { bg: string; text: string }>
   finished: { bg: 'bg-blue-500', text: 'text-blue-500' },
 };
 
-export const SEGMENT_TYPES: Record<ITimeRaceConfig['type'], { text: string; icon: string }> = {
+export const SEGMENT_TYPES: Record<ISegment['type'], { text: string; icon: string }> = {
   running: {
     text: 'running',
     icon: '/assets/icons/ic_running.svg',
@@ -36,7 +36,7 @@ export const SEGMENT_TYPES: Record<ITimeRaceConfig['type'], { text: string; icon
   },
 };
 
-export const SEGMENT_COLORS: Record<ITimeRaceConfig['type'], { bg: string; text: string }> = {
+export const SEGMENT_COLORS: Record<ISegment['type'], { bg: string; text: string }> = {
   running: { bg: 'bg-green-500', text: 'text-green-500' },
   swimming: { bg: 'bg-blue-500', text: 'text-blue-500' },
   biking: { bg: 'bg-red-500', text: 'text-red-500' },

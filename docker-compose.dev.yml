@@ -35,7 +35,8 @@ services:
       - NODE_MONGODB=mongodb://root:example@mongodb:27017/test?authSource=admin
       - NODE_PORT=4000
     restart: always
-
+    volumes:
+      - ./aquathon_backend/.:/app
   mongodb:
     image: mongo
     restart: always
