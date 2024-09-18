@@ -36,6 +36,7 @@ export interface ISegment extends Document {
   name?: string
   type: string
   mode: string
+  totalCompleted: number;
   timeTrackId: string[]
 }
 const SegmentSchema = new Schema<ISegment>(
@@ -52,6 +53,7 @@ const SegmentSchema = new Schema<ISegment>(
     timeTrackId: [
         String
     ],
+    totalCompleted: Number,
   },
 )
 export const Segment = db.model("TimeRaceConfig", SegmentSchema)
