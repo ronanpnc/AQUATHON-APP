@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/races/{raceId}/segment:
+ * /api/races/{raceId}/segments:
  *   get:
  *     summary: Retrieve all segments for a specific race
  *     tags:
@@ -56,7 +56,7 @@ router.get("/:raceId/segments", SegmentController.getAllSegments)
 
 /**
  * @swagger
- * /api/races/{raceId}/segment/{segmentId}:
+ * /api/races/{raceId}/segments/{segmentId}:
  *   get:
  *     summary: Retrieve all participant for segment
  *     tags:
