@@ -9,30 +9,30 @@ export enum RaceStatus {
 
 // Interfaces
 export interface IParticipant {
-  bib: number
-  gender: "male"|"female"
-  firstName: string
-  lastName: string
-  colour?: string
-  dateOfBirth: Date
-  school: string | null
-  segments?: ISegment[]
+  bib: number;
+  gender: 'male' | 'female';
+  firstName: string;
+  lastName: string;
+  colour?: string;
+  dateOfBirth: Date;
+  school: string | null;
+  segments?: ISegment[];
 }
 
 export interface ITimeTracking {
-  participantId: string,
-  timeRaceConfigId: string,
-  startTime: Date
-  endTime: Date
-  timeInMs?: BigInteger
+  participantId: string;
+  timeRaceConfigId: string;
+  startTime: Date;
+  endTime: Date;
+  timeInMs?: BigInteger;
 }
 
 export interface ISegment {
+  _id: string;
   type: string;
   mode: string;
   timeTrackId: string[];
 }
-
 
 export interface Race {
   _id?: string;
@@ -66,9 +66,9 @@ export interface RaceFormData extends Omit<Race, '_id'> {
 
 // Constants
 export const segmentTypes = [
-  { value: "swimming", label: "Swimming" },
-  { value: "running", label: "Running" },
+  { value: 'swimming', label: 'Swimming' },
+  { value: 'running', label: 'Running' },
 ] as const;
 
 // Type for segment types
-export type SegmentType = typeof segmentTypes[number]['value'];
+export type SegmentType = (typeof segmentTypes)[number]['value'];

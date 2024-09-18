@@ -10,7 +10,7 @@ export default function SwimmingTrackingPage() {
   return (
     <Container>
       <h1 className='text-2xl font-bold mb-4'>Swimming Time Tracking</h1>
-      <div className='grid grid-cols-3 gap-4'>
+      <div className='grid grid-cols-4 gap-4'>
         {dummyParticipants.map((participant) => (
           <TimeButton key={participant.id} bibNumber={participant.bibNumber} />
         ))}

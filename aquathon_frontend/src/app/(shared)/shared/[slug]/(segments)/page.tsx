@@ -5,11 +5,12 @@ import { useParams } from 'next/navigation';
 import Container from '@/components/Container';
 import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
-import { useSegmentList } from '@/services/segment.services'; 
+import { useSegmentList } from '@/services/segment.services';
 
 export default function TimeTrackerOnlyPage() {
-  const { raceId } = useParams();
-  const { data: segments = [], isLoading } = useSegmentList(raceId as string);
+  const { slug } = useParams();
+  
+  const { data: segments = [], isLoading } = useSegmentList(slug as string);
 
   if (isLoading) {
     return <div>Loading segments...</div>;
