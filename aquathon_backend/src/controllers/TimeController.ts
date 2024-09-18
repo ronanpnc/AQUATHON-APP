@@ -12,7 +12,7 @@ class TimeControllers {
 	}
     // Ms is millisecond
 	static async getRaceMsCount(req:Request, res:Response) {
-        const now = new Race.;
+        const now = new Date();
         return res.status(200).send({time : now});
 	}
 }
