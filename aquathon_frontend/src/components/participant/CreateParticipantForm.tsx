@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CheckIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -49,7 +49,7 @@ export interface CreateParticipantFormProps {
 export default function CreateParticipantForm() {
   const [colorState, setColor] = useState<string>('');
   const param = useParams();
- // const router = useRouter();
+ const router = useRouter();
   const createParticipantMutation = useCreateParticipant();
 
   const form = useForm<FormValues>({

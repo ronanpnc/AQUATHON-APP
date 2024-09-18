@@ -40,7 +40,7 @@ export default function MyParticipantPage() {
 
 const EmptyDataDisplay = () => {
     return (
-        <div className='flex items-center justify-center fixed inset-36'>
+        <div className='flex items-center justify-center fixed inset-0 z-10'>
           <div className='flex flex-col items-center'>
             <Image
               src='/assets/icons/ic_cross_race.svg'

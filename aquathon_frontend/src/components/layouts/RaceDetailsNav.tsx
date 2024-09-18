@@ -29,7 +29,7 @@ export function RaceDetailsNav({ raceId, title }: { raceId: string; title: strin
 
   return (
     <>
-      <div className='flex flex-col sticky top-0'>
+      <div className='flex flex-col sticky top-0 z-50'>
         <Header raceId={raceId} title={title} />
         <TabNavigation tabs={tabs.slice(0, 3)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
