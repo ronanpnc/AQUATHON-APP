@@ -24,7 +24,7 @@ export default function HomePage() {
                    transform hover:scale-105 shadow-lg'
         >
           {copied ? <Check className='mr-2' /> : null}
-          {copied ? 'Copied!' : 'Get Shareable Link'}
+          {copied ? 'Copied!' : 'Get Shareable Link Here'}
         </button>
       </CopyToClipboard>
 

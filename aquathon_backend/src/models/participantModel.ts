@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { ISegment, segmentSchema } from './splitModel'
+import segmentSchema, { ISegment } from './segmentModel'
 //import { db } from '../configs/db'
 
 /**
@@ -62,7 +62,7 @@ export interface IParticipant {
   colour?: string
   dateOfBirth: Date
   school: string | null
-  segment?: ISegment[]
+  segments?: ISegment[]
 }
 export const participantSchema = new mongoose.Schema<IParticipant>(
   {
@@ -89,7 +89,7 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
       required: [true, 'Date of birth is required']
     },
     school: String,
-    segment: [segmentSchema]
+    segments: [segmentSchema]
   },
   { timestamps: true }
 );

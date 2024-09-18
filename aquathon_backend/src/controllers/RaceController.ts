@@ -43,7 +43,7 @@ class RaceController {
         startTime: null,
         swimDistance: req.body.swimDistance,
         runDistance: req.body.runDistance,
-        timeRaceConfigs: req.body.timeRaceConfigs,
+        segments: req.body.segments,
         status: 'upcoming',
         // this will be re define later
         // colours can be customize in the future

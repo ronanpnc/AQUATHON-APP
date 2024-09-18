@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { db } from '../configs/db'
 import { IParticipant, participantSchema } from './participantModel'
-import SegmentSchema, { ISegment } from './timeTrackConfigModel'
+import SegmentSchema, { ISegment } from './segmentModel'
 import { ITimeTracking, timeTrackingSchema } from './timeTrackingModel'
 
 export interface IRace {

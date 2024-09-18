@@ -1,22 +1,28 @@
+version: '3.8'
+
 services:
   frontend:
     depends_on:
-    - backend
+      - backend
     image: vm0077/aquathon_app:frontend
     build:
       context: aquathon_frontend
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     ports:
       - "3000:3000"
     networks:
       - mern
     restart: always
     environment:
-      NEXT_PUBLIC_API_BASE_URL: 'http://backend/api'
-      NEXT_PUBLIC_WS_BASE_URL: 'http://backend'
+      NEXT_PUBLIC_API_BASE_URL: 'http://localhost:4000/api'
+      NEXT_PUBLIC_WS_BASE_URL: 'http://localhost:4000'
+    volumes:
+      - ./aquathon_frontend/src:/app/src
+      - ./aquathon_frontend/public:/app/public
+
   backend:
     depends_on:
-      - mongo
+      - mongodb
     image: vm0077/aquathon_app:backend
     build:
       context: aquathon_backend
@@ -26,26 +32,43 @@ services:
     ports:
       - "4000:4000"
     environment:
-      - NODE_MONGODB=mongodb://root:example@mongo:27017
+      - NODE_MONGODB=mongodb://root:example@mongodb:27017/test?authSource=admin
       - NODE_PORT=4000
     restart: always
-  mongo:
+
+  mongodb:
     image: mongo
     restart: always
+    command: mongod --logpath=/dev/stdout --auth
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodbdata:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - mern
 
   mongo-express:
     image: mongo-express
     restart: always
+    depends_on:
+      - mongodb
+    networks:
+      - mern
     ports:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongodb:27017/?authSource=admin
       ME_CONFIG_BASICAUTH: false
+
+volumes:
+  mongodbdata:
+    driver: local
+
 networks:
   mern:
     driver: bridge
