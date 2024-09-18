@@ -12,9 +12,9 @@ class SegmentController {
     const { raceId } = req.params;
     try {
       const segments = await getAllSegments(raceId);
-      res.status(200).json({
+      res.status(200).json(
         segments
-      });
+      );
     } catch (error) {
       res.status(500).json({
         message: 'Error fetching segments',
