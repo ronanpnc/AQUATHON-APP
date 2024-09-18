@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { RaceStatus } from '@/domains/race/interface';
 import { useCreateRace } from '@/services/race.services';
 
-import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
+import { SegmentSchema,SegmentsList } from './SegmentsList';
 
  const raceformSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -26,7 +26,7 @@ import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
   runDistance: z.number().min(0, 'Run distance must be a positive number'),
   swimDistance: z.number().min(0, 'Swim distance must be a positive number'),
   status: z.nativeEnum(RaceStatus).optional(),
-  timeRaceConfigs: z.array(TimeRaceConfigSchema),
+  segments: z.array(SegmentSchema),
 });
 
 export type RaceFormValues = z.infer<typeof raceformSchema>;
@@ -49,14 +49,14 @@ export default function CreateRaceForm() {
 
     createRaceMutation.mutate(
       {
-        title: values.raceName,
-        date: formattedDate,
-        time: values.time,
-        runDistance: values.runDistance,
-        swimDistance: values.swimDistance,
-        status: RaceStatus.Upcoming,
-        startTime: formattedDate,
-        timeRaceConfigs: values.timeRaceConfigs.map((item) => ({ ...item, mode: '1-step' })),
+          title: values.raceName,
+          date: new Date(formattedDate),
+          runDistance: values.runDistance,
+          swimDistance: values.swimDistance,
+          status: RaceStatus.Upcoming,
+          startTime: new Date(formattedDate),
+          segments: values.segments.map((item) => ({ ...item, mode: '1-step' })),
+          colours: []
       },
       {
         onSuccess: () => {
@@ -153,7 +153,7 @@ export default function CreateRaceForm() {
             />
 
             <div className='space-y-4'>
-              {form.watch('timeRaceConfigs')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
+              {form.watch('segments')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
               <SegmentsList form={form} ref={childRef} />
             </div>
 
