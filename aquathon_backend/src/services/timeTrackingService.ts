@@ -1,25 +1,22 @@
 import mongoose from 'mongoose'
 import { Race } from '../models/raceModel'
 import { handleMongooseError } from '../utils/mongooseError'
-import { ISegment } from '../models/segmentModel'
 
-// Get all segments
-export async function getAllSegments(
-  raceId: string
-): Promise<ISegment[]> {
-  try {
-    const segments = await Race.findOne({ _id: raceId })
-    return segments.segments
-  } catch (error) {
-    throw handleMongooseError(error)
-  }
+interface setTrackingProp {
+    raceId: string;
+    segmentId:string;
+    participantId:string;
+    bib?:string;
 }
 
-export async function getParticipantSegment(
-  raceId: string,
-  segmentId: string
-){
+export async function setTracking({
+  raceId,
+  segmentId,
+  participantId,
+  ...props,
+}: setTrackingProp){
   const rId = new mongoose.Types.ObjectId(raceId)
+  //const rId = new mongoose.Types.ObjectId("66e27103a16ff49d062c1194")
   const sId = new mongoose.Types.ObjectId(segmentId)
 
   try {

@@ -14,6 +14,8 @@ RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else echo "NO
 
 
 # Copy the rest of the application code
+COPY /src /app/src
+
 COPY . .
 
 # Build the application (if needed)
@@ -23,6 +25,6 @@ COPY . .
 EXPOSE 4000
 
 # Compile
-RUN pnpm build
+# RUN pnpm build
 # Define the command to run the app
-CMD ["pnpm", "start"]
+CMD ["pnpm", "dev"]
