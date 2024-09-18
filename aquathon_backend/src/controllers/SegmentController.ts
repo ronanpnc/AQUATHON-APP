@@ -13,7 +13,7 @@ class SegmentController {
     try {
       const segments = await getAllSegments(raceId);
       res.status(200).json({
-        data: segments
+        segments
       });
     } catch (error) {
       res.status(500).json({

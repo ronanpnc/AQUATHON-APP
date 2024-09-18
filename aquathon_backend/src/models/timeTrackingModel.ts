@@ -28,9 +28,8 @@ import mongoose from 'mongoose'
  */
 export interface ITimeTracking {
   participantId: string,
-  timeRaceConfigId: string,
-  startTime: Date
-  endTime: Date
+  segmentId: string | null,
+  stampTime: Date,
   timeInMs?: BigInteger
 }
 export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>({
@@ -38,15 +37,11 @@ export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>({
     type: String,
     required: true
   },
-  timeRaceConfigId: {
-    type: String,
+  segmentId: {
+    type: String || null,
     required: true
   },
-  startTime: {
-    type: mongoose.Schema.Types.Date,
-    required: true
-  },
-  endTime: {
+  stampTime: {
     type: mongoose.Schema.Types.Date,
     required: true
   },

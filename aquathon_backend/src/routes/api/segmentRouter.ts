@@ -52,7 +52,7 @@ const router = Router();
  *           type: number
  *           description: The order of the segment in the race (optional)
  */
-router.get("/:raceId/segment", SegmentController.getAllSegments)
+router.get("/:raceId/segments", SegmentController.getAllSegments)
 
 /**
  * @swagger
