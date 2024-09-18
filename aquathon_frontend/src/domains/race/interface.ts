@@ -26,6 +26,7 @@ export interface ITimeTracking {
   endTime: Date
   timeInMs?: BigInteger
 }
+
 export interface ISegment {
   type: string;
   mode: string;

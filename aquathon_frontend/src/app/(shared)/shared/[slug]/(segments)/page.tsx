@@ -1,37 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useParams } from 'next/navigation';
 
 import Container from '@/components/Container';
 import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
-import { ITimeRaceConfig } from '@/domains/race/interface';
-
-// Dummy data
-const dummySegments: ITimeRaceConfig[] = [
-  {
-    type: 'swimming',
-    mode: 'active',
-    timeTrackId: ['swim1'],
-  },
-  {
-    type: 'biking',
-    mode: 'upcoming',
-    timeTrackId: ['bike1'],
-  },
-  {
-    type: 'running',
-    mode: 'upcoming',
-    timeTrackId: ['run1'],
-  },
-];
+import { useSegmentList } from '@/services/segment.services'; 
 
 export default function TimeTrackerOnlyPage() {
-  const [segments] = useState<ITimeRaceConfig[]>(dummySegments);
+  const { raceId } = useParams();
+  const { data: segments = [], isLoading } = useSegmentList(raceId as string);
+
+  if (isLoading) {
+    return <div>Loading segments...</div>;
+  }
 
   return (
     <Container>
-      {[...segments, ...segments, ...segments, ...segments, ...segments].map((segment, index) => (
+      {segments.map((segment, index) => (
         <SegmentCard key={index} segment={segment} />
       ))}
     </Container>

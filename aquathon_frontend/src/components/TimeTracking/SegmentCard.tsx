@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 import { SEGMENT_COLORS, SEGMENT_TYPES } from '@/domains/race/constants';
-import { ITimeRaceConfig } from '@/domains/race/interface';
+import { ISegment } from '@/domains/race/interface';
 
-const SegmentCard: React.FC<{ segment: ITimeRaceConfig }> = ({ segment }) => {
+const SegmentCard: React.FC<{ segment: ISegment }> = ({ segment }) => {
   const { type } = segment;
   const completedParticipants = 45;
   const totalParticipants = 89;
@@ -27,7 +27,7 @@ const SegmentCard: React.FC<{ segment: ITimeRaceConfig }> = ({ segment }) => {
   );
 };
 
-const CardHeader: React.FC<{ type: ITimeRaceConfig['type'] }> = ({ type }) => (
+const CardHeader: React.FC<{ type: ISegment['type'] }> = ({ type }) => (
   <div className='flex items-center p-4 pb-0'>
     <StatusIcon type={type} />
     <h3 className='text-lg font-bold flex-grow'>{SEGMENT_TYPES[type].text}</h3>
@@ -35,7 +35,7 @@ const CardHeader: React.FC<{ type: ITimeRaceConfig['type'] }> = ({ type }) => (
   </div>
 );
 
-const StatusIcon: React.FC<{ type: ITimeRaceConfig['type'] }> = ({ type }) => (
+const StatusIcon: React.FC<{ type: ISegment['type'] }> = ({ type }) => (
   <div className={clsx('w-12 h-12 rounded-full flex items-center justify-center mr-4', SEGMENT_COLORS[type].bg)}>
     <Image src={SEGMENT_TYPES[type].icon} alt={`${type} icon`} width={32} height={32} />
   </div>

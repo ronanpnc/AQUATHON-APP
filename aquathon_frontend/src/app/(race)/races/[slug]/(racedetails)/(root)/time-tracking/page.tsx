@@ -9,11 +9,11 @@ import Container from '@/components/Container';
 import RaceTimer from '@/components/TimeTracking/RaceTimer';
 import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
-import { ITimeRaceConfig } from '@/domains/race/interface';
+import { ISegment } from '@/domains/race/interface';
 import { socket } from '@/socket';
 
 // Dummy data
-const dummySegments: ITimeRaceConfig[] = [
+const dummySegments: ISegment[] = [
   {
     type: 'swimming',
     mode: 'active',
@@ -33,7 +33,7 @@ const dummySegments: ITimeRaceConfig[] = [
 
 export default function RaceDetailPage() {
   const [time, setTime] = useState<Date | null>(null);
-  const [segments, setSegments] = useState<ITimeRaceConfig[]>(dummySegments);
+  const [segments, setSegments] = useState<ISegment[]>(dummySegments);
   const [copied, setCopied] = useState(false);
   const id = useParams().slug;
   const shareableLink = `${window.location.origin}/shared/${id}`;
@@ -92,6 +92,16 @@ export default function RaceDetailPage() {
         <SegmentCard key={index} segment={segment} />
       ))}
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
+      <CopyToClipboard text={shareableLink} onCopy={handleCopy}>
+        <button
+          className='bg-white text-purple-600 font-semibold py-3 px-8 rounded-full
+                   hover:bg-purple-100 transition duration-300 ease-in-out
+                   transform hover:scale-105 shadow-lg'
+        >
+          {copied ? <Check className='mr-2' /> : null}
+          {copied ? 'Copied!' : 'Get Shareable Link'}
+        </button>
+      </CopyToClipboard>
     </Container>
   );
 }
