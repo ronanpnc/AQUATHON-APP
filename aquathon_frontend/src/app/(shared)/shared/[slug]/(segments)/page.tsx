@@ -5,10 +5,10 @@ import { useState } from 'react';
 import Container from '@/components/Container';
 import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
-import { ITimeRaceConfig } from '@/domains/race/interface';
+import { ISegment } from '@/domains/race/interface';
 
 // Dummy data
-const dummySegments: ITimeRaceConfig[] = [
+const dummySegments: ISegment[] = [
   {
     type: 'swimming',
     mode: 'active',
@@ -27,7 +27,7 @@ const dummySegments: ITimeRaceConfig[] = [
 ];
 
 export default function TimeTrackerOnlyPage() {
-  const [segments] = useState<ITimeRaceConfig[]>(dummySegments);
+  const [segments] = useState<ISegment[]>(dummySegments);
 
   return (
     <Container>

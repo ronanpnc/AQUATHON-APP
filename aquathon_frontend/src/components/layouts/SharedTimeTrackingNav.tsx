@@ -16,7 +16,7 @@ const tabs: Tab[] = [
   { id: '1 Step', label: '1 Step', Icon: <MapPin /> },
   { id: '2 Step', label: '2 Step', Icon: <MapPin /> },
 ];
-export function TimeTrackingNav() {
+export function SharedTimeTrackingNav() {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
 
   return (
@@ -40,7 +40,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
             key={tab.id}
             tab={tab}
             isActive={activeTab === tab.id}
-            onClick={() => {    
+            onClick={() => {
               handleTabClick(tab.id, tab?.path);
             }}
           />
