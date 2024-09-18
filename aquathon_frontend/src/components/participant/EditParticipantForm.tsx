@@ -47,7 +47,9 @@ export default function EditParticipantForm() {
       form.reset({
         ...participant.data,
         dateOfBirth: format(participant.data.dateOfBirth, 'yyyy-MM-dd').toString(),
+        color: participant.data.colour,
       });
+      setColor(participant.data.colour);
     }
   }, [participant.data]);
 
@@ -73,7 +75,7 @@ export default function EditParticipantForm() {
           });
           router.back();
         },
-        onError: (error) => {
+        onError: () => {
           toast({
             title: 'Error',
             description: 'Failed to create participant. Please try again.',
