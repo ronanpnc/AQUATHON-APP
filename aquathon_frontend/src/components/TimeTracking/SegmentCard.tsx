@@ -12,10 +12,11 @@ const SegmentCard: React.FC<{ segment: ISegment }> = ({ segment }) => {
   const totalParticipants = 89;
 
   const basePath = window.location.pathname.includes('/shared') ? '/shared' : '/races';
-  const { slug, _id } = useParams();
+  const { slug } = useParams();
+  const { _id } = segment;
 
   return (
-    <Link href={`${basePath}/${slug}/time-tracking/`} className='block'>
+    <Link href={`${basePath}/${slug}/time-tracking/${_id}`} className='block'>
       <div className='flex flex-col bg-white rounded-lg shadow-xl mb-4 overflow-hidden'>
         <CardHeader type={type} />
         <CardBody

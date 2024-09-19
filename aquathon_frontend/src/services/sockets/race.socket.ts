@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { socket } from "../../socket";
+import { useEffect, useState } from 'react';
 
-export default function useRaceSocket({raceId}: {raceId:string}) {
+import { socket } from '../../socket';
+
+export default function useRaceSocket({ raceId }: { raceId: string }) {
   const [isConnected, setIsConnected] = useState(false);
-  const [transport, setTransport] = useState("N/A");
+  const [transport, setTransport] = useState('N/A');
   useEffect(() => {
     socket.emit('subscribe', raceId);
-  }, [raceId])
-
+  }, [raceId]);
 
   useEffect(() => {
     if (socket.connected) {
@@ -20,28 +20,28 @@ export default function useRaceSocket({raceId}: {raceId:string}) {
       setIsConnected(true);
       setTransport(socket.io.engine.transport.name);
 
-      socket.io.engine.on("upgrade", (transport) => {
+      socket.io.engine.on('upgrade', (transport) => {
         setTransport(transport.name);
       });
     }
 
     function onDisconnect() {
       setIsConnected(false);
-      setTransport("N/A");
+      setTransport('N/A');
     }
 
-    const stampTime =() => {
-        socket.emit("stampTime");
-    }
+    const stampTime = () => {
+      socket.emit('stampTime');
+    };
 
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
 
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
     };
   }, []);
 
-  return {isConnected};
+  return { isConnected };
 }

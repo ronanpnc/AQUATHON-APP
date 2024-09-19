@@ -17,7 +17,7 @@ export default function TimeTrackerOnlyPage() {
   }
 
   return (
-    <Container>
+    <Container className='pt-4'>
       {segments.map((segment, index) => (
         <SegmentCard key={index} segment={segment} />
       ))}
