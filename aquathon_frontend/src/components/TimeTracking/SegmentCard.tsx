@@ -1,3 +1,4 @@
+"use client"
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,8 +9,6 @@ import { ISegment } from '@/domains/race/interface';
 
 const SegmentCard: React.FC<{ segment: ISegment }> = ({ segment }) => {
   const { type } = segment;
-  const completedParticipants = 45;
-  const totalParticipants = 89;
 
   const basePath = window.location.pathname.includes('/shared') ? '/shared' : '/races';
   const { slug, _id } = useParams();
@@ -19,9 +18,10 @@ const SegmentCard: React.FC<{ segment: ISegment }> = ({ segment }) => {
       <div className='flex flex-col bg-white rounded-lg shadow-xl mb-4 overflow-hidden'>
         <CardHeader type={type} />
         <CardBody
-          completionPercentage={0}
-          completedParticipants={completedParticipants}
-          totalParticipants={totalParticipants}
+          completionPercentage={20}
+          completedParticipants={segment?.totalCompleted|| 0}
+          totalParticipants={100}
+          type={segment.type}
         />
       </div>
     </Link>
@@ -46,18 +46,19 @@ const CardBody: React.FC<{
   completionPercentage: number;
   completedParticipants: number;
   totalParticipants: number;
-}> = ({ completionPercentage, completedParticipants, totalParticipants }) => (
+  type:string
+}> = ({ completionPercentage, completedParticipants, totalParticipants, type }) => (
   <div className='px-4 pb-4'>
     <div className='text-center mb-2 text-sm font-medium'>
       {completedParticipants.toString().padStart(2, '0')}/{totalParticipants}
     </div>
-    <ProgressBar progress={completionPercentage} />
+    <ProgressBar progress={completionPercentage} type={type} />
   </div>
 );
 
-const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
-  <div className='w-full h-2 bg-gray-200 rounded-full'>
-    <div className='absolute top-0 left-0 h-full bg-blue-500 rounded-full' style={{ width: `${progress}%` }} />
+const ProgressBar: React.FC<{ progress: number , type:string}> = ({ progress, type }) => (
+  <div className='w-full h-2 bg-gray-200 rounded-full relative'>
+    <div className={`absolute top-0 left-0 h-full bg-blue-500 rounded-full ${SEGMENT_COLORS[type].bg}`} style={{ width: `${progress}%`}} />
   </div>
 );
 

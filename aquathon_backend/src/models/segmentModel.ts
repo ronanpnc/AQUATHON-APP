@@ -31,30 +31,27 @@ import { db } from '../configs/db'
  *         timeTrack: []
  */
 
-
 export interface ISegment extends Document {
   name?: string
   type: string
   mode: string
-  totalCompleted: number;
-  timeTrackId: string[]
+  totalCompleted: number
+  timeTrackId?: string[]
+  status?: string
 }
-const SegmentSchema = new Schema<ISegment>(
-  {
-    name: String,
-    type: {
-      type: String,
-      required: true
-    },
-    mode: {
-      type: String,
-      required: true
-    },
-    timeTrackId: [
-        String
-    ],
-    totalCompleted: Number,
+const SegmentSchema = new Schema<ISegment>({
+  name: String,
+  type: {
+    type: String,
+    required: true
   },
-)
-export const Segment = db.model("TimeRaceConfig", SegmentSchema)
+  mode: {
+    type: String,
+    required: true
+  },
+  timeTrackId: [String],
+  totalCompleted: Number,
+  status: String
+})
+export const Segment = db.model('TimeRaceConfig', SegmentSchema)
 export default SegmentSchema

@@ -9,7 +9,7 @@ import { useSegmentList } from '@/services/segment.services';
 
 export default function TimeTrackerOnlyPage() {
   const { slug } = useParams();
-  
+
   const { data: segments = [], isLoading } = useSegmentList(slug as string);
 
   if (isLoading) {

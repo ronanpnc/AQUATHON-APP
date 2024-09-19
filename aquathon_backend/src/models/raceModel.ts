@@ -13,8 +13,7 @@ export interface IRace {
     runDistance: number
     participants?: IParticipant[]
     colours: string[]
-    splitTotal?: number
-    splitCompleted?: number
+    segmentsCompleted?: number
     timeTracking?: ITimeTracking[]
     segments: ISegment[]
     totalParticipants?: number
@@ -48,8 +47,7 @@ const raceSchema = new mongoose.Schema<IRace>(
             enum: ['finished', 'upcoming', 'ongoing']
         },
         colours: [String],
-        splitTotal: Number,
-        splitCompleted: Number,
+        segmentsCompleted: Number,
         totalParticipants:Number,
         timeTracking: [timeTrackingSchema], // Using splitSchema directly
         participants: [participantSchema],

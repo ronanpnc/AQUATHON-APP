@@ -28,6 +28,7 @@ import mongoose from 'mongoose'
  */
 export interface ITimeTracking {
   participantId: string,
+  bib: number
   segmentId: string | null,
   stampTime: Date,
   timeInMs?: BigInteger
@@ -37,6 +38,7 @@ export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>({
     type: String,
     required: true
   },
+  bib: Number || null,
   segmentId: {
     type: String || null,
     required: true
@@ -47,6 +49,5 @@ export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>({
   },
   timeInMs: {
     type: Number,
-    required: true
   }
 });
