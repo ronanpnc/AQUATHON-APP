@@ -20,8 +20,7 @@ export async function getParticipantSegment(
   segmentId: string
 ){
   const rId = new mongoose.Types.ObjectId(raceId)
-  const sId = new mongoose.Types.ObjectId(segmentId)
-
+  //const sId = new mongoose.Types.ObjectId(segmentId)
   try {
     const result = await Race.aggregate([
       // Match the specific race

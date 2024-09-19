@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import { socket } from '../../socket';
+import { useEffect, useState } from "react";
+import { createStore } from "zustand";
+
+import { socket } from "../../socket";
 
 export default function useRaceSocket({ raceId }: { raceId: string }) {
   const [isConnected, setIsConnected] = useState(false);

@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { Race } from '../models/raceModel'
 import { handleMongooseError } from '../utils/mongooseError'
 
-interface setTrackingProp {
+export interface setTrackingProp {
   raceId: string
   segmentId: string
   participantId: string
@@ -15,26 +15,22 @@ export async function setTracking({
   participantId,
   bib
 }: setTrackingProp) {
+  const now = new Date();
   if (bib || participantId) {
     try {
-      const result = await Race.aggregate([
-        // Match the specific race
-        { $match: { _id: rId } },
+      const result = await Race.updateOne(
+        { _id: raceId },
         {
-          $unwind: {
-            path: '$participants'
-          }
-        },
-        {
-          $project: {
-            _id: '$participants._id',
-            firstName: '$participants.firstName',
-            lastName: '$participants.lastName',
-            bib: '$participants.bib'
+          $push: {
+            timeTracking: {
+              segmentId: segmentId,
+              participantId: participantId,
+              stampTime: now,
+              bib: bib
+            }
           }
         }
-      ])
-
+      )
       return result
     } catch (error) {
       throw handleMongooseError(error)
@@ -43,20 +39,8 @@ export async function setTracking({
     try {
       const result = await Race.aggregate([
         // Match the specific race
-        { $match: { _id: rId } },
-        {
-          $unwind: {
-            path: '$participants'
-          }
-        },
-        {
-          $project: {
-            _id: '$participants._id',
-            firstName: '$participants.firstName',
-            lastName: '$participants.lastName',
-            bib: '$participants.bib'
-          }
-        }
+        { $match: { _id: new mongoose.Types.ObjectId(raceId) } },
+        { $unwind: '$timeTraking' },
       ])
 
       return result

@@ -32,6 +32,8 @@ export interface ISegment {
   type: string;
   mode: string;
   timeTrackId: string[];
+  totalCompleted?: number;
+  status?: string;
 }
 
 export interface Race {

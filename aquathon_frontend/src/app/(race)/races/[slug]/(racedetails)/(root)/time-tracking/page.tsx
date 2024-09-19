@@ -11,32 +11,19 @@ import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
 import { ISegment } from '@/domains/race/interface';
 import { socket } from '@/socket';
+import { useSegmentList } from '@/services/segment.services';
+import { useRace } from '@/services/race.services';
 
 // Dummy data
-const dummySegments: ISegment[] = [
-  {
-    type: 'swimming',
-    mode: 'active',
-    timeTrackId: ['swim1'],
-  },
-  {
-    type: 'biking',
-    mode: 'upcoming',
-    timeTrackId: ['bike1'],
-  },
-  {
-    type: 'running',
-    mode: 'upcoming',
-    timeTrackId: ['run1'],
-  },
-];
+;
 
 export default function RaceDetailPage() {
   const [time, setTime] = useState<Date | null>(null);
-  const [segments, setSegments] = useState<ISegment[]>(dummySegments);
   const [copied, setCopied] = useState(false);
   const id = useParams().slug;
+  const race = useRace(id as string)
   const shareableLink = `${window.location.origin}/shared/${id}`;
+  const { data: segments = [], isLoading } = useSegmentList(id as string);
 
   const handleCopy = () => {
     setCopied(true);
@@ -54,25 +41,12 @@ export default function RaceDetailPage() {
   }, [id]);
 
   useEffect(() => {
-    const fetchRaceData = async () => {
-      try {
-        const response = await fetch(`http://localhost:4000/api/races/${id}`);
-        const data = await response.json();
-        const startTime = data?.startTime === null ? null : new Date(data?.startTime);
-        setTime(startTime);
-        // Uncomment the next line when your API is ready to provide real segment data
-        // setSegments(data?.segments || dummySegments);
-      } catch (error) {
-        console.error('Failed to fetch race data:', error);
-        // Use dummy data in case of an error
-        setSegments(dummySegments);
+      if(race){
+        setTime(race.data?.startTime as Date)
       }
-    };
-
-    fetchRaceData();
-
+  }, [race])
+  useEffect(() => {
     socket.emit('subscribe', id);
-
     socket.on('subscribeAccepted', () => {
       socket.on('poolChanged', (value) => {
         const startTime = value === null ? null : new Date(value);
@@ -88,7 +62,7 @@ export default function RaceDetailPage() {
 
   return (
     <Container>
-      {[...segments, ...segments, ...segments, ...segments, ...segments].map((segment, index) => (
+      {segments.map((segment, index) => (
         <SegmentCard key={index} segment={segment} />
       ))}
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
