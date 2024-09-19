@@ -22,7 +22,7 @@ type TabNavigationProps = {
 
 export function SharedTimeTrackingNav({ activeTab, setActiveTab }: TabNavigationProps) {
   return (
-    <div className='flex flex-col sticky top-0'>
+    <div className='flex flex-col sticky z-10 top-0'>
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
@@ -33,12 +33,7 @@ function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
     <div className='scrollbar-hide bg-secondary-purple'>
       <div className='grid grid-cols-2'>
         {tabs.map((tab) => (
-          <TabButton
-            key={tab.id}
-            tab={tab}
-            isActive={activeTab === tab.id}
-            onClick={() => setActiveTab(tab.id)}
-          />
+          <TabButton key={tab.id} tab={tab} isActive={activeTab === tab.id} onClick={() => setActiveTab(tab.id)} />
         ))}
       </div>
     </div>

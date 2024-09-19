@@ -35,7 +35,7 @@ const TimeButton: React.FC<TimeButtonProps> = ({ bibNumber }) => {
   return (
     <button
       onClick={handleClick}
-      className={`flex flex-col items-center justify-between p-2 rounded-xl transition-colors h-24 w-full ${
+      className={`flex flex-col items-center justify-between p-1 rounded-xl transition-colors h-20 w-full ${
         isTracked
           ? 'bg-white text-primary-purple border border-primary-purple'
           : 'bg-primary-purple text-white hover:bg-primary-purple/90'
