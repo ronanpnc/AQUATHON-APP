@@ -1,27 +1,23 @@
 'use client';
-
 import { Check } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { useStore } from 'zustand';
 
 import Container from '@/components/Container';
 import RaceTimer from '@/components/TimeTracking/RaceTimer';
 import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
-import { ISegment } from '@/domains/race/interface';
-import { socket } from '@/socket';
 import { useSegmentList } from '@/services/segment.services';
-import { useRace } from '@/services/race.services';
-
-// Dummy data
-;
+import { RaceRealTimeContext } from '@/services/sockets/race/store';
 
 export default function RaceDetailPage() {
   const [time, setTime] = useState<Date | null>(null);
   const [copied, setCopied] = useState(false);
   const id = useParams().slug;
-  const race = useRace(id as string)
+  const socketContext = useContext(RaceRealTimeContext);
+  const raceSocket = useStore(socketContext!, (state) => state);
   const shareableLink = `${window.location.origin}/shared/${id}`;
   const { data: segments = [], isLoading } = useSegmentList(id as string);
 
@@ -29,36 +25,22 @@ export default function RaceDetailPage() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-
   const startTime = () => {
-    socket.emit('startTime', id);
+    raceSocket.startTime(id as string);
   };
   const resetTime = () => {
-    socket.emit('resetTime', id);
+    raceSocket.resetTime(id as string);
   };
   useEffect(() => {
-    socket.emit('subscribe', id);
-  }, [id]);
-
-  useEffect(() => {
-      if(race){
-        setTime(race.data?.startTime as Date)
+    raceSocket.subscribe(id as string);
+    raceSocket.socketClient.on('startTimeChanged', (time) => {
+      if (time) {
+        setTime(new Date(time));
+        return;
       }
-  }, [race])
-  useEffect(() => {
-    socket.emit('subscribe', id);
-    socket.on('subscribeAccepted', () => {
-      socket.on('poolChanged', (value) => {
-        const startTime = value === null ? null : new Date(value);
-        setTime(startTime);
-      });
-      return () => {
-        socket.off('poolChanged');
-        socket.off('subscribeAccepted');
-        socket.off('connect');
-      };
+        setTime(null);
     });
-  }, [id]);
+  }, [raceSocket.roomId, id]);
 
   return (
     <Container>
@@ -73,7 +55,7 @@ export default function RaceDetailPage() {
                    transform hover:scale-105 shadow-lg'
         >
           {copied ? <Check className='mr-2' /> : null}
-          {copied ? 'Copied!' : 'Get Shareable Link'}
+          {copied ? 'Copied!' : `${raceSocket.roomId}`}
         </button>
       </CopyToClipboard>
     </Container>

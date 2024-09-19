@@ -127,9 +127,4 @@ export const setRaceStartTime = async (
   }
 }
 
-export const getRaceSegment = async (id: string) => {
-  const segments = await Race.aggregate([]).catch((error) => {
-    throw handleMongooseError(error)
-  })
-  return segments
-}
+
