@@ -43,7 +43,7 @@ export default function MyRacePage() {
     <div className='min-h-screen flex flex-col pb-24'>
       {data?.length ? (
         <div>
-          <SectionTitle>Today</SectionTitle>
+          <SectionTitle>Welcome,</SectionTitle>
           <div className='flex-grow'>
             {data.map((race) => (
               <RaceCard key={race._id} race={race} />

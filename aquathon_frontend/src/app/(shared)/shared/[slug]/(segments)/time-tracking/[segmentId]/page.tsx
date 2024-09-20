@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Container from '@/components/Container';
 import { SharedTimeTrackingNav } from '@/components/layouts/SharedTimeTrackingNav';
 import TimeButton from '@/components/TimeTracking/TimeButton';
+import TimeStampCard from '@/components/TimeTracking/TimeStampCard';
 
 const dummyParticipants = Array.from({ length: 50 }, (_, index) => ({
   id: index + 1,
@@ -25,7 +26,18 @@ export default function SharedTrackingPage() {
             ))}
           </div>
         ) : (
-          <div>Hello</div>
+          <div>
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+            <TimeStampCard />
+          </div>
         )}
       </Container>
     </div>

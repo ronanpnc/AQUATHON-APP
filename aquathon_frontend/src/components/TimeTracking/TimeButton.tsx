@@ -1,7 +1,7 @@
 'use client';
 
 import { RotateCw } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface TimeButtonProps {
   bibNumber: string;
