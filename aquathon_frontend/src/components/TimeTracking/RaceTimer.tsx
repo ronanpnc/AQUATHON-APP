@@ -5,8 +5,8 @@ import { formatDuration } from '@/utils/clock';
 
 interface IRaceTimer {
   time: Date | null;
-  startTimer: () => void;
-  resetTimer: () => void;
+  startTimer: (id:string) => void;
+  resetTimer: (id:string) => void;
 }
 export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) {
   const [elapsedTime, setElapsedTime] = useState(0);

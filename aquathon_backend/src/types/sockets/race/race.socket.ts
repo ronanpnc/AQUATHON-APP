@@ -11,7 +11,11 @@ export interface ServerToClientEvents {
   basicEmit: (a: number, b: string, c: Buffer) => void;
   withAck: (d: string, callback: (e: number) => void) => void;
   // handshake for server to client
-  subscribeAccepted : ()=> void;
+  subscribeAccepted : (id:string) => void;
+
+  // race start time update
+  startTimeChanged :(value) => void;
+
   // update participant pool
   poolChanged :(value) => void;
 }

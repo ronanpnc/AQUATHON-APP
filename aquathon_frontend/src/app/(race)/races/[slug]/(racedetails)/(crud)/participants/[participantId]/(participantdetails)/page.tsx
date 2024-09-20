@@ -19,7 +19,7 @@ export default function ParticipantDetailPage({ params }: { params: { slug: stri
         <DeleteParticipantButton raceId={params.slug} participantId={params.participantId} />
       </nav>
       <div>
-        <EditParticipantForm/>
+        <EditParticipantForm  />
       </div>
     </div>
   );

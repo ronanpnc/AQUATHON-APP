@@ -15,4 +15,5 @@ export const useFetch = <T>(queryKey: string, url: string) => {
     queryKey: [queryKey],
     queryFn: () => fetchData<T>(url),
   });
+
 };

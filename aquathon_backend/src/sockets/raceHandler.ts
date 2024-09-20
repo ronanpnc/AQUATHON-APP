@@ -3,15 +3,14 @@ import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketDa
 import { setRaceStartTime } from "../services/raceService";
 import { setTracking, setTrackingProp } from "../services/timeTrackingService";
 import { StatusError } from "../types/common";
-
 type ServerProp = Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents,SocketData>
 
 const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
     let raceID : string|null = null;
     let raceRoom = io.to(null);
     const startTime = (payload) => {
-        setRaceStartTime(payload, "start").then( (data) => {
-            raceRoom.emit("poolChanged", data?.startTime)
+        setRaceStartTime(payload, "start").then((data) => {
+            raceRoom.emit("startTimeChanged", data?.startTime)
         }).catch((e) => console.log(e))
     };
 
@@ -19,7 +18,7 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
     const resetTime = (payload) => {
         if (payload === undefined ||  null ) return;
         setRaceStartTime(payload, "reset").then( (data) => {
-            raceRoom.emit("poolChanged", data?.startTime)
+            raceRoom.emit("startTimeChanged", data?.startTime)
             console.log("hello");
         }).catch((e) => {throw new StatusError(e)})
     };
@@ -30,7 +29,7 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
         socket.join(payload);
         raceID = payload;
         raceRoom = io.to(raceID);
-        raceRoom.emit("subscribeAccepted")
+        raceRoom.emit("subscribeAccepted", raceID)
     }
 
     const stampTime = (payload:setTrackingProp) => {
@@ -45,7 +44,7 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
 
     }
 
-   // reset for 1-step
+   // reset for 2-step
     const resetAssignedTimeTracking = (payloay) => {
 
     }
