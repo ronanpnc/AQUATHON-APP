@@ -107,5 +107,5 @@ router.get("/:raceId/segments", SegmentController.getAllSegments)
  *           type: number
  *           description: The order of the segment in the race (optional)
  */
-router.get("/:raceId/segment/:segmentId", SegmentController.getParticipantSegment)
+router.get("/:raceId/segments/:segmentId", SegmentController.getParticipantSegment)
 export default router;

@@ -1,4 +1,5 @@
 import { Timer, Users } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import { formatDuration } from '@/utils/clock';
@@ -7,9 +8,11 @@ interface IRaceTimer {
   time: Date | null;
   startTimer: (id:string) => void;
   resetTimer: (id:string) => void;
+  participant: number | undefined;
 }
-export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) {
+export default function RaceTimer({ time, startTimer, resetTimer, participant }: IRaceTimer) {
   const [elapsedTime, setElapsedTime] = useState(0);
+  const id = useParams().id;
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -29,11 +32,11 @@ export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) 
   useEffect(() => {}, []);
 
   const startRace = () => {
-    startTimer();
+    startTimer(id as string);
   };
 
   const resetRace = () => {
-    resetTimer();
+    resetTimer(id as string);
   };
 
   return (
@@ -60,14 +63,23 @@ export default function RaceTimer({ time, startTimer, resetTimer }: IRaceTimer) 
             {formatDuration(elapsedTime)}
           </div>
           <div className='text-md flex items-center'>
-            <Users className='mr-1' size={16} />
-            Participants: 999 {/* Add participant count here */}
+          <Users className='mr-1' size={16} />
+            {` Participants:${participant || 0}`}
           </div>
         </div>
         <div className='text-center text-xs font-semibold'>
           {isRunning ? 'Race in progress' : 'Tap to start the Race'}
         </div>
+        <ProgressBar progress={100}/>
       </div>
     </div>
   );
 }
+
+
+
+const ProgressBar: React.FC<{ progress: number}>= ({ progress }) => (
+  <div className='w-full h-2 bg-gray-200 rounded-full relative'>
+    <div className={`absolute top-0 left-0 h-full bg-blue-500 rounded-full`} style={{ width: `${progress}%`}} />
+  </div>
+);

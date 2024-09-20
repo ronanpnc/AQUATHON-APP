@@ -20,10 +20,11 @@ export async function getParticipantSegment(
   segmentId: string
 ){
   const rId = new mongoose.Types.ObjectId(raceId)
-  //const sId = new mongoose.Types.ObjectId(segmentId)
+  const sId = new mongoose.Types.ObjectId(segmentId)
   try {
     const result = await Race.aggregate([
       // Match the specific race
+      { $match: { _id: rId } },
       { $match: { _id: rId } },
       { $unwind: {
         path :"$participants",
@@ -37,8 +38,7 @@ export async function getParticipantSegment(
         }
       }
     ])
-
-    return result
+    return result;
   } catch (error) {
     throw handleMongooseError(error)
   }

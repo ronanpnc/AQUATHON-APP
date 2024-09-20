@@ -45,8 +45,7 @@ export interface Race {
   runDistance: number;
   participants?: IParticipant[];
   colours: string[];
-  splitTotal?: number;
-  splitCompleted?: number;
+  segmentsCompleted?: number
   timeTracking?: ITimeTracking[];
   segments: ISegment[];
   totalParticipants?: number;
@@ -55,6 +54,7 @@ export interface Race {
 
 // Types
 export type CreateRaceData = Omit<Race, '_id'>;
+export type RaceWithoutSubCollection = Omit<Race, 'participants'|'timeTracking'>;
 export type UpdateRaceData = Partial<CreateRaceData> & { id: string };
 
 export interface ComponentProps extends PropsWithChildren {

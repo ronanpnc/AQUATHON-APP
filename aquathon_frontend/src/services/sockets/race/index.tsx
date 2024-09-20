@@ -15,10 +15,7 @@ export const RaceManagerContextProvider : React.FC<RaceProviderProp> = ({childre
         if(!raceRealStore.current){
             raceRealStore.current = newStore;
         }
-
-
         return () => {
-
         };
     },[]);
     return <RaceRealTimeContext.Provider value={raceRealStore.current}>

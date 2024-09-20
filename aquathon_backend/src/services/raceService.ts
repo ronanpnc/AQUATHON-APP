@@ -51,18 +51,31 @@ export const getRacesGroupy = async (limit = 2, page = 1) => {
   })
   return races
 }
-export const getRace = async (id: string) => {
-  const data = await Race.find({ _id: id }).catch((error) => {
-    throw handleMongooseError(error)
-  })
-  return data[0]
-}
+// NOTE: need more work in the future where you can select field from client
+export const getRace = async (id: string): Promise<IRace | null> => {
+  try {
+    const query = Race.findById(id).select({participants : 0, timeTracking: 0});
+
+    const race = await query.exec();
+
+    if (!race) {
+      // If no race is found, return null instead of throwing an error
+      return null;
+    }
+
+    return race;
+  } catch (error) {
+    throw handleMongooseError(error);
+  }
+};
 
 // delete the race with new obj
 export const createRace = async (data: IRace) => {
   const new_race = new Race({
     startTime: null,
     status: 'upcoming',
+    totalParticipants: 0,
+    segmentsCompleted: 0,
     date: new Date(data.date),
     ...data
   })
