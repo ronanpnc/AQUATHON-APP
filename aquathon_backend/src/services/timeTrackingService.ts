@@ -1,51 +1,37 @@
-import mongoose from 'mongoose'
-import { Race } from '../models/raceModel'
 import { handleMongooseError } from '../utils/mongooseError'
-
-export interface setTrackingProp {
-  raceId: string
-  segmentId: string
-  participantId: string
-  bib?: string
+import { ITimeTracking, TimeTracking } from '../models/timeTrackingModel'
+import { StatusError } from '../types/common'
+interface setTrackingProp extends ITimeTracking {
+  _id: string
 }
 
-export async function setTracking({
-  raceId,
-  segmentId,
-  participantId,
-  bib
-}: setTrackingProp) {
-  const now = new Date();
-  if (bib || participantId) {
+export async function setTracking(data: setTrackingProp) {
+  const now = new Date()
+  if (data.bib || data.participantId) {
     try {
-      const result = await Race.updateOne(
-        { _id: raceId },
-        {
-          $push: {
-            timeTracking: {
-              segmentId: segmentId,
-              participantId: participantId,
-              stampTime: now,
-              bib: bib
-            }
-          }
-        }
-      )
-      return result
+      const timeTracking = await createTimeTracking({
+        raceId: data.raceId,
+        stampTime: now,
+        ...data
+      })
+      return timeTracking
     } catch (error) {
       throw handleMongooseError(error)
     }
   } else {
-    try {
-      const result = await Race.aggregate([
-        // Match the specific race
-        { $match: { _id: new mongoose.Types.ObjectId(raceId) } },
-        { $unwind: '$timeTraking' },
-      ])
-
-      return result
-    } catch (error) {
-      throw handleMongooseError(error)
-    }
   }
 }
+
+export const createTimeTracking = async (data: setTrackingProp)=> {
+
+  try {
+    // Step 1: Create new TimeTracking document
+    const  timeTracking  = new TimeTracking(data);
+    console.log(timeTracking);
+    const res = await timeTracking.save();
+    return res;
+  } catch (error) {
+    console.log(error)
+    throw new StatusError('Failed to create time tracking and add reference', 500, error);
+  }
+};

@@ -20,5 +20,4 @@ const timerSchema = new mongoose.Schema({
   },
 });
 
-const Timer = mongoose.model("Timer", timerSchema);
-module.exports = Timer;
+export const Timer = mongoose.model("Timer", timerSchema);

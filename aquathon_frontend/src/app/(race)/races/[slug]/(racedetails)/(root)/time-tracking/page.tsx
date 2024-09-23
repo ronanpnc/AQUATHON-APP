@@ -33,7 +33,7 @@ export default function RaceDetailPage() {
     raceSocket.resetTime(id as string);
   };
   useEffect(() => {
-    race.data ? setTime(new Date(race.data.startTime)) : null;
+    race.data?.startTime ? setTime(new Date(race.data.startTime)) : setTime(null);
   }, [race.data])
   useEffect(() => {
     raceSocket.subscribe(id as string);

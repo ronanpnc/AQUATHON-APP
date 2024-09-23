@@ -40,7 +40,7 @@ services:
   mongodb:
     image: mongo
     restart: always
-    command: mongod --logpath=/dev/stdout --auth
+    command: mongod --logpath=/dev/null --auth
     ports:
       - 27017:27017
     volumes:

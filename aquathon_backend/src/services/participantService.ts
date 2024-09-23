@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { IParticipant } from '../models/participantModel'
 import { Race } from '../models/raceModel'
 import { StatusError } from '../types/common'
@@ -45,77 +46,90 @@ export const getParticipantById = async (raceId: string, participantId: string) 
 
 export const createParticipant = async (raceId: string, data: IParticipant) => {
     try {
-        const result = await Race.updateOne(
+        const result = await Race.findOneAndUpdate(
             {
-                _id: raceId,
+                _id: new mongoose.Types.ObjectId(raceId),
                 'participants.bib': { $ne: data.bib }
             },
-            { $push: { participants: data }, $inc: { totalParticipants: 1 } },
-            { runValidators: true }
+            {
+                $push: { participants: data },
+                $inc: { totalParticipants: 1 }
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
         );
 
-        if (result.matchedCount === 0) {
-            throw new StatusError('Race not found', 404);
+        if (!result) {
+            throw new StatusError('Race not found or participant with this bib number already exists', 400);
         }
 
-        if (result.modifiedCount === 0) {
-            throw new StatusError('Participant with this bib number already exists', 400);
-        }
-
-        return data;  // Return the newly added participant data
+        return result.participants[result.participants.length - 1];
     } catch (error) {
-        if (error instanceof StatusError) {
-            throw error;
-        }
+        if (error instanceof StatusError) throw error;
         throw handleMongooseError(error);
     }
 };
 
 export const deleteParticipant = async (raceId: string, participantId: string) => {
     try {
-        const race = await Race.findOneAndUpdate(
-            { _id: raceId },
-            { $pull: { participants: { _id: participantId } }, $inc: { totalParticipants: -1 } },
-            { new: true, projection: { participants: 1 } }
-        )
-        if (!race) {
-            throw new StatusError('Race or participant not found', 404)
+        const result = await Race.findOneAndUpdate(
+            { _id: new mongoose.Types.ObjectId(raceId) },
+            {
+                $pull: { participants: { _id: new mongoose.Types.ObjectId(participantId) } },
+                $inc: { totalParticipants: -1 }
+            },
+            {
+                new: true,
+                projection: { totalParticipants: 1 }
+            }
+        );
+
+        if (!result) {
+            throw new StatusError('Race or participant not found', 404);
         }
-        await race.save()
-        return race
+
+        return { message: 'Participant deleted successfully', totalParticipants: result.totalParticipants };
     } catch (error) {
-        if (error instanceof StatusError) {
-            throw error
-        }
-        throw handleMongooseError(error)
+        if (error instanceof StatusError) throw error;
+        throw handleMongooseError(error);
     }
-}
+};
 
 export const updateParticipant = async (raceId: string, participantId: string, data: IParticipant) => {
     try {
-        const race = await Race.findOneAndUpdate(
-            { _id: raceId, "participants._id": participantId },
+        const result = await Race.findOneAndUpdate(
             {
-                $set: {
-                    'participants.$.firstName': data.firstName,
-                    'participants.$.lastName': data.lastName,
-                    'participants.$.bib': data.bib,
-                    'participants.$.dateOfBirth': data.dateOfBirth,
-                    'participants.$.school': data.school,
-                    'participants.$.colour': data.colour,
-                    'participants.$.gender': data.gender,
+                _id: new mongoose.Types.ObjectId(raceId),
+                participants: {
+                    $elemMatch: {
+                        _id: new mongoose.Types.ObjectId(participantId),
+                        $or: [
+                            { bib: data.bib },
+                            { bib: { $ne: data.bib }, 'participants.bib': { $ne: data.bib } }
+                        ]
+                    }
                 }
             },
-            { new: true }
-        )
-        if (!race) {
-            throw new StatusError('Race or participant not found', 404)
+            {
+                $set: {
+                    'participants.$': { ...data, _id: new mongoose.Types.ObjectId(participantId) }
+                }
+            },
+            {
+                new: true,
+                projection: { 'participants.$': 1 }
+            }
+        );
+
+        if (!result) {
+            throw new StatusError('Race or participant not found, or bib number already in use', 400);
         }
-        return race
+
+        return result.participants[0];
     } catch (error) {
-        if (error instanceof StatusError) {
-            throw error
-        }
-        throw new StatusError(error?.reason?.message || 'Update failed', 500, error)
+        if (error instanceof StatusError) throw error;
+        throw handleMongooseError(error);
     }
-}
+};

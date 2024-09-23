@@ -11,7 +11,7 @@ export interface ServerToClientEvents {
   basicEmit: (a: number, b: string, c: Buffer) => void;
   withAck: (d: string, callback: (e: number) => void) => void;
   // handshake for server to client
-  subscribeAccepted : (id:string) => void;
+  subscribeAccepted : ({roomId}: {roomId: string}) => void;
 
   // race start time update
   startTimeChanged :(value) => void;
@@ -24,7 +24,7 @@ export interface ClientToServerEvents {
   subscribe: (value:ISubscribe) => void ;
   startTime: (value) => void;
   resetTime: (value) => void;
-  stampTime: (value: setTrackingProp) => void;
+  trackTime: (value: setTrackingProp) => void;
 }
 
 export interface InterServerEvents {

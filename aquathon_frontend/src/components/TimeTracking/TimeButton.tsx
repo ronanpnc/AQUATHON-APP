@@ -5,6 +5,10 @@ import { useState } from 'react';
 
 interface TimeButtonProps {
   bibNumber: string;
+  participantId: string;
+  trackTime: (id: string, bib: number) => void;
+  stampTime: Date;
+  hasBeenTrack: boolean
 }
 
 const formatTime = (date: Date): string => {
@@ -14,38 +18,31 @@ const formatTime = (date: Date): string => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
-const TimeButton: React.FC<TimeButtonProps> = ({ bibNumber }) => {
-  const [isTracked, setIsTracked] = useState(false);
-  const [time, setTime] = useState<string | null>(null);
-
+const TimeButton: React.FC<TimeButtonProps> = ({ bibNumber, participantId, trackTime, stampTime , hasBeenTrack: hasBeenTracked}) => {
   const handleClick = () => {
-    if (!isTracked) {
-      const now = new Date();
-      setTime(formatTime(now));
-      setIsTracked(true);
-    }
+    //if (stampTime !== null || hasBeenTracked) return;
+    trackTime(participantId, parseInt(bibNumber));
   };
 
   const handleRedo = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsTracked(false);
-    setTime(null);
   };
 
   return (
     <button
       onClick={handleClick}
+      disabled={hasBeenTracked}
       className={`flex flex-col items-center justify-between p-1 rounded-xl transition-colors h-20 w-full ${
-        isTracked
+        hasBeenTracked
           ? 'bg-white text-primary-purple border border-primary-purple'
           : 'bg-primary-purple text-white hover:bg-primary-purple/90'
       }`}
     >
       <span className='text-2xl font-bold'>{bibNumber}</span>
       <div className='flex items-center justify-center h-8'>
-        {isTracked ? (
+        {hasBeenTracked ? (
           <div className='flex items-center'>
-            <span className='text-sm mr-2'>{time}</span>
+            <span className='text-sm mr-2'>{formatTime(new Date(stampTime))}</span>
             <button onClick={handleRedo} className='text-red-500 hover:text-red-600' title='Redo'>
               <RotateCw width={12} height={12} />
             </button>

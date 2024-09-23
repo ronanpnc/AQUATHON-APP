@@ -49,7 +49,6 @@ const raceSchema = new mongoose.Schema<IRace>(
         colours: [String],
         segmentsCompleted: Number,
         totalParticipants:Number,
-        timeTracking: [timeTrackingSchema], // Using splitSchema directly
         participants: [participantSchema],
         segments: [SegmentSchema]
     },
