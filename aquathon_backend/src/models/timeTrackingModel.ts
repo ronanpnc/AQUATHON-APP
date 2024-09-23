@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { Race } from './raceModel';
 import { db } from '../configs/db';
+import { timeStamp } from 'console';
 
 export interface ITimeTracking {
   raceId: mongoose.Types.ObjectId;
@@ -56,36 +57,44 @@ timeTrackingSchema.pre('save', async function(next) {
   }
 });
 
-// Post-save hook to update the Race document
-timeTrackingSchema.post('save', async function(doc, next) {
-  try {
-    const updatedRace = await Race.findOneAndUpdate(
-      {
-        _id: doc.raceId,
-        'participants._id': doc.participantId
-      },
-      {
-        $addToSet: {
-          'participants.$.timeTrackings': doc._id
-        },
-        $inc: {"segmentsCompleted": 1},
-      },
-      { new: true, lean: true }
-    );
 
-    if (!updatedRace) {
-      throw new Error('Failed to update Race document');
-    }
+// NOTE need more research
 
-    next();
-  } catch (error) {
-    console.error('Error in post-save hook:', error);
-    await TimeTracking.findByIdAndDelete(doc._id).catch(deleteError => {
-      console.error('Error deleting TimeTracking document:', deleteError);
-    });
-    next(error);
-  }
-});
+//// Post-save hook to update the Race document
+//timeTrackingSchema.post('save', async function(doc, next) {
+//  try {
+//    if(doc.bib) return;
+//    const updatedRace = await Race.findOneAndUpdate(
+//      {
+//        _id: doc.raceId,
+//        'participants._id': doc.participantId
+//      },
+//      {
+//        $addToSet: {
+//          'participants.$.timeTrackings': {
+//              segmentId: doc.segmentId,
+//              stampTime: doc.stampTime,
+//              timeTracking: doc.id,
+//          },
+//        },
+//        $inc: {"segmentsCompleted": 1},
+//      },
+//      { new: true, lean: true }
+//    );
+//
+//    if (!updatedRace) {
+//      throw new Error('Failed to update Race document');
+//    }
+//
+//    next();
+//  } catch (error) {
+//    console.error('Error in post-save hook:', error);
+//    await TimeTracking.findByIdAndDelete(doc._id).catch(deleteError => {
+//      console.error('Error deleting TimeTracking document:', deleteError);
+//    });
+//    next(error);
+//  }
+//});
 
 export const TimeTracking = db.model<ITimeTracking>('TimeTracking', timeTrackingSchema);
 

@@ -33,7 +33,7 @@ export default function RaceDetailPage() {
     raceSocket.resetTime(id as string);
   };
   useEffect(() => {
-    race.data?.startTime ? setTime(new Date(race.data.startTime)) : setTime(null);
+    race.data?.startTime ? setTime(new Date(race.data.startTime)) : null;
   }, [race.data])
   useEffect(() => {
     raceSocket.subscribe(id as string);
@@ -46,12 +46,13 @@ export default function RaceDetailPage() {
     });
   }, [raceSocket.roomId, id]);
 
+  if (race.data === undefined) return  null;
   return (
     <Container>
       {race.data?.segments.map((segment, index) => (
         <SegmentCard key={index} segment={segment} totalParticipant={race.data.totalParticipants} completedParticipants={segment.totalCompleted}/>
       ))}
-      <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} participant={race.data?.totalParticipants}/>
+      <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} participant={race.data?.totalParticipants}  total={race.data.totalParticipants * race.data.segments.length} completed={race.data?.segments.reduce((a,seg) => seg.totalCompleted! + a,  0)}/>
       <CopyToClipboard text={shareableLink} onCopy={handleCopy}>
         <button
           className='bg-white text-purple-600 font-semibold py-3 px-8 rounded-full

@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "../types/sockets/race/race.socket";
 import { setRaceStartTime } from "../services/raceService";
-import { setTracking, setTrackingProp } from "../services/timeTrackingService";
+import {resetTracking, setTracking} from "../services/timeTrackingService";
 import { StatusError } from "../types/common";
 type ServerProp = Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents,SocketData>
 
@@ -41,10 +41,15 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
 
 
    // reset for 1-step
-//    const resetTimeTracking = (payloay) => {
-//
-//    }
-//
+    const resetTimeTracking = (payload:setTrackingProp) => {
+        resetTracking(payload).then((data) =>{
+            raceRoom.emit("poolChanged", data)
+        }).catch(e => {
+            console.log(e)
+            raceRoom.emit("error",e)
+        })
+    }
+
 //   // reset for 2-step
 //    const resetAssignedTimeTracking = (payloay) => {
 
@@ -54,6 +59,7 @@ const RaceHandler = (io:ServerProp, socket:Socket<ClientToServerEvents>) => {
     socket.on("resetTime", resetTime);
     socket.on("subscribe", subscribe);
     socket.on("trackTime", trackTime);
+    socket.on("resetTrackTime", resetTimeTracking);
 }
 
 export default RaceHandler;

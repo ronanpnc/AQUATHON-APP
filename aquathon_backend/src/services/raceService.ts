@@ -122,6 +122,7 @@ export const setRaceStartTime = async (
       'status',
       'startTime',
       'participants',
+      'segments',
       'timeTracking'
     ])
     const data = result[0]
@@ -131,6 +132,8 @@ export const setRaceStartTime = async (
     } else if (status == 'reset') {
       data.startTime = null
       data.status = 'upcoming'
+      data.segments.map(item => item.totalCompleted = 0)
+      data.participants.map(item => item.timeTrackings=[])
       data.timeTracking = []
     }
     const res = await data.save()

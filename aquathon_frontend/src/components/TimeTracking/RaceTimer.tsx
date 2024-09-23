@@ -6,11 +6,13 @@ import { formatDuration } from '@/utils/clock';
 
 interface IRaceTimer {
   time: Date | null;
+  total: number,
+  completed: number,
   startTimer: (id:string) => void;
   resetTimer: (id:string) => void;
   participant: number | undefined;
 }
-export default function RaceTimer({ time, startTimer, resetTimer, participant }: IRaceTimer) {
+export default function RaceTimer({ time, startTimer, resetTimer, participant, total, completed }: IRaceTimer) {
   const [elapsedTime, setElapsedTime] = useState(0);
   const id = useParams().id;
   const [isRunning, setIsRunning] = useState(false);
@@ -70,7 +72,7 @@ export default function RaceTimer({ time, startTimer, resetTimer, participant }:
         <div className='text-center text-xs font-semibold'>
           {isRunning ? 'Race in progress' : 'Tap to start the Race'}
         </div>
-        <ProgressBar progress={100}/>
+        <ProgressBar progress={(completed/total)*100}/>
       </div>
     </div>
   );
@@ -79,7 +81,7 @@ export default function RaceTimer({ time, startTimer, resetTimer, participant }:
 
 
 const ProgressBar: React.FC<{ progress: number}>= ({ progress }) => (
-  <div className='w-full h-2 bg-gray-200 rounded-full relative'>
+  <div className='w-full h-4 bg-gray-200 rounded-full relative'>
     <div className={`absolute top-0 left-0 h-full bg-blue-500 rounded-full`} style={{ width: `${progress}%`}} />
   </div>
 );

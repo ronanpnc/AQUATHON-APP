@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import {
   getAllSegments,
-  getParticipantSegment,
+  getParticipantsBySegment,
 
 } from '../services/segmentService'; // Adjust the import path as needed
 
@@ -26,7 +26,7 @@ class SegmentController {
   static async getParticipantSegment(req: Request, res: Response) {
     const { raceId , segmentId} = req.params;
     try {
-      const segments = await getParticipantSegment(raceId,segmentId);
+      const segments = await getParticipantsBySegment(raceId,segmentId);
       res.status(200).json(
         segments
       );

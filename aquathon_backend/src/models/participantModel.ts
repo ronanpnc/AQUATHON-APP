@@ -1,7 +1,5 @@
 import mongoose, { mongo } from 'mongoose'
-import { type } from 'os'
 import { ITimeTracking } from './timeTrackingModel'
-import { extname } from 'path'
 //import { db } from '../configs/db'
 
 /**
@@ -57,13 +55,15 @@ import { extname } from 'path'
  *           description: The date and time when the participant was last updated.
  */
 
-interface ITimeTrackingsEmbbed extends Pick<ITimeTracking, "segmentId"| "stampTime">{
-    timeTracking: mongoose.Types.ObjectId;
+export interface ITimeTrackingsEmbbed extends Pick<ITimeTracking, "segmentId"| "stampTime">{
+    timeTracking?: mongoose.Types.ObjectId;
 }
 const timeTrackingEmbbedSchema = new  mongoose.Schema<ITimeTrackingsEmbbed> (
 {
     stampTime: Date,
-    timeTracking: mongoose.Types.ObjectId,
+    segmentId:{
+       type: mongoose.SchemaTypes.ObjectId,
+    },
 }
 )
 

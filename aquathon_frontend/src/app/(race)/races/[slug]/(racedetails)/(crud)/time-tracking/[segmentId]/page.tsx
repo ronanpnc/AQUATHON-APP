@@ -17,9 +17,28 @@ export default function TrackingPage() {
   const raceStore = useContext(RaceRealTimeContext);
   const raceSocket = useStore(raceStore!, (state) => state);
 
+  useEffect(() => {
+    raceStore?.getState().socketClient.on('poolChanged', (data) => {
+      participants.refetch();
+    });
+  }, [raceStore, participants]);
+
   const onTrackTime = (participantId: string, bib: number) => {
-    console.log(slug);
-    raceSocket.trackTime({ raceId: slug as string, segmentId: segmentId as string, participantId: participantId, bib:bib });
+    raceSocket.trackTime({
+      raceId: slug as string,
+      segmentId: segmentId as string,
+      participantId: participantId,
+      bib: bib,
+    });
+  };
+
+  const onResetTrackTime = (participantId: string, bib: number) => {
+    raceSocket.resetTrackTime({
+      raceId: slug as string,
+      segmentId: segmentId as string,
+      participantId: participantId,
+      bib: bib,
+    });
   };
 
   if (participants.isLoading) return null;
@@ -27,17 +46,19 @@ export default function TrackingPage() {
     <div>
       <SharedTimeTrackingNav activeTab={activeTab} setActiveTab={setActiveTab} />
       <Container className='p-4'>
-      {raceSocket.roomId}
+        {raceSocket.roomId}
         {activeTab === '1 Step' ? (
           <div className='grid grid-cols-4 gap-2'>
             {participants?.data?.map((participant) => (
               <TimeButton
+                disabled={false}
+                resetTrackTime={onResetTrackTime}
                 key={participant._id}
                 participantId={participant._id}
                 bibNumber={participant.bib.toString()}
                 stampTime={participant?.stampTime}
                 trackTime={onTrackTime}
-                hasBeenTrack={participant.hasBeenTracked}
+                hasBeenTracked={participant.stampTime !== null && participant.stampTime !== undefined}
               />
             ))}
           </div>

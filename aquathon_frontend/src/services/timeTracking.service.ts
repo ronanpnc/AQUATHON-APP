@@ -2,8 +2,7 @@
 import { useFetch } from '@/hooks/useFetch';
 
 import { Participant } from '@/domains/participant/interface';
-interface TrackParticipant extends Participant {
-    hasBeenTracked: boolean,
+export interface TrackParticipant extends Participant {
     stampTime: Date,
 }
 

@@ -48,7 +48,7 @@ export interface Race {
   segmentsCompleted?: number
   timeTracking?: ITimeTracking[];
   segments: ISegment[];
-  totalParticipants?: number;
+  totalParticipants: number;
   status: RaceStatus;
 }
 
