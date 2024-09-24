@@ -10,25 +10,23 @@ import { DeleteRaceButton } from '../race/DeleteRaceButton';
 
 // Define tab type
 type Tab = {
+  id: string;
   label: string;
   path?: string;
   Icon: React.ReactNode;
 };
 
 const tabs: Tab[] = [
-  {  label: 'Participants', Icon: <UsersRound />, path: '/participants' },
-  {  label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
-  {  label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
-  {  label: 'Settings', Icon: <Settings /> },
-  {  label: 'Results', Icon: <Trophy /> },
+  { id: 'Participants', label: 'Participants', Icon: <UsersRound />, path: '/participants' },
+  { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
+  { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
+  { id: 'Settings', label: 'Settings', Icon: <Settings /> },
+  { id: 'Results', label: 'Results', Icon: <Trophy /> },
 ];
-const checkPathname = (url: string): string => {
-    const path = url.substring(url.lastIndexOf('/') + 1);
-    return "/"+path;
-}
 
 export function RaceDetailsNav({ raceId, title }: { raceId: string; title: string }) {
-  const [activeTab, setActiveTab] = useState(checkPathname(window.location.pathname));
+  const [activeTab, setActiveTab] = useState(tabs[0].id);
+
   return (
     <>
       <div className='flex flex-col sticky top-0 z-50'>
@@ -74,7 +72,7 @@ function MoreButton({ raceId }: { raceId: string }) {
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-5'>
         <div className='w-40'>
           {tabs.slice(-2).map((tab) => (
-            <Link key={tab.path} href={`/races/${raceId}/${tab.path}`} className='block'>
+            <Link key={tab.id} href={`/races/${raceId}/${tab.id.toLowerCase()}`} className='block'>
               <div
                 className={`flex items-center text-black hover:bg-gray-100 w-full px-4 py-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
               >
@@ -101,15 +99,15 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     setActiveTab(id);
   };
   return (
-    <div className='scrollbar-hide bg-secondary-purple'>
+    <div className='overflow-x-auto scrollbar-hide w-screen bg-secondary-purple'>
       <div className='grid grid-cols-3'>
         {tabs.map((tab) => (
           <TabButton
-            key={tab.path}
+            key={tab.id}
             tab={tab}
-            isActive={activeTab === tab.path}
+            isActive={activeTab === tab.id}
             onClick={() => {
-              handleTabClick(tab.path as string);
+              handleTabClick(tab.id);
             }}
           />
         ))}
@@ -117,7 +115,6 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     </div>
   );
 }
-
 type TabButtonProps = {
   tab: Tab;
   isActive: boolean;
