@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { db } from '../configs/db'
 import { IParticipant, participantSchema } from './participantModel'
 import SegmentSchema, { ISegment } from './segmentModel'
-import { ITimeTracking, timeTrackingSchema } from './timeTrackingModel'
+import { ITimeTracking } from './timeTrackingModel'
 
 export interface IRace {
     _id?: string
@@ -49,14 +49,38 @@ const raceSchema = new mongoose.Schema<IRace>(
         colours: [String],
         segmentsCompleted: Number,
         totalParticipants:Number,
-        participants: [participantSchema],
+        participants: [{ type: participantSchema ,ref:"Participant"}],
         segments: [SegmentSchema]
     },
     { timestamps: true, collection: 'races' }
 )
-// TODO : unique bib
-//raceSchema.index({_id:1, 'participants.bib': 1},{unique : true})
+
 export const Race = db.model('Race', raceSchema)
+
+//raceSchema.pre<IRace>('save', async function ( next) {
+//  const update = this.getUpdate();
+//  console.log(update);
+//
+//  if (update && update.$set && update.$set['participants.$.bib']) {
+//    const bib = update.$set['participants.$.bib'];
+//    const participantId = update.$set['participants.$._id'];
+//
+//    const race = await mongoose.model('Race').findOne({
+//      _id: this.getQuery()._id,
+//      'participants.bib': bib,
+//      'participants._id': { $ne: participantId } // Exclude the current participant from check
+//    });
+//
+//    if (race) {
+//      return next(new Error(`The bib '${bib}' is already in use by another participant.`));
+//    }
+//  }
+//
+//  next();
+//});
+// TODO : unique bib
+//
+//raceSchema.index({_id:1, 'participants.bib': 1},{unique : true})
 
 /**
  * @swagger

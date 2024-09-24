@@ -50,7 +50,7 @@ export interface ISegment {
   type: string;
   mode: string;
   timeTrackId: string[];
-  totalCompleted?: number;
+  totalCompleted: number;
   status?: string;
 }
 

@@ -26,6 +26,8 @@ export interface ClientToServerEvents {
   resetTime: (value) => void;
   trackTime: (value: setTrackingProp) => void;
   resetTrackTime: (value: setTrackingProp) => void;
+  unassignedStamp: (value: setTrackingProp) => void;
+  assignStamp: (value: setTrackingProp) => void;
 }
 
 export interface InterServerEvents {

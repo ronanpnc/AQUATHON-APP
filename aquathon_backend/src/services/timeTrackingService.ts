@@ -117,7 +117,10 @@ export const deleteTimeTracking = async (
 export const createUnassignedTimeTracking = async (data: setTrackingProp) => {
   try {
     // Step 1: Create new TimeTracking document
-    const timeTracking = new TimeTracking(data)
+    const timeTracking = new TimeTracking({
+        ...data,
+        stampTime: new Date(),
+    })
     const res = await timeTracking.save()
     return res
   } catch (error) {
@@ -131,14 +134,13 @@ export const createUnassignedTimeTracking = async (data: setTrackingProp) => {
 
 
 export const assignTimeTracking = async (
-  raceId: mongoose.Types.ObjectId,
   data: setTrackingProp
 ) => {
   try {
     // Step 1: Create new TimeTracking document
     await Race.findOneAndUpdate(
       {
-        _id: raceId.toString()
+        _id: data.raceId.toString()
       },
       {
         $pull: {
@@ -161,6 +163,28 @@ export const assignTimeTracking = async (
     )
     const res = data
     return res
+  } catch (error) {
+    throw new StatusError(
+      'Failed to create time tracking and add reference',
+      500,
+      error
+    )
+  }
+}
+
+export const getUnassignedTrackTime = async (
+  raceId: string,
+  segmentId: string,
+) => {
+  try {
+    // Step 1: Create new TimeTracking document
+    const data = await TimeTracking.find(
+      {
+        raceId: raceId,
+        segmentId: segmentId
+      },
+    )
+    return data;
   } catch (error) {
     throw new StatusError(
       'Failed to create time tracking and add reference',
