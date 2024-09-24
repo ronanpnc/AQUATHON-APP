@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parse } from 'date-fns';
 import { PlusIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -17,9 +17,9 @@ import { Input } from '@/components/ui/input';
 import { RaceStatus } from '@/domains/race/interface';
 import { useCreateRace } from '@/services/race.services';
 
-import { SegmentSchema,SegmentsList } from './SegmentsList';
+import { SegmentSchema, SegmentsList } from './SegmentsList';
 
- const raceformSchema = z.object({
+const raceformSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
   date: z.string().min(1, 'Date is required'),
   time: z.string().min(1, 'Time is required'),
@@ -43,20 +43,27 @@ export default function CreateRaceForm() {
     resolver: zodResolver(raceformSchema),
   });
 
+  useEffect(() => {
+    // Ensure at least one segment is present
+    if (form.getValues('segments').length === 0) {
+      childRef.current?.addSegment();
+    }
+  }, []);
+
   const handleSubmit = (values: RaceFormValues) => {
     const raceDateTime = parse(`${values.date} ${values.time}`, 'yyyy-MM-dd HH:mm', new Date());
     const formattedDate = format(raceDateTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 
     createRaceMutation.mutate(
       {
-          title: values.raceName,
-          date: new Date(formattedDate),
-          runDistance: values.runDistance,
-          swimDistance: values.swimDistance,
-          status: RaceStatus.Upcoming,
-          startTime: new Date(formattedDate),
-          segments: values.segments.map((item) => ({ ...item, mode: '1-step' })),
-          colours: []
+        title: values.raceName,
+        date: new Date(formattedDate),
+        runDistance: values.runDistance,
+        swimDistance: values.swimDistance,
+        status: RaceStatus.Upcoming,
+        startTime: new Date(formattedDate),
+        segments: values.segments.map((item) => ({ ...item, mode: '1-step' })),
+        colours: [],
       },
       {
         onSuccess: () => {
@@ -153,21 +160,21 @@ export default function CreateRaceForm() {
             />
 
             <div className='space-y-4'>
-              {form.watch('segments')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
+              <h3 className='text-lg font-semibold'>Segments</h3>
               <SegmentsList form={form} ref={childRef} />
+              <Button
+                variant='ghost'
+                type='button'
+                className='ml-1 p-1  text-gray-600'
+                onClick={() => childRef?.current?.addSegment()}
+              >
+                <PlusIcon className='w-3 h-3 mr-2 text-green-500' />
+                Add Segment
+              </Button>
             </div>
 
             <div className='bottom-0 left-0 right-0 p-4'>
               <div className='max-w-md mx-auto space-y-6'>
-                <Button
-                  type='button'
-                  className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-8 text-xl font-semibold'
-                  onClick={() => childRef?.current?.addSegment()}
-                >
-                  <PlusIcon className='w-6 h-6 mr-3' />
-                  Create Segment
-                </Button>
-
                 <Button
                   type='submit'
                   className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-8 text-xl font-semibold'
