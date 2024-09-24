@@ -40,7 +40,7 @@ export default function MyRacePage() {
   }
 
   return (
-    <div className='min-h-screen flex flex-col pb-24'>
+    <>
       {data?.length ? (
         <div>
           <SectionTitle>Welcome,</SectionTitle>
@@ -51,22 +51,21 @@ export default function MyRacePage() {
           </div>
         </div>
       ) : (
-        <div className='flex-grow flex items-center justify-center'>
-          <div className='flex flex-col items-center'>
-            <Image
-              src='/assets/icons/ic_cross_race.svg'
-              alt='Logo'
-              width={250}
-              height={250}
-              className='cursor-pointer'
-            />
-            <span className='text-xl font-medium italic mt-4'>"Start By Creating a Race"</span>
+        <div className='flex items-center justify-center fixed inset-0'>
+          <div className='cursor-pointer'>
+          <Image
+            src='/assets/icons/ic_cross_race.svg'
+            alt='No Races'
+            width={250}
+            height={250}
+          />
+          <span className='text-xl font-medium italic mt-4'>"Start By Creating a Race"</span>
           </div>
         </div>
       )}
       <div className='fixed bottom-4 right-4'>
         <AddRaceButton />
       </div>
-    </div>
+    </>
   );
 }

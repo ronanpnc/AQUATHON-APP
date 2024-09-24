@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
+import { DeleteRaceButton } from '../race/DeleteRaceButton';
+
 // Define tab type
 type Tab = {
   label: string;
@@ -29,7 +31,7 @@ export function RaceDetailsNav({ raceId, title }: { raceId: string; title: strin
   const [activeTab, setActiveTab] = useState(checkPathname(window.location.pathname));
   return (
     <>
-      <div className='flex flex-col sticky top-0'>
+      <div className='flex flex-col sticky top-0 z-50'>
         <Header raceId={raceId} title={title} />
         <TabNavigation tabs={tabs.slice(0, 3)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
@@ -70,17 +72,18 @@ function MoreButton({ raceId }: { raceId: string }) {
         </button>
       </PopoverTrigger>
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-5'>
-        <div className=' w-40'>
+        <div className='w-40'>
           {tabs.slice(-2).map((tab) => (
             <Link key={tab.path} href={`/races/${raceId}/${tab.path}`} className='block'>
               <div
-                className={`flex items-center text-black hover:bg-gray-100 w-full px-3 py-2 rounded ${pathname.includes(tab.path as string) ? 'bg-gray-100' : ''}`}
+                className={`flex items-center text-black hover:bg-gray-100 w-full px-4 py-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
               >
                 {tab.Icon}
                 <p className='ml-5'>{tab.label}</p>
               </div>
             </Link>
           ))}
+          <DeleteRaceButton raceId={raceId} />
         </div>
       </PopoverContent>
     </Popover>

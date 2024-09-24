@@ -29,7 +29,6 @@ export default function EditRacePage() {
             </Link>
             <span className='ml-4 text-white'>Edit Race</span>
           </div>
-          <DeleteRaceButton raceId={race._id} />
         </div>
       </nav>
       <div className='mt-16'>
