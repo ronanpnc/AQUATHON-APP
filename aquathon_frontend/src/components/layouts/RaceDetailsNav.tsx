@@ -21,19 +21,23 @@ import { Button } from '../ui/button';
 
 // Define tab type
 type Tab = {
-  id: string;
   label: string;
   path?: string;
   Icon: React.ReactNode;
 };
 
 const tabs: Tab[] = [
-  { id: 'Participants', label: 'Participants', Icon: <UsersRound />, path: '/participants' },
-  { id: 'TimeTracking', label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
-  { id: 'Dashboard', label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
-  { id: 'Settings', label: 'Settings', Icon: <Settings /> },
-  { id: 'Results', label: 'Results', Icon: <Trophy /> },
+  { label: 'Participants', Icon: <UsersRound />, path: '/participants' },
+  { label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
+  { label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
+  { label: 'Settings', Icon: <Settings />, path: '/settings' },
+  { label: 'Results', Icon: <Trophy />, path: '/results' },
 ];
+
+const checkPathname = (url: string): string => {
+  const path = url.substring(url.lastIndexOf('/') + 1);
+  return '/' + path;
+};
 
 export function RaceDetailsNav({
   raceId,
@@ -44,7 +48,7 @@ export function RaceDetailsNav({
   title: string;
   shareableLink: string;
 }) {
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const [activeTab, setActiveTab] = useState(checkPathname(window.location.pathname));
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -104,9 +108,9 @@ function MoreButton({ raceId }: { raceId: string }) {
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-5'>
         <div className='w-40'>
           {tabs.slice(-2).map((tab) => (
-            <Link key={tab.id} href={`/races/${raceId}/${tab.id.toLowerCase()}`} className='block'>
+            <Link key={tab.path} href={`/races/${raceId}/${tab.path}`} className='block'>
               <div
-                className={`flex items-center text-black hover:bg-gray-100 w-full px-4 py-2 rounded ${pathname.includes(tab.id.toLowerCase()) ? 'bg-gray-100' : ''}`}
+                className={`flex items-center text-black hover:bg-gray-100 w-full px-4 py-2 rounded ${pathname.includes(tab.path as string) ? 'bg-gray-100' : ''}`}
               >
                 {tab.Icon}
                 <p className='ml-5'>{tab.label}</p>
@@ -143,11 +147,11 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
       <div className='grid grid-cols-3'>
         {tabs.map((tab) => (
           <TabButton
-            key={tab.id}
+            key={tab.path}
             tab={tab}
-            isActive={activeTab === tab.id}
+            isActive={activeTab === tab.path}
             onClick={() => {
-              handleTabClick(tab.id);
+              handleTabClick(tab.path as string);
             }}
           />
         ))}

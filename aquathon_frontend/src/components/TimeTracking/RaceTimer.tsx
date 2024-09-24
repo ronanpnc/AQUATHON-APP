@@ -72,7 +72,6 @@ export default function RaceTimer({ time, startTimer, resetTimer, participant, t
         <div className='text-center text-xs font-semibold'>
           {isRunning ? 'Race in progress' : 'Tap to start the Race'}
         </div>
-        <ProgressBar progress={(completed/total)*100}/>
       </div>
     </div>
   );
@@ -80,7 +79,7 @@ export default function RaceTimer({ time, startTimer, resetTimer, participant, t
 
 
 
-const ProgressBar: React.FC<{ progress: number}>= ({ progress }) => (
+export const ProgressBar: React.FC<{ progress: number}>= ({ progress }) => (
   <div className='w-full h-4 bg-gray-200 rounded-full relative'>
     <div className={`absolute top-0 left-0 h-full bg-blue-500 rounded-full`} style={{ width: `${progress}%`}} />
   </div>

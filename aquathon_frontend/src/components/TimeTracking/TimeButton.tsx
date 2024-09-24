@@ -30,6 +30,7 @@ const TimeButton: React.FC<TimeButtonProps> = ({ bibNumber, participantId, track
 
   return (
     <button
+      disabled={disabled}
       onClick={handleClick}
       className={`flex flex-col items-center justify-between p-1 rounded-xl transition-colors h-20 w-full ${
         hasBeenTracked

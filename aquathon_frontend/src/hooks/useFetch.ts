@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { QueryOptions, UndefinedInitialDataOptions, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { string } from 'zod';
 
 export const fetchData = async <T>(url: string): Promise<T> => {
@@ -11,8 +11,9 @@ export const fetchData = async <T>(url: string): Promise<T> => {
   return response.json();
 };
 
-export const useFetch = <T>(queryKey: string | string[], url: string) => {
+export const useFetch = <T>(queryKey: string | string[], url: string, config?:UseQueryOptions<T>) => {
   return useQuery<T, Error>({
+    ...config,
     queryKey:  typeof queryKey === "string" ? [queryKey]: queryKey,
     queryFn: () => fetchData<T>(url),
   });

@@ -3,7 +3,7 @@ import { ITimeTracking, TimeTracking } from '../models/timeTrackingModel'
 import { StatusError } from '../types/common'
 import { Race } from '../models/raceModel'
 import mongoose from 'mongoose'
-interface setTrackingProp extends Partial<ITimeTracking> {
+export interface setTrackingProp extends Partial<ITimeTracking> {
   _id?: string
 }
 
@@ -16,22 +16,21 @@ export async function setTracking(data: setTrackingProp) {
         participantId: data.participantId,
         stampTime: now
       })
-      return timeTracking
+      return { ...timeTracking, bib: data.bib}
     } catch (error) {
       throw handleMongooseError(error)
     }
   }
 }
 export async function resetTracking(data: setTrackingProp) {
-  const now = new Date()
   if (data.bib || data.participantId) {
     try {
       const timeTracking = await deleteTimeTracking(data.raceId, {
         segmentId: data.segmentId,
         participantId: data.participantId,
-        stampTime: now
+        stampTime: null
       })
-      return timeTracking
+      return { ...timeTracking, bib: data.bib,status:"reset"}
     } catch (error) {
       throw handleMongooseError(error)
     }
@@ -105,7 +104,7 @@ export const deleteTimeTracking = async (
         ]
       }
     )
-    const res = data
+    const res = {...data, stampTime: null}
     return res
   } catch (error) {
     throw new StatusError(
