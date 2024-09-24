@@ -12,6 +12,9 @@ import SegmentCard from '@/components/TimeTracking/SegmentCard';
 import { useRace } from '@/services/race.services';
 import { useSegmentList } from '@/services/segment.services';
 import { RaceRealTimeContext } from '@/services/sockets/race/store';
+import { queryClient } from '@/utils/providers/ReactQueryProvider';
+import { ITimeTrackingSocket, Race } from '@/domains/race/interface';
+import _ from 'lodash';
 
 export default function RaceDetailPage() {
   const [copied, setCopied] = useState(false);
@@ -40,17 +43,44 @@ export default function RaceDetailPage() {
     raceSocket.socketClient.on('startTimeChanged', (time) => {
       if (time) {
         setTime(new Date(time));
+        race.refetch();
         return;
       }
+        race.refetch();
         setTime(null);
     });
-  }, [raceSocket.roomId, id]);
+    raceSocket.socketClient.on('poolChanged', (data) => {
+        updater(data)
+    });
 
+    return () =>  {
+        raceSocket.socketClient.off("poolChanged")
+        raceSocket.socketClient.off("startTimeChanged")
+    }
+  }, []);
+
+  const updater = (nextData?: ITimeTrackingSocket) => {
+    queryClient.setQueryData(['race', id], (oldData?: Race | undefined) => {
+      const arr = [...(oldData?.segments || [])];
+      const index = _.findIndex(arr, { _id: nextData?.segmentId });
+      let updatedArr;
+      if (nextData?.status === 'reset') {
+        // Create a new array with the updated participant
+        updatedArr = arr.map((item, idx) => (idx === index ? { ...item, totalCompleted: Math.max(0,item.totalCompleted! - 1) } : item));
+         return ({...oldData, segments: updatedArr}); // Return the old array if no update occurs
+      }
+      if (index !== -1 && nextData?.stampTime !== undefined) {
+        // Create a new array with the updated participant
+         updatedArr = arr.map((item, idx) => (idx === index ? { ...item, totalCompleted: Math.max(0,item.totalCompleted! + 1) } : item));
+        return ({...oldData, segments: updatedArr}); // Return the old array if no update occurs
+      }
+    });
+  };
   if (race.data === undefined) return  null;
   return (
     <Container>
       {race.data?.segments.map((segment, index) => (
-        <SegmentCard key={index} segment={segment} totalParticipant={race.data.totalParticipants} completedParticipants={segment.totalCompleted}/>
+        <SegmentCard startTime={race.data.startTime} key={index} segment={segment} totalParticipant={race.data.totalParticipants} completedParticipants={segment.totalCompleted}/>
       ))}
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} participant={race.data?.totalParticipants}  total={race.data.totalParticipants * race.data.segments.length} completed={race.data?.segments.reduce((a,seg) => seg.totalCompleted! + a,  0)}/>
       <CopyToClipboard text={shareableLink} onCopy={handleCopy}>

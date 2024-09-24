@@ -22,8 +22,14 @@ export const useRaceList = (id: string) => {
 // Fetch a single race by ID
 export const useRace = (id: string) => {
   const url = `${API_BASE_URL}/races/${id}`;
-  return useFetch<Race>(`race-${id}`, url);
-};
+  return useFetch<Race>(['race',id], url);
+}
+
+// Fetch a single race by ID
+export const useRaceStartTime = (id: string) => {
+  const url = `${API_BASE_URL}/races/${id}/startTime`;
+  return useFetch<Race>(`race-start-${id}`, url);
+};;
 
 const createRace = async (raceData: CreateRaceData): Promise<Race> => {
   const response = await fetch(`${API_BASE_URL}/races/`, {
