@@ -7,7 +7,7 @@ export const STATUS_ICONS: Record<Race['status'], { text: string; icon: string }
   },
   ongoing: {
     text: 'Ongoing',
-    icon: '/assets/icons/ic_ongoing.svg',
+    icon: '/assets/icons/ic_running.svg',
   },
   upcoming: {
     text: 'Upcoming',
