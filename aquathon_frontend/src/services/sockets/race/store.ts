@@ -83,7 +83,7 @@ export const createRealTimeRaceStore = () => {
       startTime,
       disconnect,
       trackTime,
-      resetTrackTime,
+      resetTrackTime
     }),
   );
   return store;

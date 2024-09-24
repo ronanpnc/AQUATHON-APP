@@ -64,7 +64,8 @@ export async function getParticipantsBySegment(
           colour: 1,
           stampTime: '$stampTime.stampTime' // Extract the actual timestamp value
         }
-      }
+      },
+      { $sort : { bib: 1} }
 
       // Extract totalCompleted from the filtered segment object
     ])

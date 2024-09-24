@@ -34,6 +34,10 @@ export const SEGMENT_TYPES: Record<ISegment['_id'], { text: string; icon: string
     text: 'biking',
     icon: '/assets/icons/ic_biking.svg',
   },
+  transition: {
+    text: 'biking',
+    icon: '/assets/icons/ic_biking.svg',
+  },
 };
 
 export const SEGMENT_COLORS: Record<ISegment['_id'], { bg: string; text: string }> = {

@@ -2,44 +2,15 @@
 
 import { useState } from 'react';
 
-import Container from '@/components/Container';
-import { SharedTimeTrackingNav } from '@/components/layouts/SharedTimeTrackingNav';
-import TimeButton from '@/components/TimeTracking/TimeButton';
-import TimeStampCard from '@/components/TimeTracking/TimeStampCard';
+import TrackingPage from '@/app/(race)/races/[slug]/(racedetails)/(crud)/time-tracking/[segmentId]/page';
 
-const dummyParticipants = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  bibNumber: (101 + index).toString().padStart(3, '0'),
-}));
 
 export default function SharedTrackingPage() {
   const [activeTab, setActiveTab] = useState('1 Step');
 
   return (
     <div>
-      <SharedTimeTrackingNav activeTab={activeTab} setActiveTab={setActiveTab} />
-      <Container className='p-4'>
-        {activeTab === '1 Step' ? (
-          <div className='grid grid-cols-4 gap-2'>
-            {dummyParticipants.map((participant) => (
-              <TimeButton key={participant.id} bibNumber={participant.bibNumber} />
-            ))}
-          </div>
-        ) : (
-          <div>
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-            <TimeStampCard />
-          </div>
-        )}
-      </Container>
+        <TrackingPage/>
     </div>
   );
 }

@@ -19,14 +19,32 @@ export interface IParticipant {
   segments?: ISegment[];
 }
 
-export interface ITimeTracking {
+export interface ITimeTrackingSocket {
   participantId: string;
-  timeRaceConfigId: string;
-  startTime: Date;
-  endTime: Date;
-  timeInMs?: BigInteger;
+  stampTime: Date;
+  segmentId: string;
+  bib: number;
+  raceId: string;
+  status?:string;
 }
 
+export interface ITimeTracking {
+  _id: string;
+  segmentId: string;
+  stampTime: Date;
+  bib: number;
+  raceId: string;
+  status?:string;
+}
+
+export interface ITimeTrackingSocket {
+  _id: string;
+  segmentId: string;
+  stampTime: Date;
+  bib: number;
+  raceId: string;
+  status?:string;
+}
 export interface ISegment {
   _id: string;
   type: string;
@@ -70,6 +88,8 @@ export interface RaceFormData extends Omit<Race, '_id'> {
 export const segmentTypes = [
   { value: 'swimming', label: 'Swimming' },
   { value: 'running', label: 'Running' },
+  { value: 'biking', label: 'Biking' },
+  { value: 'transition', label: 'Transition' },
 ] as const;
 
 // Type for segment types

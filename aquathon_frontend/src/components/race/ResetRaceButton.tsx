@@ -1,4 +1,3 @@
-
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
@@ -14,33 +13,28 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-
-import { useDeleteRace } from '@/services/race.services';
 
 interface DeleteRaceButtonProps {
   raceId: string;
+  reset: () => void;
 }
 
 export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const deleteRaceMutation = useDeleteRace();
 
-  const handleDelete = async () => {
+  const handleReset = async () => {
     try {
-      await deleteRaceMutation.mutateAsync(raceId);
       toast({
-        title: 'Race deleted',
-        description: 'The race has been successfully deleted.',
+        title: 'Race Time reset',
+        description: 'The race has been successfully reset.',
       });
       router.push('/races');
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete the race. Please try again.',
+        description: 'Failed to reset the race. Please try again.',
         variant: 'destructive',
       });
     }
@@ -48,23 +42,15 @@ export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild className='bg-white'>
-        <Button className='text-black hover:bg-gray-100 rounded w-full block'>
-          <div className='flex'>
-          <Trash2 className='text-red-500' />
-          <p className='ml-5'>Delete</p>
-          </div>  
-        </Button>
-      </AlertDialogTrigger>
       <AlertDialogContent className='rounded-lg max-w-max'>
         <AlertDialogHeader>
-          <AlertDialogTitle className='text-primary-purple'>Are you sure want to delete this Race?</AlertDialogTitle>
+          <AlertDialogTitle className='text-primary-purple'>Are you sure want to reset this Race?</AlertDialogTitle>
           <AlertDialogDescription>All current race data will be lost. </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className='grid grid-cols-2 gap-2 justify-center items-center'>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} className='bg-red-500 hover:bg-primary-purple/90 mt-2'>
-            Delete
+          <AlertDialogAction onClick={handleReset} className='bg-red-500 hover:bg-primary-purple/90 mt-2'>
+            Reset
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
