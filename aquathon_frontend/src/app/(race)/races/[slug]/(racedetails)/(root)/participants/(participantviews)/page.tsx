@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
 import { AddParticipantButton } from '@/components/participant/AddParticipantButton';
@@ -37,18 +36,14 @@ export default function MyParticipantPage() {
 
 const EmptyDataDisplay = () => {
   return (
-    <div className='flex items-center justify-center fixed inset-0 z-5'>
-      <div className='flex flex-col items-center'>
-        <Image
-          src='/assets/icons/ic_empty_list Background Removed.png'
-          alt='Logo'
-          width={250}
-          height={250}
-          className='cursor-pointer'
-        />
-        <span className='text-xl font-medium italic mt-4 text-center'>
-          You have no participants at <br /> the moment
+    <div className='relative'>
+      <img src='/assets/icons/ic_empty_list Background Removed.png' alt='Description' className='w-full' />{' '}
+      <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center'>
+        <span className='text-xl font-semibold'>
+          Empty List!
+          <br />
         </span>
+        You have no participants at <br /> the moment.
       </div>
     </div>
   );
