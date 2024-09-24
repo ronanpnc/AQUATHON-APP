@@ -117,14 +117,14 @@ function MoreButton({ raceId }: { raceId: string }) {
               </div>
             </Link>
           ))}
-          <CopyToClipboard text={shareableLink} onCopy={handleCopy}>
+          {/* <CopyToClipboard text={shareableLink} onCopy={handleCopy}> */}
             <Button className='text-black bg-white hover:bg-gray-100  w-full block'>
               <div className='flex'>
                 <Share className='mr-2' />
                 <span className='ml-3'>{copied ? 'Copied!' : 'Copy Link'}</span>{' '}
               </div>
             </Button>
-          </CopyToClipboard>
+          {/* </CopyToClipboard> */}
           <DeleteRaceButton raceId={raceId} />
         </div>
       </PopoverContent>
