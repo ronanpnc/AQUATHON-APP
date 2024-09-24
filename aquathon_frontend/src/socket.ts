@@ -1,7 +1,4 @@
 "use client";
-import { io } from 'socket.io-client';
 
-// "undefined" means the URL will be computed from the `window.location` object
-const URL = process.env.NEXT_PUBLIC_WS_BASE_URL;
+export const WsEnpoint = process.env.NEXT_PUBLIC_WS_BASE_URL || "http://localhost:4000";
 
-export const socket = io(URL as string, { autoConnect: true, transports: ['websocket', 'pooling'] });

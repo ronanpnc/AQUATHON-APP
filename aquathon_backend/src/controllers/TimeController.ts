@@ -1,17 +1,15 @@
-import { Request , Response} from "express";
-
-interface TimeProps {
- time: Date;
-}
-
+import { Request, Response } from 'express'
 
 class TimeControllers {
-	static async getTime(req:Request, res:Response) {
-        const now = new Date();
-        return res.status(200).send({time : now});
-	}
+  static async getTime(req: Request, res: Response) {
+    const time = new Date()
+    return res.status(200).send({ time: time, now: time.getTime()})
+  }
+  // Ms is millisecond
+  static async getRaceMsCount(req: Request, res: Response) {
+    const time = new Date()
+    return res.status(200).send({ time: time, now: time.getTime()})
+  }
 }
 
-
-export default TimeControllers;
-
+export default TimeControllers

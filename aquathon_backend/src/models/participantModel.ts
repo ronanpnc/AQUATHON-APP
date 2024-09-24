@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import { ISplit, splitSchema } from './splitModel'
+import mongoose, { mongo } from 'mongoose'
+import { ITimeTracking } from './timeTrackingModel'
 //import { db } from '../configs/db'
 
 /**
@@ -54,6 +54,19 @@ import { ISplit, splitSchema } from './splitModel'
  *           format: date-time
  *           description: The date and time when the participant was last updated.
  */
+
+export interface ITimeTrackingsEmbbed extends Pick<ITimeTracking, "segmentId"| "stampTime">{
+    timeTracking?: mongoose.Types.ObjectId;
+}
+const timeTrackingEmbbedSchema = new  mongoose.Schema<ITimeTrackingsEmbbed> (
+{
+    stampTime: Date,
+    segmentId:{
+       type: mongoose.SchemaTypes.ObjectId,
+    },
+}
+)
+
 export interface IParticipant {
   bib: number
   gender: "male"|"female"
@@ -62,7 +75,7 @@ export interface IParticipant {
   colour?: string
   dateOfBirth: Date
   school: string | null
-  splits?: ISplit[]
+  timeTrackings?: ITimeTrackingsEmbbed[]
 }
 export const participantSchema = new mongoose.Schema<IParticipant>(
   {
@@ -72,7 +85,7 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
     },
     lastName: {
       type: String,
-      required: [true, 'Last name is required']
+      required: [true, 'Last name is rstringequired']
     },
     bib: {
       type: Number,
@@ -88,7 +101,7 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
       required: [true, 'Date of birth is required']
     },
     school: String,
-    splits: [splitSchema]
+    timeTrackings: [timeTrackingEmbbedSchema]
   },
   { timestamps: true }
 );

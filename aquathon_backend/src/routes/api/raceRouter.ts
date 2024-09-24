@@ -11,6 +11,17 @@ const router = Router()
  *      - Race
  *     summary: Retrieve a list of races.
  *     description: Retrieve a list of race all race in the database
+ *     parameters:
+ *      - name: limit
+ *        in: query
+ *        description: limit
+ *        schema:
+ *          type: number
+ *      - name: page
+ *        in: query
+ *        description: pagination
+ *        schema:
+ *          type: number
  *     responses:
  *       200:
  *         description: A list of race.

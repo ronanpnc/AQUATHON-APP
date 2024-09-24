@@ -17,8 +17,8 @@ import { Input } from '@/components/ui/input';
 import { Race, RaceStatus } from '@/domains/race/interface';
 import { useUpdateRace } from '@/services/race.services';
 
-import { SegmentsList, TimeRaceConfigSchema } from './SegmentsList';
 import { RaceFormValues } from './CreateRaceForm';
+import { SegmentSchema,SegmentsList } from './SegmentsList';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -27,9 +27,8 @@ const formSchema = z.object({
   runDistance: z.number().min(0, 'Run distance must be a positive number'),
   swimDistance: z.number().min(0, 'Swim distance must be a positive number'),
   status: z.nativeEnum(RaceStatus),
-  timeRaceConfigs: z.array(TimeRaceConfigSchema),
+  segments: z.array(SegmentSchema),
 });
-
 
 interface EditRaceFormProps {
   race: Race;
@@ -52,7 +51,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
       runDistance: race.runDistance || 0,
       swimDistance: race.swimDistance || 0,
       status: race.status,
-      timeRaceConfigs: race.timeRaceConfigs
+      segments: race.segments,
     },
   });
 
@@ -62,14 +61,12 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
 
     updateRaceMutation.mutate(
       {
-        id: race._id,
-        title: values.raceName,
-        date: formattedDate,
-        time: values.time,
-        runDistance: values.runDistance,
-        swimDistance: values.swimDistance,
-        startTime: formattedDate,
-        timeRaceConfigs: values.timeRaceConfigs,
+          id: race._id as string,
+          title: values.raceName,
+          date: new Date(formattedDate),
+          runDistance: values.runDistance,
+          swimDistance: values.swimDistance,
+          segments: values.segments,
       },
       {
         onSuccess: () => {
@@ -166,7 +163,7 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
             />
 
             <div className='space-y-4'>
-              {form.watch('timeRaceConfigs')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
+              {form.watch('segments')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
               <SegmentsList form={form} ref={childRef} />
             </div>
 

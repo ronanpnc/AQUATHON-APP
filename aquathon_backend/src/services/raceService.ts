@@ -6,7 +6,7 @@ import { handleMongooseError } from '../utils/mongooseError'
 export const getRaces = async (limit: number = 2, page: number = 1) => {
   const data = await Race.find(
     {},
-    { participants: 0, timeRaceConfigs: 0, startTime: 0 }
+    { participants: 0 }
   )
     .skip((page - 1) * limit)
     .limit(limit)
@@ -16,18 +16,66 @@ export const getRaces = async (limit: number = 2, page: number = 1) => {
     })
   return data
 }
-export const getRace = async (id: string) => {
-  const data = await Race.find({ _id: id }).catch((error) => {
-    throw handleMongooseError(error);
+export const getRacesGroupy = async (limit = 2, page = 1) => {
+  const races = await Race.aggregate([
+    {
+      $sort: { date: 1, startTime: 1 }
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$date' } },
+        races: {
+          $push: {
+            _id: '$_id',
+            title: '$title',
+            startTime: '$startTime',
+            date: '$date',
+            status: '$status',
+            location: '$location',
+            totatParticipants: '$totalParticipants'
+          }
+        }
+      }
+    },
+    {
+      $sort: { _id: 1 }
+    },
+    {
+      $skip: (page - 1) * limit || 0
+    },
+    {
+      $limit: limit || 3
+    }
+  ]).catch((error: Error) => {
+    throw handleMongooseError(error)
   })
-  return data[0]
+  return races
 }
+// NOTE: need more work in the future where you can select field from client
+export const getRace = async (id: string): Promise<IRace | null> => {
+  try {
+    const query = Race.findById(id).select({participants : 0, timeTracking: 0});
+
+    const race = await query.exec();
+
+    if (!race) {
+      // If no race is found, return null instead of throwing an error
+      return null;
+    }
+
+    return race;
+  } catch (error) {
+    throw handleMongooseError(error);
+  }
+};
 
 // delete the race with new obj
 export const createRace = async (data: IRace) => {
   const new_race = new Race({
     startTime: null,
     status: 'upcoming',
+    totalParticipants: 0,
+    segmentsCompleted: 0,
     date: new Date(data.date),
     ...data
   })
@@ -62,28 +110,37 @@ export const getRaceStartTime = async (id: string) => {
     .catch((error) => {
       throw handleMongooseError(error)
     })
-  return data[0].startTime;
+  return data[0].startTime
 }
-
 
 export const setRaceStartTime = async (
   id: string,
   status: 'start' | 'reset'
 ) => {
-  const data = await Race.find({ _id: id })
-    .select('startTime')
-    .catch((error) => {
-      throw error
-    })
-  if (status == 'start') {
-    data[0].startTime = new Date();
-    data[0].status = "ongoing";
-  } else if (status == 'reset') {
-    data[0].startTime = null
-    data[0].status = "upcoming";
+  try {
+    const result = await Race.find({ _id: id }).select([
+      'status',
+      'startTime',
+      'participants',
+      'segments',
+      'timeTracking'
+    ])
+    const data = result[0]
+    if (status == 'start') {
+      data.startTime = new Date()
+      data.status = 'ongoing'
+    } else if (status == 'reset') {
+      data.startTime = null
+      data.status = 'upcoming'
+      data.segments.map(item => item.totalCompleted = 0)
+      data.participants.map(item => item.timeTrackings=[])
+      data.timeTracking = []
+    }
+    const res = await data.save()
+    return res
+  } catch (error) {
+    return handleMongooseError(error)
   }
-  const res = await data[0].save().catch((error) => {
-    throw handleMongooseError(error)
-  })
-  return res
 }
+
+

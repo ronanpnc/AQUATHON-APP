@@ -44,7 +44,7 @@ class ParticipantController {
         colour: req.body.colour,
         school: req.body.school,
         gender: req.body.gender,
-        splits: []
+        segments: req.body.segments,
       };
       const result = await createParticipant(raceId, participantData);
       return res.status(201).send(result);

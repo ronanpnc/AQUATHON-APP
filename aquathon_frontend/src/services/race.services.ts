@@ -1,22 +1,35 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useFetch } from '@/hooks/useFetch';
 
-import { CreateRaceData, Race, UpdateRaceData } from '@/domains/race/interface';
+import { CreateRaceData, Race, RaceWithoutSubCollection, UpdateRaceData } from '@/domains/race/interface';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Fetch all races
-export const useRaceList = () => {
+export const useRaceList = (id?: string) => {
   const url = `${API_BASE_URL}/races/`;
-  return useFetch<Race[]>('races', url);
+  return useQuery({
+    queryKey: ["race"],
+    queryFn: async () => {
+        const res =  await fetch(url);
+        const data = await res.json()
+        return data as RaceWithoutSubCollection[];
+    }
+  });
 };
 
 // Fetch a single race by ID
 export const useRace = (id: string) => {
   const url = `${API_BASE_URL}/races/${id}`;
-  return useFetch<Race>(`race-${id}`, url);
-};
+  return useFetch<Race>(['race',id], url);
+}
+
+// Fetch a single race by ID
+export const useRaceStartTime = (id: string) => {
+  const url = `${API_BASE_URL}/races/${id}/startTime`;
+  return useFetch<Race>(`race-start-${id}`, url);
+};;
 
 const createRace = async (raceData: CreateRaceData): Promise<Race> => {
   const response = await fetch(`${API_BASE_URL}/races/`, {

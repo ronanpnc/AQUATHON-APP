@@ -7,6 +7,8 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
+import { CreateRaceData, segmentTypes } from '@/domains/race/interface';
+
 import { RaceFormValues } from './CreateRaceForm';
 
 
@@ -15,17 +17,17 @@ interface SegmentsListProps {
     form: UseFormReturn<RaceFormValues,object>;
 }
 
-export const TimeRaceConfigSchema = z.object({
+export const SegmentSchema = z.object({
   type: z.string(),
   mode: z.string(),
   timeTrackId: z.array(z.string()),
 });
-export type Segment = z.infer<typeof TimeRaceConfigSchema>;
+export type Segment = z.infer<typeof SegmentSchema>;
 export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   const [openPopover, setOpenPopover] = useState<string | null>(null);
   const { fields, append, move, remove } = useFieldArray({
     control: form.control,
-    name: 'timeRaceConfigs',
+    name: 'segments',
   });
 
   useImperativeHandle(ref, () => ({
@@ -43,7 +45,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   };
 
   const updateSegment = (index: number, updates: Partial<Segment>) => {
-    form.setValue(`timeRaceConfigs.${index}`, { ...fields[index], ...updates } as Segment);
+    form.setValue(`segments.${index}`, { ...fields[index], ...updates } as Segment);
   };
 
   const deleteSegment = (index: number) => {
@@ -56,7 +58,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
         {(provided) => (
           <ul {...provided.droppableProps} ref={provided.innerRef} className='space-y-2 w-full'>
             {fields.map((segment, index) => (
-              <Draggable key={`timeRaceConfigs[${index}]`} draggableId={`timeRaceConfigs-${index}`} index={index}>
+              <Draggable key={`segments[${index}]`} draggableId={`segments-${index}`} index={index}>
                 {(provided, snapshot) => (
                   <li
                     ref={provided.innerRef}
@@ -71,7 +73,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
                       </div>
                       <input
                         hidden
-                        name={`timeRaceConfigs.${index}.type`}
+                        name={`segments.${index}.type`}
                         defaultValue={`${segment.type}`} // make sure to set up defaultValue
                       />
                       <Popover
@@ -80,23 +82,20 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
                       >
                         <PopoverTrigger asChild>
                           <Button variant='outline' className='w-full justify-between'>
-                            {form.watch(`timeRaceConfigs.${index}`).type || 'Select type'}
+                            {form.watch(`segments.${index}`).type || 'Select type'}
                             <ChevronDown className='ml-2 h-4 w-4' />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className='w-full p-0 bg-white border border-gray-200 shadow-lg'>
-                          <Button
-                            className='w-full justify-start rounded-none bg-white text-black hover:bg-gray-100'
-                            onClick={() => updateSegment(index, { type: 'swimming' })}
-                          >
-                            Swimming
-                          </Button>
-                          <Button
-                            className='w-full justify-start rounded-none bg-white text-black hover:bg-gray-100'
-                            onClick={() => updateSegment(index, { type: 'running' })}
-                          >
-                            Running
-                          </Button>
+                          {segmentTypes.map((segmentType) => (
+                            <Button
+                              key={segmentType.value}
+                              className='w-full justify-start rounded-none bg-white text-black hover:bg-gray-100'
+                              onClick={() => updateSegment(index, { type: segmentType.value })}
+                            >
+                              {segmentType.label}
+                            </Button>
+                          ))}
                         </PopoverContent>
                       </Popover>
                     </div>

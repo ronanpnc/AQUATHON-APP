@@ -8,11 +8,14 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml* ./app
 
+
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else echo "NO LOCKFILE FOUND" && exit 1; fi
 
 
 # Copy the rest of the application code
+COPY /src /app/src
+
 COPY . .
 
 # Build the application (if needed)
@@ -22,6 +25,6 @@ COPY . .
 EXPOSE 4000
 
 # Compile
-RUN pnpm build
+# RUN pnpm build
 # Define the command to run the app
-CMD ["pnpm", "start"]
+CMD ["pnpm", "dev"]

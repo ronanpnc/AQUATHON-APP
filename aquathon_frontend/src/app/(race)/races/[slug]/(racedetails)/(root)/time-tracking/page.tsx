@@ -1,57 +1,87 @@
 'use client';
+import _ from 'lodash';
+import { Check } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { useStore } from 'zustand';
 
-import RaceTimer from '@/components/clock/RaceTimer';
+import Container from '@/components/Container';
+import RaceTimer from '@/components/TimeTracking/RaceTimer';
+import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
-import { socket } from '@/socket';
+import { ITimeTrackingSocket, Race } from '@/domains/race/interface';
+import { useRace } from '@/services/race.services';
+import { RaceRealTimeContext } from '@/services/sockets/race/store';
+import { queryClient } from '@/utils/providers/ReactQueryProvider';
 
 export default function RaceDetailPage() {
-  const [time, setTime] = useState<Date | null>(null);
+  const [copied, setCopied] = useState(false);
   const id = useParams().slug;
+  const race = useRace(id as string);
+  const socketContext = useContext(RaceRealTimeContext);
+  const raceSocket = useStore(socketContext!, (state) => state);
+  const shareableLink = `${window.location.origin}/shared/${id}`;
+  const [time, setTime] = useState<Date | null>(null);
 
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   const startTime = () => {
-    socket.emit('startTime', id);
+    raceSocket.startTime(id as string);
   };
   const resetTime = () => {
-    socket.emit('resetTime', id);
+    raceSocket.resetTime(id as string);
   };
   useEffect(() => {
-    socket.emit('subscribe', id);
-  }, [id]);
-
+    race.data?.startTime ? setTime(new Date(race.data.startTime)) : null;
+  }, [race.data])
   useEffect(() => {
-    const fetchRaceData = async () => {
-      try {
-        const response = await fetch(`http://localhost:4000/api/races/${id}`);
-        const data = await response.json();
-        const startTime = data?.startTime === null ? null : new Date(data?.startTime);
-        setTime(startTime);
-      } catch (error) {
-        //console.error("Failed to fetch race data:", error);
+    raceSocket.subscribe(id as string);
+    raceSocket.socketClient.on('startTimeChanged', (time) => {
+      if (time) {
+        setTime(new Date(time));
+        race.refetch();
+        return;
       }
-    };
-
-    fetchRaceData();
-
-    socket.emit('subscribe', id);
-
-    socket.on('subscribeAccepted', () => {
-      socket.on('poolChanged', (value) => {
-        const startTime = value === null ? null : new Date(value);
-        setTime(startTime);
-      });
-      return () => {
-        socket.off('poolChanged');
-        socket.off('subscribeAccepted');
-        socket.off('connect');
-      };
+        race.refetch();
+        setTime(null);
     });
-  }, [id]);
+    raceSocket.socketClient.on('poolChanged', (data) => {
+        updater(data)
+    });
 
+    return () =>  {
+        raceSocket.socketClient.off("poolChanged")
+        raceSocket.socketClient.off("startTimeChanged")
+    }
+  }, []);
+
+  const updater = (nextData?: ITimeTrackingSocket) => {
+    queryClient.setQueryData(['race', id], (oldData?: Race | undefined) => {
+      const arr = [...(oldData?.segments || [])];
+      const index = _.findIndex(arr, { _id: nextData?.segmentId });
+      let updatedArr;
+      if (nextData?.status === 'reset') {
+        // Create a new array with the updated participant
+        updatedArr = arr.map((item, idx) => (idx === index ? { ...item, totalCompleted: Math.max(0,item.totalCompleted! - 1) } : item));
+         return ({...oldData, segments: updatedArr}); // Return the old array if no update occurs
+      }
+      if (index !== -1 && nextData?.stampTime !== undefined) {
+        // Create a new array with the updated participant
+         updatedArr = arr.map((item, idx) => (idx === index ? { ...item, totalCompleted: Math.max(0,item.totalCompleted! + 1) } : item));
+        return ({...oldData, segments: updatedArr}); // Return the old array if no update occurs
+      }
+    });
+  };
+  if (race.data === undefined) return  null;
   return (
-    <div>
-      <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} />
-    </div>
+    <Container className='pt-5'>
+      {race.data?.segments.map((segment, index) => (
+        <SegmentCard startTime={race.data.startTime} key={index} segment={segment} totalParticipant={race.data.totalParticipants} completedParticipants={segment.totalCompleted}/>
+      ))}
+      <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} participant={race.data?.totalParticipants}  total={race.data.totalParticipants * race.data.segments.length} completed={race.data?.segments.reduce((a,seg) => seg.totalCompleted! + a,  0)}/>
+    </Container>
   );
 }

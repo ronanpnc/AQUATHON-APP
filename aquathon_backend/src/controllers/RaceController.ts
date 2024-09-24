@@ -4,10 +4,11 @@ import {
   deleteRace,
   getRace,
   getRaces,
+  //getRacesGroupy,
   getRaceStartTime,
   updateRace
 } from '../services/raceService'
-import { IRace } from '../models/raceModel'
+//import { IRace } from '../models/raceModel'
 
 class RaceController {
   static async getRace(req: Request, res: Response) {
@@ -27,6 +28,7 @@ class RaceController {
     const limit = req.query.limit as string
     try {
       const data = await getRaces(parseInt(page), parseInt(limit))
+      //const data = await getRacesGroupy(parseInt(limit),parseInt(page))
       return res.status(200).send(data)
     } catch (error) {
       return res.status(error.statusCode).send(error.message)
