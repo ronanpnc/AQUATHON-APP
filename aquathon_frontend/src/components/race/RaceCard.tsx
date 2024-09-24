@@ -6,23 +6,25 @@ import Link from 'next/link';
 
 import { STATUS_COLORS, STATUS_ICONS } from '@/domains/race/constants';
 import { Race } from '@/domains/race/interface';
+import SmallTimer from '../TimeTracking/SmallTimer';
 
 const calculateTotalDistance = (race: Race): number => {
   return (race.swimDistance ?? 0) + (race.runDistance ?? 0);
 };
 
 const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
-  const { _id, title, date, status } = race;
+  const { _id, title, date, status, totalParticipants ,startTime,segments } = race;
   const formattedTime = format(new Date(date), 'hh:mm a');
   const totalDistance = calculateTotalDistance(race);
 
+  const progrss = (segments.reduce((a, c) => a + (c.totalCompleted||0) , 0 ) / (totalParticipants * segments.length));
   return (
     <Link href={`/races/${_id}/`} className='block'>
       <div className='flex items-center bg-white rounded-lg shadow-xl mb-4'>
         <div className='flex-grow p-4'>
           <TimeDisplay time={formattedTime} />
-          <RaceDetails title={title} distance={totalDistance.toString()} />
-          <ProgressBar progress={0} />
+          <RaceDetails title={title} distance={totalDistance.toString()} startTime={startTime === null ? null :new Date(startTime)} />
+          <ProgressBar progress={progrss*100} />
         </div>
         <StatusDisplay status={status} />
       </div>
@@ -30,11 +32,11 @@ const RaceCard: React.FC<{ race: Race }> = ({ race }) => {
   );
 };
 
-const TimeDisplay: React.FC<{ time: string }> = ({ time }) => (
+const TimeDisplay: React.FC<{ time: string}> = ({ time }) => (
   <span className='text-xs text-gray-500 font-medium'>{time}</span>
 );
 
-const RaceDetails: React.FC<{ title: string; distance: string }> = ({ title, distance }) => (
+const RaceDetails: React.FC<{ title: string; distance: string,  startTime:Date|null  }> = ({ title, distance, startTime }) => (
   <div>
     <div className='grid grid-cols-4 items-center justify-between'>
       <h3 className='text-lg font-bold truncate col-span-3'>{title}</h3>
@@ -42,7 +44,7 @@ const RaceDetails: React.FC<{ title: string; distance: string }> = ({ title, dis
     </div>
     <div className='text-xs text-gray-600 flex items-center space-x-1 mt-1 mb-2'>
       <Clock size={12} />
-      <span>00:00:00</span>
+      <SmallTimer time={startTime}/>
     </div>
   </div>
 );
@@ -55,7 +57,7 @@ const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
 
 const StatusDisplay: React.FC<{ status: keyof typeof STATUS_COLORS }> = ({ status }) => {
   const StatusIcon = STATUS_ICONS[status];
-  const { bg: bgColorClass, text: textColorClass } = STATUS_COLORS[status]; 
+  const { bg: bgColorClass, text: textColorClass } = STATUS_COLORS[status];
 
   return (
     <div className='flex flex-col items-center p-4'>

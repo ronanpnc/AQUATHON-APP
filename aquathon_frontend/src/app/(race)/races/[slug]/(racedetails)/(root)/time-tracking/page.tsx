@@ -1,4 +1,5 @@
 'use client';
+import _ from 'lodash';
 import { Check } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useContext, useEffect, useState } from 'react';
@@ -9,12 +10,10 @@ import Container from '@/components/Container';
 import RaceTimer from '@/components/TimeTracking/RaceTimer';
 import SegmentCard from '@/components/TimeTracking/SegmentCard';
 
+import { ITimeTrackingSocket, Race } from '@/domains/race/interface';
 import { useRace } from '@/services/race.services';
-import { useSegmentList } from '@/services/segment.services';
 import { RaceRealTimeContext } from '@/services/sockets/race/store';
 import { queryClient } from '@/utils/providers/ReactQueryProvider';
-import { ITimeTrackingSocket, Race } from '@/domains/race/interface';
-import _ from 'lodash';
 
 export default function RaceDetailPage() {
   const [copied, setCopied] = useState(false);
@@ -78,21 +77,11 @@ export default function RaceDetailPage() {
   };
   if (race.data === undefined) return  null;
   return (
-    <Container>
+    <Container className='pt-5'>
       {race.data?.segments.map((segment, index) => (
         <SegmentCard startTime={race.data.startTime} key={index} segment={segment} totalParticipant={race.data.totalParticipants} completedParticipants={segment.totalCompleted}/>
       ))}
       <RaceTimer time={time} startTimer={startTime} resetTimer={resetTime} participant={race.data?.totalParticipants}  total={race.data.totalParticipants * race.data.segments.length} completed={race.data?.segments.reduce((a,seg) => seg.totalCompleted! + a,  0)}/>
-      <CopyToClipboard text={shareableLink} onCopy={handleCopy}>
-        <button
-          className='bg-white text-purple-600 font-semibold py-3 px-8 rounded-full
-                   hover:bg-purple-100 transition duration-300 ease-in-out
-                   transform hover:scale-105 shadow-lg'
-        >
-          {copied ? <Check className='mr-2' /> : null}
-          {copied ? 'Copied!' : `${raceSocket.roomId}`}
-        </button>
-      </CopyToClipboard>
     </Container>
   );
 }

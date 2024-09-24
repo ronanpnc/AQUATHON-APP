@@ -7,14 +7,14 @@ import { CreateRaceData, Race, RaceWithoutSubCollection, UpdateRaceData } from '
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Fetch all races
-export const useRaceList = (id: string) => {
+export const useRaceList = (id?: string) => {
   const url = `${API_BASE_URL}/races/`;
   return useQuery({
-    queryKey: ["race",id],
+    queryKey: ["race"],
     queryFn: async () => {
         const res =  await fetch(url);
         const data = await res.json()
-        return data as RaceWithoutSubCollection;
+        return data as RaceWithoutSubCollection[];
     }
   });
 };

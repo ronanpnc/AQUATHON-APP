@@ -17,8 +17,8 @@ const tabs: Tab[] = [
   {  label: 'Participants', Icon: <UsersRound />, path: '/participants' },
   {  label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
   {  label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
-  {  label: 'Settings', Icon: <Settings /> },
-  {  label: 'Results', Icon: <Trophy /> },
+  {  label: 'Settings', Icon: <Settings /> ,path:'/settings' },
+  {  label: 'Results', Icon: <Trophy />,path:'/results' },
 ];
 const checkPathname = (url: string): string => {
     const path = url.substring(url.lastIndexOf('/') + 1);
