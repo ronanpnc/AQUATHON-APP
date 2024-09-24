@@ -1,12 +1,23 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, UsersRound } from 'lucide-react';
+import {
+  ChevronLeft,
+  EllipsisVertical,
+  LayoutDashboard,
+  Settings,
+  Share,
+  Timer,
+  Trophy,
+  UsersRound,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { DeleteRaceButton } from '../race/DeleteRaceButton';
+import { Button } from '../ui/button';
 
 // Define tab type
 type Tab = {
@@ -24,8 +35,22 @@ const tabs: Tab[] = [
   { id: 'Results', label: 'Results', Icon: <Trophy /> },
 ];
 
-export function RaceDetailsNav({ raceId, title }: { raceId: string; title: string }) {
+export function RaceDetailsNav({
+  raceId,
+  title,
+  shareableLink,
+}: {
+  raceId: string;
+  title: string;
+  shareableLink: string;
+}) {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <>
@@ -39,7 +64,7 @@ export function RaceDetailsNav({ raceId, title }: { raceId: string; title: strin
 
 function Header({ raceId, title }: { raceId: string; title: string }) {
   return (
-    <nav className='flex items-center justify-between p-4  bg-primary-purple text-white'>
+    <nav className='flex items-center justify-between p-4 bg-primary-purple text-white'>
       <div className='flex items-center'>
         <BackButton />
         <h1 className='text-xl font-semibold ml-4'>{title}</h1>
@@ -61,6 +86,13 @@ function BackButton() {
 
 function MoreButton({ raceId }: { raceId: string }) {
   const pathname = usePathname();
+  const [copied, setCopied] = useState(false);
+  const shareableLink = `${window.location.origin}/shared/${raceId}`;
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Popover>
@@ -81,6 +113,14 @@ function MoreButton({ raceId }: { raceId: string }) {
               </div>
             </Link>
           ))}
+          <CopyToClipboard text={shareableLink} onCopy={handleCopy}>
+            <Button className='text-black bg-white hover:bg-gray-100  w-full block'>
+              <div className='flex'>
+                <Share className='mr-2' />
+                <span className='ml-3'>{copied ? 'Copied!' : 'Copy Link'}</span>{' '}
+              </div>
+            </Button>
+          </CopyToClipboard>
           <DeleteRaceButton raceId={raceId} />
         </div>
       </PopoverContent>
@@ -115,6 +155,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     </div>
   );
 }
+
 type TabButtonProps = {
   tab: Tab;
   isActive: boolean;

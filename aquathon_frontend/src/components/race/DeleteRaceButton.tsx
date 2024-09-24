@@ -53,8 +53,8 @@ export function DeleteRaceButton({ raceId }: DeleteRaceButtonProps) {
         <Button className='text-black hover:bg-gray-100 rounded w-full block'>
           <div className='flex'>
           <Trash2 className='text-red-500' />
-          <p className='ml-5 text-base'>Delete</p>
-          </div>
+          <p className='ml-5'>Delete</p>
+          </div>  
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className='rounded-lg max-w-max'>
