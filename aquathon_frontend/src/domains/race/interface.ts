@@ -26,6 +26,7 @@ export interface ITimeTrackingSocket {
   bib: number;
   raceId: string;
   status?:string;
+  stampId?:string;
 }
 
 export interface ITimeTracking {

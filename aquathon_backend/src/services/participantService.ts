@@ -47,6 +47,35 @@ export const getParticipantById = async (
   }
 }
 
+export const getAllParticipantDashboard = async (
+  raceId: string,
+) => {
+  try {
+    const race = await Race.findOne(
+      { _id: raceId  },
+    )
+
+
+    if (!race) {
+      throw new StatusError('Race or participant not found', 404)
+    }
+
+    const participant = race.participants
+    if (!participant) {
+      throw new StatusError('Participant not found', 404)
+    }
+
+    return participant
+  } catch (error) {
+    if (error instanceof StatusError) {
+      throw error
+    }
+    throw new StatusError(error.message, 500)
+  }
+}
+
+
+
 export const createParticipant = async (raceId: string, data: IParticipant) => {
   try {
     const result = await Race.findOneAndUpdate(

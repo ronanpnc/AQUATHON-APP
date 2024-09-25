@@ -86,6 +86,15 @@ async function deleteParticipant({ raceId , id }:{raceId:string, id:string}): Pr
   }
 }
 
+async function getAllParticipantDashboard({ raceId }:{raceId:string}): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/races/${raceId}/dashboard`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete participant');
+  }
+}
 export const useDeleteParticipant = () => {
   const queryClient = useQueryClient();
 
@@ -96,4 +105,9 @@ export const useDeleteParticipant = () => {
       queryClient.removeQueries({ queryKey: ['participant', id] });
     },
   });
-};
+}
+export const useDashboard = (raceId:string) => {
+  const url = `${API_BASE_URL}/races/${raceId}/dashboard`;
+  return useFetch<Participant>(["dashboard", raceId], url);
+
+};;

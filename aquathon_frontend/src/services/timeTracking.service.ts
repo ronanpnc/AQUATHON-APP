@@ -7,6 +7,7 @@ import { Participant } from '@/domains/participant/interface';
 import { ISegment } from '@/domains/race/interface';
 export interface TrackParticipant extends Participant {
     stampTime: Date,
+    stampId?:string,
 }
 
 export interface SegmentTrackParticipant extends Participant {

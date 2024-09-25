@@ -15,9 +15,11 @@ export interface ServerToClientEvents {
 
   // race start time update
   startTimeChanged :(value) => void;
-
   // update participant pool
   poolChanged :(value) => void;
+  // update 2-step pool
+  stampPoolChanged :(value) => void;
+  error :(e:Error) => void;
 }
 
 export interface ClientToServerEvents {

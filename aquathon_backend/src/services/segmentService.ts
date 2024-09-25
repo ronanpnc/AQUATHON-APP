@@ -78,7 +78,6 @@ export async function getParticipantsBySegment(
         }
       },
       { $sort : { bib: 1} }
-
       // Extract totalCompleted from the filtered segment object
     ])
 

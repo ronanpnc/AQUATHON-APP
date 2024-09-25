@@ -1,16 +1,17 @@
+"use client"
+import { useParams } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { metadata } from './layout';
+import { useDashboard } from '@/services/participant.services';
 
-//import RaceDetailClient from '@/components/clock/RaceDetailClient';
+
 
 export default function RaceDetailPage() {
-  metadata.title = 'testing';
+  const id = useParams().slug;
+  const dashboard = useDashboard(id as string);
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className='min-h-screen flex flex-col pb-24'>
-        <div className='fixed bottom-4 right-4'></div>
-      </div>
+      <div className='min-h-screen flex flex-col pb-24'>{JSON.stringify(dashboard.data)}</div>
     </Suspense>
   );
 }

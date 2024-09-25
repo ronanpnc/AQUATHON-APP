@@ -2,6 +2,7 @@ import { IRace, Race } from '../models/raceModel'
 import { StatusError } from '../types/common'
 import { Error } from 'mongoose'
 import { handleMongooseError } from '../utils/mongooseError'
+import { TimeTracking } from '../models/timeTrackingModel'
 
 export const getRaces = async (limit: number = 2, page: number = 1) => {
   const data = await Race.find(
@@ -135,6 +136,7 @@ export const setRaceStartTime = async (
       data.segments.map(item => item.totalCompleted = 0)
       data.participants.map(item => item.timeTrackings=[])
       data.timeTracking = []
+      await TimeTracking.deleteMany({raceId: data._id});
     }
     const res = await data.save()
     return res

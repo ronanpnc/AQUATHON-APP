@@ -5,6 +5,7 @@ import {
   getParticipantById,
   updateParticipant,
   deleteParticipant,
+  getAllParticipantDashboard,
 } from '../services/participantService';
 import { IParticipant } from '../models/participantModel'; // Adjust the import path as needed
 
@@ -27,6 +28,15 @@ class ParticipantController {
     const { raceId, participantId } = req.params;
     try {
       const data = await getParticipantById(raceId, participantId);
+      return res.status(200).send(data);
+    } catch (error) {
+      return res.status(error.statusCode).send(error);
+    }
+  }
+  static async getAllParticipantDashboard (req: Request, res: Response) {
+    const { raceId } = req.params;
+    try {
+      const data = await getAllParticipantDashboard(raceId);
       return res.status(200).send(data);
     } catch (error) {
       return res.status(error.statusCode).send(error);

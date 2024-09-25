@@ -65,16 +65,21 @@ export default function TrackingPage() {
   const unassignedUpdater = (nextData?: ITimeTrackingSocket) => {
     queryClient.setQueryData(['segments', segmentId], (oldData?: SegmentTrackParticipant | undefined) => {
       const arr = [...(oldData?.unassignedTime || [])];
-
-      if (nextData?.status === 'reset') {
+      if (nextData?.status === 'delete') {
         // Create a new array with the updated participant
-        const index = _.findIndex(arr, { _id: nextData?._id});
+        const index = _.findIndex(arr, { _id: nextData?._id });
         const updatedArr = arr.map((item, idx) => (idx === index ? { ...item, stampTime: null } : item));
         return { ...oldData, unassignedTime: [...updatedArr] };
       }
       if (nextData?.stampTime !== undefined) {
         // Create a new array with the updated participant
-        return { ...oldData, unassignedTime : [...(oldData?.unassignedTime || []), {raceId: nextData.raceId, segmentId:nextData.segmentId, stampTime: nextData.stampTime}] };
+        return {
+          ...oldData,
+          unassignedTime: [
+            ...(oldData?.unassignedTime || []),
+            { raceId: nextData.raceId, segmentId: nextData.segmentId, stampTime: nextData.stampTime, stampId:nextData.stampId },
+          ],
+        };
       }
       return oldData; // Return the old array if no update occurs
     });
@@ -91,6 +96,25 @@ export default function TrackingPage() {
       segmentId: segmentId as string,
       participantId: participantId,
       bib: bib,
+    });
+  };
+
+  const assignTime = (bib: number, stampTime: Date, stampId:string) => {
+    raceSocket.assignStamp({
+      raceId: slug as string,
+      segmentId: segmentId as string,
+      participantId: querySegment.data?.participants.find((item) => item.bib === bib)?._id,
+      stampTime: stampTime,
+      stampId:stampId ,
+      bib: bib,
+    });
+  };
+  const deleteUnassignedTime = (stampId: string) => {
+    raceSocket.unassignedStamp({
+      stampId:stampId,
+      raceId: slug as string,
+      segmentId: segmentId as string,
+      status: "delete"
     });
   };
 
@@ -122,13 +146,23 @@ export default function TrackingPage() {
         <Container className='p-4'>
           {activeTab === '1 Step' ? (
             <OneStepPanel
+              startTime={race.data.startTime}
               participants={querySegment.data?.participants}
               disabled={raceSocket.roomId == null || raceSocket.roomId == undefined}
               resetTrackTime={onResetTrackTime}
               trackTime={onTrackTime}
             />
           ) : (
-          <TwoStepPanel participants={querySegment.data?.unassignedTime} startTime={race.data.startTime}/>
+            <TwoStepPanel
+              twoStepAction={{
+                  deleteUnassigned : deleteUnassignedTime,
+                  deleteAssigned: onResetTrackTime,
+                  assignTime: assignTime,
+              }}
+              participants={querySegment.data?.participants}
+              unassignedStamp={querySegment.data?.unassignedTime}
+              startTime={race.data.startTime}
+            />
           )}
         </Container>
         <RaceTimerWithProgress

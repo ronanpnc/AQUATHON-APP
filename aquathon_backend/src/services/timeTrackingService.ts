@@ -5,6 +5,8 @@ import { Race } from '../models/raceModel'
 import mongoose from 'mongoose'
 export interface setTrackingProp extends Partial<ITimeTracking> {
   _id?: string
+  status?: string
+  stampId?: string
 }
 
 export async function setTracking(data: setTrackingProp) {
@@ -14,9 +16,20 @@ export async function setTracking(data: setTrackingProp) {
       const timeTracking = await createTimeTracking(data.raceId, {
         segmentId: data.segmentId,
         participantId: data.participantId,
-        stampTime: now
+        stampTime: data.stampTime || now
       })
-      return { ...timeTracking, bib: data.bib}
+      return { ...timeTracking, bib: data.bib }
+    } catch (error) {
+      throw handleMongooseError(error)
+    }
+  }
+}
+export async function assignTracking(data: setTrackingProp) {
+  if (data.bib || data.participantId) {
+    try {
+      const timeTracking = await setTracking(data)
+      await deleteOneUnassignedTimeTracking({raceId: data.raceId, segmentId: data.segmentId, stampId: data.stampId});
+      return { ...timeTracking, bib: data.bib }
     } catch (error) {
       throw handleMongooseError(error)
     }
@@ -25,12 +38,12 @@ export async function setTracking(data: setTrackingProp) {
 export async function resetTracking(data: setTrackingProp) {
   if (data.bib || data.participantId) {
     try {
-      const timeTracking = await deleteTimeTracking(data.raceId, {
+      const timeTracking = await deleteTimeTrackings(data.raceId, {
         segmentId: data.segmentId,
         participantId: data.participantId,
         stampTime: null
       })
-      return { ...timeTracking, bib: data.bib,status:"reset"}
+      return { ...timeTracking, bib: data.bib, status: 'reset' }
     } catch (error) {
       throw handleMongooseError(error)
     }
@@ -76,9 +89,28 @@ export const createTimeTracking = async (
   }
 }
 
-
+export const deleteOneUnassignedTimeTracking = async (
+  data: setTrackingProp
+) => {
+  try {
+    // Step 1: Create new TimeTracking document
+    await TimeTracking.deleteOne({
+      _id: data.stampId.toString(),
+      segmentId: data.segmentId.toString(),
+      raceId: data.raceId.toString()
+    })
+    const res = { ...data, status: 'delete' ,stampId: data.stampId}
+    return res
+  } catch (error) {
+    throw new StatusError(
+      'Failed to delete unassigned track time',
+      500,
+      error
+    )
+  }
+}
 // reset
-export const deleteTimeTracking = async (
+export const deleteTimeTrackings = async (
   raceId: mongoose.Types.ObjectId,
   data: setTrackingProp
 ) => {
@@ -87,7 +119,7 @@ export const deleteTimeTracking = async (
     await Race.findOneAndUpdate(
       {
         _id: raceId.toString(),
-        "participants._id": data.participantId.toString(),
+        'participants._id': data.participantId.toString()
       },
       {
         $pull: {
@@ -98,13 +130,12 @@ export const deleteTimeTracking = async (
         $inc: {
           'segments.$[seg].totalCompleted': -1 // Increment by 1
         }
-      } ,   {
-        arrayFilters: [
-          { 'seg._id': data.segmentId.toString() }
-        ]
+      },
+      {
+        arrayFilters: [{ 'seg._id': data.segmentId.toString() }]
       }
     )
-    const res = {...data, stampTime: null}
+    const res = { ...data, stampTime: null }
     return res
   } catch (error) {
     throw new StatusError(
@@ -118,8 +149,8 @@ export const createUnassignedTimeTracking = async (data: setTrackingProp) => {
   try {
     // Step 1: Create new TimeTracking document
     const timeTracking = new TimeTracking({
-        ...data,
-        stampTime: new Date(),
+      ...data,
+      stampTime: new Date()
     })
     const res = await timeTracking.save()
     return res
@@ -132,10 +163,7 @@ export const createUnassignedTimeTracking = async (data: setTrackingProp) => {
   }
 }
 
-
-export const assignTimeTracking = async (
-  data: setTrackingProp
-) => {
+export const assignTimeTracking = async (data: setTrackingProp) => {
   try {
     // Step 1: Create new TimeTracking document
     await Race.findOneAndUpdate(
@@ -174,17 +202,26 @@ export const assignTimeTracking = async (
 
 export const getUnassignedTrackTime = async (
   raceId: string,
-  segmentId: string,
+  segmentId: string
 ) => {
   try {
     // Step 1: Create new TimeTracking document
-    const data = await TimeTracking.find(
+    const data = await TimeTracking.aggregate([
       {
-        raceId: raceId,
-        segmentId: segmentId
+        $match: {
+          raceId: new mongoose.Types.ObjectId(raceId),
+          segmentId: new mongoose.Types.ObjectId(segmentId)
+        }
       },
-    )
-    return data;
+      {
+        $project: {
+          stampTime: 1,
+          stampId: '$_id', // Rename _id to stampId
+          _id: 0 // Exclude the original _id field
+        }
+      }
+    ])
+    return data
   } catch (error) {
     throw new StatusError(
       'Failed to create time tracking and add reference',
