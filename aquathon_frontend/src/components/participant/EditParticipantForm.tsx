@@ -78,7 +78,7 @@ export default function EditParticipantForm() {
         onError: () => {
           toast({
             title: 'Error',
-            description: 'Failed to create participant. Please try again.',
+            description: 'Failed to edit participant. Please try again.',
             variant: 'destructive',
           });
         },
