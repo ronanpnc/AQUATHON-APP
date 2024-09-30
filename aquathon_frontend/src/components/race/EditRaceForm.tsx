@@ -18,7 +18,7 @@ import { Race, RaceStatus } from '@/domains/race/interface';
 import { useUpdateRace } from '@/services/race.services';
 
 import { RaceFormValues } from './CreateRaceForm';
-import { SegmentSchema,SegmentsList } from './SegmentsList';
+import { SegmentSchema, SegmentsList } from './SegmentsList';
 
 const formSchema = z.object({
   raceName: z.string().min(1, 'Race name is required'),
@@ -61,12 +61,12 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
 
     updateRaceMutation.mutate(
       {
-          id: race._id as string,
-          title: values.raceName,
-          date: new Date(formattedDate),
-          runDistance: values.runDistance,
-          swimDistance: values.swimDistance,
-          segments: values.segments,
+        id: race._id as string,
+        title: values.raceName,
+        date: new Date(formattedDate),
+        runDistance: values.runDistance,
+        swimDistance: values.swimDistance,
+        segments: values.segments,
       },
       {
         onSuccess: () => {
@@ -165,19 +165,19 @@ export default function EditRaceForm({ race }: EditRaceFormProps) {
             <div className='space-y-4'>
               {form.watch('segments')?.length !== 0 && <h3 className='text-lg font-semibold'>Segments</h3>}
               <SegmentsList form={form} ref={childRef} />
+              <Button
+                variant='ghost'
+                type='button'
+                className='ml-1 p-1  text-gray-600'
+                onClick={() => childRef?.current?.addSegment()}
+              >
+                <PlusIcon className='w-3 h-3 mr-2 text-green-500' />
+                Add Segment
+              </Button>
             </div>
 
             <div className='bottom-0 left-0 right-0 p-4'>
               <div className='max-w-md mx-auto space-y-6'>
-                <Button
-                  type='button'
-                  className='w-full bg-[#36B37E] hover:bg-[#36B37E]/90 text-white py-8 text-xl font-semibold'
-                  onClick={() => childRef?.current?.addSegment()}
-                >
-                  <PlusIcon className='w-6 h-6 mr-3' />
-                  Create Segment
-                </Button>
-
                 <Button
                   type='submit'
                   className='w-full bg-primary-purple hover:bg-primary-purple/90 text-white py-8 text-xl font-semibold'

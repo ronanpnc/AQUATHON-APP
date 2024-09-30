@@ -26,6 +26,7 @@ export interface ITimeTrackingSocket {
   bib: number;
   raceId: string;
   status?:string;
+  stampId?:string;
 }
 
 export interface ITimeTracking {
@@ -50,7 +51,7 @@ export interface ISegment {
   type: string;
   mode: string;
   timeTrackId: string[];
-  totalCompleted?: number;
+  totalCompleted: number;
   status?: string;
 }
 

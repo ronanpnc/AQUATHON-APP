@@ -3,8 +3,9 @@ import mongoose from 'mongoose'
 import { Race } from '../models/raceModel'
 import { ISegment } from '../models/segmentModel'
 import { handleMongooseError } from '../utils/mongooseError'
+import { getUnassignedTrackTime } from './timeTrackingService'
+    //NOTE: temporary added
 
-// Get all segments
 export async function getAllSegments(raceId: string): Promise<ISegment[]> {
   try {
     const segments = await Race.findOne({ _id: raceId })
@@ -13,6 +14,17 @@ export async function getAllSegments(raceId: string): Promise<ISegment[]> {
     throw handleMongooseError(error)
   }
 }
+
+export async function getSegment(raceId: string, segmentId:string): Promise<ISegment> {
+  try {
+    const segments = await Race.findOne({ _id: raceId });
+    return segments.segments.find((seg) => seg.id === segmentId);
+  } catch (error) {
+    throw handleMongooseError(error)
+  }
+}
+
+
 
 // with different collection
 
@@ -62,15 +74,17 @@ export async function getParticipantsBySegment(
           firstName: 1,
           lastName: 1,
           colour: 1,
-          stampTime: '$stampTime.stampTime' // Extract the actual timestamp value
+          stampTime: '$stampTime.stampTime', // Extract the actual timestamp value
         }
       },
       { $sort : { bib: 1} }
-
       // Extract totalCompleted from the filtered segment object
     ])
 
-    return result
+    //NOTE: add 2 temporary added
+    const segment = await getSegment(raceId, segmentId);
+    const unassignedTime = await getUnassignedTrackTime(raceId, segmentId);
+    return { participants:result,segment, unassignedTime}
   } catch (error) {
     console.error('Error retrieving participants:', error)
     throw error

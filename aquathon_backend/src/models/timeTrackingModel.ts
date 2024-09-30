@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { Race } from './raceModel';
 import { db } from '../configs/db';
-import { timeStamp } from 'console';
 
 export interface ITimeTracking {
   raceId: mongoose.Types.ObjectId;
@@ -17,12 +16,9 @@ export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>(
     raceId: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
-      index: true // Add index for better query performance
     },
     participantId: {
       type: mongoose.SchemaTypes.ObjectId,
-      required: true,
-      index: true // Add index for better query performance
     },
     bib: Number,
     segmentId: {
@@ -31,7 +27,6 @@ export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>(
     },
     stampTime: {
       type: Date,
-      required: true
     },
     timeInMs: {
       type: Number
@@ -39,23 +34,23 @@ export const timeTrackingSchema = new mongoose.Schema<ITimeTracking>(
   },
   { timestamps: true, collection: 'timeTrackings' }
 );
-
-// Pre-save hook to check if the race and participant exist
-timeTrackingSchema.pre('save', async function(next) {
-  try {
-    const race = await Race.findOne({
-      _id: this.raceId,
-      'participants._id': this.participantId
-    }).select('_id').lean().exec();
-
-    if (!race) {
-      throw new Error('Race or participant not found');
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+//
+//// Pre-save hook to check if the race and participant exist
+//timeTrackingSchema.pre('save', async function(next) {
+//  try {
+//    const race = await Race.findOne({
+//      _id: this.raceId,
+//      'participants._id': this.participantId
+//    }).select('_id').lean().exec();
+//
+//    if (!race) {
+//      throw new Error('Race or participant not found');
+//    }
+//    next();
+//  } catch (error) {
+//    next(error);
+//  }
+//});
 
 
 // NOTE need more research

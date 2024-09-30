@@ -90,6 +90,21 @@ export const participantSchema = new mongoose.Schema<IParticipant>(
     bib: {
       type: Number,
       required: [true, 'Bib number is required'],
+      unique:true,
+      bib: {
+        type: String,
+        validate: {
+          validator: async function (bib) {
+            const race = await mongoose.model('Race').findOne({
+              _id: this.parent()._id,
+              'participants.bib': bib,
+              'participants._id': { $ne: this._id } // Exclude current participant
+            });
+            return !race; // If no race is found, then bib is unique
+          },
+          message: props => `The bib '${props.value}' is already in use by another participant in this race.`
+        }
+      },
     },
     colour: String,
     gender: {

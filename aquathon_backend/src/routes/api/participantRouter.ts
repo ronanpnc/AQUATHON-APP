@@ -186,5 +186,6 @@ router.put('/:raceId/participants/:participantId', ParticipantController.updateP
  *         description: Server error
  */
 router.delete('/:raceId/participants/:participantId', ParticipantController.deleteParticipant);
+router.delete('/:raceId/dashboard', ParticipantController.deleteParticipant);
 
 export default router;

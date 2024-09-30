@@ -66,7 +66,7 @@ export default function RaceTimer({ time, startTimer, resetTimer, participant, t
           </div>
           <div className='text-md flex items-center'>
           <Users className='mr-1' size={16} />
-            {` Participants:${participant || 0}`}
+            {` Participants: ${participant || 0}`}
           </div>
         </div>
         <div className='text-center text-xs font-semibold'>

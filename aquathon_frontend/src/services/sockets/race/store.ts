@@ -16,15 +16,21 @@ export interface SocketState {
   resetTime: (id: string) => void;
   startTime: (id: string) => void;
   trackTime: ({ ...props }: trackTimeProp) => void;
+  assignStamp: ({ ...props }: trackTimeProp) => void;
   resetTrackTime: ({ ...props }: trackTimeProp) => void;
+  unassignedStamp: ({ ...props }: trackTimeProp) => void;
   disconnect: () => void;
 }
 
 type trackTimeProp = {
+  _id?:string,
   raceId: string;
   segmentId: string;
-  participantId: string;
+  participantId?: string;
   bib?: number;
+  stampTime?:Date;
+  stampId?:string;
+  status?: string;
 };
 
 interface RaceState {
@@ -60,6 +66,14 @@ export const createRealTimeRaceStore = () => {
   const resetTrackTime = (payload: trackTimeProp) => {
     socket.emit('resetTrackTime', payload);
   };
+
+  const unassignedStamp = (payload: trackTimeProp) => {
+    socket.emit('unassignedStamp', payload);
+  };
+
+  const assignStamp = (payload: trackTimeProp) => {
+    socket.emit('assignStamp', payload);
+  };
   const subscribe = (id: string) => {
     socket.emit('subscribe', id);
   };
@@ -83,7 +97,9 @@ export const createRealTimeRaceStore = () => {
       startTime,
       disconnect,
       trackTime,
-      resetTrackTime
+      resetTrackTime,
+      unassignedStamp,
+      assignStamp
     }),
   );
   return store;

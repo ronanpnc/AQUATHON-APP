@@ -1,10 +1,23 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@radix-ui/react-popover';
-import { ChevronLeft, EllipsisVertical, LayoutDashboard, Settings, Timer, Trophy, UsersRound } from 'lucide-react';
+import {
+  ChevronLeft,
+  EllipsisVertical,
+  LayoutDashboard,
+  Settings,
+  Share,
+  Timer,
+  Trophy,
+  UsersRound,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React, { useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+import { DeleteRaceButton } from '../race/DeleteRaceButton';
+import { Button } from '../ui/button';
 
 // Define tab type
 type Tab = {
@@ -14,22 +27,38 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
-  {  label: 'Participants', Icon: <UsersRound />, path: '/participants' },
-  {  label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
-  {  label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
-  {  label: 'Settings', Icon: <Settings /> ,path:'/settings' },
-  {  label: 'Results', Icon: <Trophy />,path:'/results' },
+  { label: 'Participants', Icon: <UsersRound />, path: '/participants' },
+  { label: 'Time Tracking', Icon: <Timer />, path: '/time-tracking' },
+  { label: 'Dashboard', Icon: <LayoutDashboard />, path: '/dashboard' },
+  { label: 'Settings', Icon: <Settings />, path: '/settings' },
+  { label: 'Results', Icon: <Trophy />, path: '/results' },
 ];
-const checkPathname = (url: string): string => {
-    const path = url.substring(url.lastIndexOf('/') + 1);
-    return "/"+path;
-}
 
-export function RaceDetailsNav({ raceId, title }: { raceId: string; title: string }) {
+const checkPathname = (url: string): string => {
+  const path = url.substring(url.lastIndexOf('/') + 1);
+  return '/' + path;
+};
+
+export function RaceDetailsNav({
+  raceId,
+  title,
+  shareableLink,
+}: {
+  raceId: string;
+  title: string;
+  shareableLink: string;
+}) {
   const [activeTab, setActiveTab] = useState(checkPathname(window.location.pathname));
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <>
-      <div className='flex flex-col sticky top-0'>
+      <div className='flex flex-col sticky top-0 z-50'>
         <Header raceId={raceId} title={title} />
         <TabNavigation tabs={tabs.slice(0, 3)} activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
@@ -39,7 +68,7 @@ export function RaceDetailsNav({ raceId, title }: { raceId: string; title: strin
 
 function Header({ raceId, title }: { raceId: string; title: string }) {
   return (
-    <nav className='flex items-center justify-between p-4  bg-primary-purple text-white'>
+    <nav className='flex items-center justify-between p-4 bg-primary-purple text-white'>
       <div className='flex items-center'>
         <BackButton />
         <h1 className='text-xl font-semibold ml-4'>{title}</h1>
@@ -61,6 +90,13 @@ function BackButton() {
 
 function MoreButton({ raceId }: { raceId: string }) {
   const pathname = usePathname();
+  const [copied, setCopied] = useState(false);
+  const shareableLink = `${window.location.origin}/shared/${raceId}`;
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Popover>
@@ -70,17 +106,26 @@ function MoreButton({ raceId }: { raceId: string }) {
         </button>
       </PopoverTrigger>
       <PopoverContent className='border border-gray-300 bg-white rounded-md -translate-x-5'>
-        <div className=' w-40'>
+        <div className='w-40'>
           {tabs.slice(-2).map((tab) => (
             <Link key={tab.path} href={`/races/${raceId}/${tab.path}`} className='block'>
               <div
-                className={`flex items-center text-black hover:bg-gray-100 w-full px-3 py-2 rounded ${pathname.includes(tab.path as string) ? 'bg-gray-100' : ''}`}
+                className={`flex items-center text-black hover:bg-gray-100 w-full px-4 py-2 rounded ${pathname.includes(tab.path as string) ? 'bg-gray-100' : ''}`}
               >
                 {tab.Icon}
                 <p className='ml-5'>{tab.label}</p>
               </div>
             </Link>
           ))}
+          {/* <CopyToClipboard text={shareableLink} onCopy={handleCopy}> */}
+            <Button className='text-black bg-white hover:bg-gray-100  w-full block'>
+              <div className='flex'>
+                <Share className='mr-2' />
+                <span className='ml-3'>{copied ? 'Copied!' : 'Copy Link'}</span>{' '}
+              </div>
+            </Button>
+          {/* </CopyToClipboard> */}
+          <DeleteRaceButton raceId={raceId} />
         </div>
       </PopoverContent>
     </Popover>
@@ -98,7 +143,7 @@ function TabNavigation({ tabs, activeTab, setActiveTab }: TabNavigationProps) {
     setActiveTab(id);
   };
   return (
-    <div className='scrollbar-hide bg-secondary-purple'>
+    <div className='overflow-x-auto scrollbar-hide w-screen bg-secondary-purple'>
       <div className='grid grid-cols-3'>
         {tabs.map((tab) => (
           <TabButton

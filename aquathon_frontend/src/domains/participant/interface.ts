@@ -1,3 +1,5 @@
+import { ITimeTracking } from "../race/interface";
+
 export interface Participant {
   _id: string;
   raceId?: string;
@@ -9,6 +11,7 @@ export interface Participant {
   dateOfBirth: string;
   school: string;
   colour: string;
+  timeTracking: ITimeTracking;
 }
 
 export type CreateParticipantData = Omit<Participant, '_id'>;

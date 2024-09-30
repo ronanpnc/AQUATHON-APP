@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CheckIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -21,7 +21,19 @@ const formSchema = z.object({
   lastName: z.string().min(1, 'This field is required.'),
   bib: z.number().min(1, 'This field is required.'),
   gender: z.string().min(1, 'This field is required.'),
-  dateOfBirth: z.string().min(1, 'This field is required.'),
+  dateOfBirth: z
+    .string()
+    .min(1, 'This field is required.')
+    .refine(
+      (date) => {
+        const today = new Date();
+        const dob = new Date(date);
+        return dob <= today;
+      },
+      {
+        message: 'Date of birth cannot be in the future.',
+      },
+    ),
   school: z.string().min(1, 'This field is required.'),
   color: z.string().optional(),
 });
@@ -37,7 +49,7 @@ export interface CreateParticipantFormProps {
 export default function CreateParticipantForm() {
   const [colorState, setColor] = useState<string>('');
   const param = useParams();
- // const router = useRouter();
+ const router = useRouter();
   const createParticipantMutation = useCreateParticipant();
 
   const form = useForm<FormValues>({
@@ -72,11 +84,10 @@ export default function CreateParticipantForm() {
           toast({
             title: 'Participant created successfully',
             description: 'Your new participant has been added.',
-
           });
           form.reset({});
-          setColor("")
-          //router.push('/participants');
+          setColor('');
+          router.back();
         },
         onError: () => {
           toast({
@@ -94,9 +105,11 @@ export default function CreateParticipantForm() {
     setColor(color);
   };
 
+  const todayDate = new Date().toISOString().split('T')[0];
+
   return (
     <main className='flex h-screen w-full justify-center p-8'>
-      <Form {...form} key={form.watch("bib")}>
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className='max-w-md w-full flex flex-col gap-4'>
           <FormField
             control={form.control}
@@ -133,7 +146,15 @@ export default function CreateParticipantForm() {
               <FormItem>
                 <FormLabel>Bib</FormLabel>
                 <FormControl>
-                  <Input type='number' {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                  <Input
+                    type='number'
+                    {...field}
+                    maxLength={3}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 3);
+                      field.onChange(Number(value));
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -169,7 +190,24 @@ export default function CreateParticipantForm() {
               <FormItem>
                 <FormLabel>Date of Birth</FormLabel>
                 <FormControl>
-                  <Input type='date' {...field} />
+                  <Input
+                    type='date'
+                    {...field}
+                    max={todayDate}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const dob = new Date(value);
+                      if (dob > new Date()) {
+                        form.setError('dateOfBirth', {
+                          type: 'manual',
+                          message: 'Date of birth cannot be in the future.',
+                        });
+                      } else {
+                        form.clearErrors('dateOfBirth');
+                        field.onChange(e);
+                      }
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

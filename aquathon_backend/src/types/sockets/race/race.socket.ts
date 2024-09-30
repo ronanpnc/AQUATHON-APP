@@ -15,9 +15,11 @@ export interface ServerToClientEvents {
 
   // race start time update
   startTimeChanged :(value) => void;
-
   // update participant pool
   poolChanged :(value) => void;
+  // update 2-step pool
+  stampPoolChanged :(value) => void;
+  error :(e:Error) => void;
 }
 
 export interface ClientToServerEvents {
@@ -26,6 +28,8 @@ export interface ClientToServerEvents {
   resetTime: (value) => void;
   trackTime: (value: setTrackingProp) => void;
   resetTrackTime: (value: setTrackingProp) => void;
+  unassignedStamp: (value: setTrackingProp) => void;
+  assignStamp: (value: setTrackingProp) => void;
 }
 
 export interface InterServerEvents {
