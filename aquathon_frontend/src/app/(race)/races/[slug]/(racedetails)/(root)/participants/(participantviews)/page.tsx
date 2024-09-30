@@ -38,7 +38,7 @@ export default function MyParticipantPage() {
 const EmptyDataDisplay = () => {
   return (
     <div className='relative'>
-      <Image src='/assets/icons/ic_empty_list Background Removed.png' alt='Description' className='w-full' />{' '}
+      <img src='/assets/icons/ic_empty_list Background Removed.png' alt='Description' className='w-full' />{' '}
       <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center'>
         <span className='text-xl font-semibold'>
           Empty List!
