@@ -44,7 +44,7 @@ const EmptyDataDisplay = () => {
           Empty List!
           <br />
         </span>
-        You have no participants at <br /> the moment.
+        You have no participants at <br /> the moment
       </div>
     </div>
   );
