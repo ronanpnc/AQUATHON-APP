@@ -4,7 +4,8 @@ import { Race } from '../models/raceModel'
 import { ISegment } from '../models/segmentModel'
 import { handleMongooseError } from '../utils/mongooseError'
 import { getUnassignedTrackTime } from './timeTrackingService'
-    //NOTE: temporary added
+import { IParticipant } from '../models/participantModel'
+//NOTE: temporary added
 
 export async function getAllSegments(raceId: string): Promise<ISegment[]> {
   try {
@@ -15,16 +16,21 @@ export async function getAllSegments(raceId: string): Promise<ISegment[]> {
   }
 }
 
-export async function getSegment(raceId: string, segmentId:string): Promise<ISegment> {
+export async function getSegment(
+  raceId: string,
+  segmentId: string
+): Promise<ISegment> {
   try {
-    const segments = await Race.findOne({ _id: raceId });
-    return segments.segments.find((seg) => seg.id === segmentId);
+    const segments = await Race.findOne({ _id: raceId })
+    return segments.segments.find((seg) => seg.id === segmentId)
   } catch (error) {
     throw handleMongooseError(error)
   }
 }
 
-
+interface IParticipantWithTime extends Omit<IParticipant, 'timeTracking'> {
+  stampTime: Date | null
+}
 
 // with different collection
 
@@ -33,58 +39,33 @@ export async function getParticipantsBySegment(
   segmentId: string
 ) {
   try {
-    const result = await Race.aggregate([
-      // Match the specific race
-      { $match: { _id: new mongoose.Types.ObjectId(raceId) } },
+    const race = await Race.findById(new mongoose.Types.ObjectId(raceId), {
+      segments: 1,
+      participants: 1
+    }).lean()
+    const index = 1;
+    const targetSegment = race.segments[index]
+    const previouseSegment: ISegment | null =
+      index !== 0 ? race.segments[index - 1] : null
+    const unassignedTime = await getUnassignedTrackTime(raceId, segmentId)
 
-      // Unwind participants array
-      { $unwind: '$participants' },
-
-      // Project the desired fields and extract stampTime for the specific segment
-      {
-        $project: {
-          _id: { $toString: '$participants._id' },
-          bib: '$participants.bib',
-          firstName: '$participants.firstName',
-          lastName: '$participants.lastName',
-          colour: '$participants.colour',
-          stampTime: {
-            $arrayElemAt: [
-              {
-                $filter: {
-                  input: '$participants.timeTrackings',
-                  as: 'tracking',
-                  cond: {
-                    $eq: [
-                      '$$tracking.segmentId',
-                      new mongoose.Types.ObjectId(segmentId)
-                    ]
-                  }
-                }
-              },
-              0
-            ]
-          }
-        }
-      },
-      {
-        $project: {
-          _id: 1,
-          bib: 1,
-          firstName: 1,
-          lastName: 1,
-          colour: 1,
-          stampTime: '$stampTime.stampTime', // Extract the actual timestamp value
-        }
-      },
-      { $sort : { bib: 1} }
-      // Extract totalCompleted from the filtered segment object
-    ])
-
-    //NOTE: add 2 temporary added
-    const segment = await getSegment(raceId, segmentId);
-    const unassignedTime = await getUnassignedTrackTime(raceId, segmentId);
-    return { participants:result,segment, unassignedTime}
+    if (previouseSegment) {
+      const ValidParticipants = race.participants.filter(
+        (elem) =>
+          elem.timeTrackings[index - 1]?.segmentId == previouseSegment.id
+      ) as IParticipantWithTime[]
+      const result = ValidParticipants.map((elem) => ({
+        ...elem,
+        stampTime: elem.timeTrackings[index]?.stampTime || null
+      }))
+      return { participants: result, segment: targetSegment, unassignedTime }
+    } else {
+      const result = race.participants.map((elem) => ({
+        ...elem,
+        stampTime: elem.timeTrackings[index]?.stampTime || null
+      }))
+      return { participants: result, segment: targetSegment, unassignedTime }
+    }
   } catch (error) {
     console.error('Error retrieving participants:', error)
     throw error
