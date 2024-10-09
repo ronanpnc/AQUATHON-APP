@@ -38,10 +38,12 @@ export interface ISegment extends Document {
   timeTrackId?: string[]
   status?:string,
   isShareable?: boolean
+  index?: number;
 }
 
 const SegmentSchema = new Schema<ISegment>({
   name: String,
+  index : Number,
   type: {
     type: String,
     required: true
