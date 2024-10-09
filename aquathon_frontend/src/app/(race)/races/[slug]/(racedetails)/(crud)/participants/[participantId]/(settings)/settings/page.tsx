@@ -37,7 +37,7 @@ export default function RaceSettingsPage({ params }: { params: { slug: string, p
             Edit Race
           </Button>
         </Link>
-        <DeleteParticipantButton raceId={race._id} participantId={params.participantId}/>
+        <DeleteParticipantButton raceId={race._id as string} participantId={params.participantId}/>
       </div>
     </div>
   );

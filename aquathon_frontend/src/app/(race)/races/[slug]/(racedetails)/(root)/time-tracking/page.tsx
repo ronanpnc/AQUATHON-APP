@@ -16,18 +16,12 @@ import { RaceRealTimeContext } from '@/services/sockets/race/store';
 import { queryClient } from '@/utils/providers/ReactQueryProvider';
 
 export default function RaceDetailPage() {
-  const [copied, setCopied] = useState(false);
   const id = useParams().slug;
   const race = useRace(id as string);
   const socketContext = useContext(RaceRealTimeContext);
   const raceSocket = useStore(socketContext!, (state) => state);
-  const shareableLink = `${window.location.origin}/shared/${id}`;
   const [time, setTime] = useState<Date | null>(null);
 
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
   const startTime = () => {
     raceSocket.startTime(id as string);
   };

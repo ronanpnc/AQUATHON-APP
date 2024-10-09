@@ -46,6 +46,7 @@ export default function TrackingPage() {
   const updater = (nextData?: ITimeTrackingSocket) => {
     queryClient.setQueryData(['segments', segmentId], (oldData?: SegmentTrackParticipant | undefined) => {
       const arr = [...(oldData?.participants || [])];
+      const unassignedTimearr = [...(oldData?.participants || [])];
       const index = _.findIndex(arr, { _id: nextData?.participantId });
 
       if (nextData?.status === 'reset') {
@@ -56,7 +57,8 @@ export default function TrackingPage() {
       if (index !== -1 && nextData?.stampTime !== undefined) {
         // Create a new array with the updated participant
         const updatedArr = arr.map((item, idx) => (idx === index ? { ...item, stampTime: nextData.stampTime } : item));
-        return { ...oldData, participants: [...updatedArr] };
+        const updatedArrUnassinged  = unassignedTimearr.filter((item) => item.stampId !== nextData.stampId);
+        return { ...oldData, participants: [...updatedArr],unassignedTime: [...updatedArrUnassinged]  };
       }
       return oldData; // Return the old array if no update occurs
     });
@@ -66,9 +68,8 @@ export default function TrackingPage() {
     queryClient.setQueryData(['segments', segmentId], (oldData?: SegmentTrackParticipant | undefined) => {
       const arr = [...(oldData?.unassignedTime || [])];
       if (nextData?.status === 'delete') {
-        // Create a new array with the updated participant
-        const index = _.findIndex(arr, { _id: nextData?._id });
-        const updatedArr = arr.map((item, idx) => (idx === index ? { ...item, stampTime: null } : item));
+        const updatedArr = arr.filter((item) => item.stampId !== nextData.stampId);
+        console.log(updatedArr);
         return { ...oldData, unassignedTime: [...updatedArr] };
       }
       if (nextData?.stampTime !== undefined) {
@@ -77,7 +78,10 @@ export default function TrackingPage() {
           ...oldData,
           unassignedTime: [
             ...(oldData?.unassignedTime || []),
-            { raceId: nextData.raceId, segmentId: nextData.segmentId, stampTime: nextData.stampTime, stampId:nextData.stampId },
+            {
+              stampTime: nextData.stampTime,
+              stampId: nextData._id,
+            },
           ],
         };
       }
@@ -99,22 +103,22 @@ export default function TrackingPage() {
     });
   };
 
-  const assignTime = (bib: number, stampTime: Date, stampId:string) => {
+  const assignTime = (bib: number, stampTime: Date, stampId: string) => {
     raceSocket.assignStamp({
       raceId: slug as string,
       segmentId: segmentId as string,
       participantId: querySegment.data?.participants.find((item) => item.bib === bib)?._id,
       stampTime: stampTime,
-      stampId:stampId ,
+      stampId: stampId,
       bib: bib,
     });
   };
   const deleteUnassignedTime = (stampId: string) => {
     raceSocket.unassignedStamp({
-      stampId:stampId,
+      stampId: stampId,
       raceId: slug as string,
       segmentId: segmentId as string,
-      status: "delete"
+      status: 'delete',
     });
   };
 
@@ -155,9 +159,9 @@ export default function TrackingPage() {
           ) : (
             <TwoStepPanel
               twoStepAction={{
-                  deleteUnassigned : deleteUnassignedTime,
-                  deleteAssigned: onResetTrackTime,
-                  assignTime: assignTime,
+                deleteUnassigned: deleteUnassignedTime,
+                deleteAssigned: onResetTrackTime,
+                assignTime: assignTime,
               }}
               participants={querySegment.data?.participants}
               unassignedStamp={querySegment.data?.unassignedTime}

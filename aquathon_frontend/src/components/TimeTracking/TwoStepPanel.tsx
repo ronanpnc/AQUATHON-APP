@@ -68,7 +68,7 @@ export const TwoStepPanel = ({
   };
 
   return (
-    <div ref={containerRef} className='block w-full px-5 overflow-y-auto h-96 bg-red-50'>
+    <div ref={containerRef} className='block w-full px-5 overflow-y-auto h-96 pt-2'>
       {stampsState?.map((item) => (
         <TimeStampCard
           twoStepAction={twoStepAction}

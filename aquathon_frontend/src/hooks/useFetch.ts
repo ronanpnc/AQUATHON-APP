@@ -11,7 +11,7 @@ export const fetchData = async <T>(url: string): Promise<T> => {
   return response.json();
 };
 
-export const useFetch = <T>(queryKey: string | string[], url: string, config?:UseQueryOptions<T>) => {
+export const useFetch = <T>(queryKey: string | string[], url: string, config?:Partial<UseQueryOptions<T>>) => {
   return useQuery<T, Error>({
     ...config,
     queryKey:  typeof queryKey === "string" ? [queryKey]: queryKey,

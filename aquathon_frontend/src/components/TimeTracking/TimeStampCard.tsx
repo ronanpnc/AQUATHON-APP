@@ -33,7 +33,6 @@ const TimeStampCard: React.FC<TimeStampCardProps> = ({ startTime, stamp, check, 
       twoStepAction.deleteAssigned(stamp._id as string, stamp.bib as number);
     } else {
       if (stamp.stampTime !== null && stamp.stampTime !== undefined) {
-        console.log(stamp.stampId);
         twoStepAction.deleteUnassigned(stamp.stampId as string);
       }
     }

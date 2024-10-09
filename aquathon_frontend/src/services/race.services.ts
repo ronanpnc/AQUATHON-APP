@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 
 import { useFetch } from '@/hooks/useFetch';
 
@@ -20,9 +20,9 @@ export const useRaceList = (id?: string) => {
 };
 
 // Fetch a single race by ID
-export const useRace = (id: string) => {
+export const useRace = (id: string, config?: UseQueryOptions<Race>) => {
   const url = `${API_BASE_URL}/races/${id}`;
-  return useFetch<Race>(['race',id], url);
+  return useFetch<Race>(['race',id], url,config);
 }
 
 // Fetch a single race by ID

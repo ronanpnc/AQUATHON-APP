@@ -4,7 +4,8 @@ import { Race } from '../models/raceModel'
 import { ISegment } from '../models/segmentModel'
 import { handleMongooseError } from '../utils/mongooseError'
 import { getUnassignedTrackTime } from './timeTrackingService'
-    //NOTE: temporary added
+import { IParticipant } from '../models/participantModel'
+//NOTE: temporary added
 
 export async function getAllSegments(raceId: string): Promise<ISegment[]> {
   try {
@@ -15,15 +16,22 @@ export async function getAllSegments(raceId: string): Promise<ISegment[]> {
   }
 }
 
-export async function getSegment(raceId: string, segmentId:string): Promise<ISegment> {
+export async function getSegment(
+  raceId: string,
+  segmentId: string
+): Promise<ISegment> {
   try {
-    const segments = await Race.findOne({ _id: raceId });
-    return segments.segments.find((seg) => seg.id === segmentId);
+    const segments = await Race.findOne({ _id: raceId })
+    return segments.segments.find((seg) => seg.id === segmentId)
   } catch (error) {
     throw handleMongooseError(error)
   }
 }
 
+interface IParticipantWithTime extends Omit<IParticipant, 'timeTracking'> {
+  stampTime: Date | null
+  previouseTime:Date | null
+}
 
 
 // with different collection
@@ -33,13 +41,11 @@ export async function getParticipantsBySegment(
   segmentId: string
 ) {
   try {
-    const result = await Race.aggregate([
+   const result = await Race.aggregate<IParticipantWithTime>([
       // Match the specific race
       { $match: { _id: new mongoose.Types.ObjectId(raceId) } },
-
       // Unwind participants array
       { $unwind: '$participants' },
-
       // Project the desired fields and extract stampTime for the specific segment
       {
         $project: {
@@ -75,12 +81,12 @@ export async function getParticipantsBySegment(
           lastName: 1,
           colour: 1,
           stampTime: '$stampTime.stampTime', // Extract the actual timestamp value
+          previouseTime: 1,
         }
       },
       { $sort : { bib: 1} }
       // Extract totalCompleted from the filtered segment object
     ])
-
     //NOTE: add 2 temporary added
     const segment = await getSegment(raceId, segmentId);
     const unassignedTime = await getUnassignedTrackTime(raceId, segmentId);

@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, UseQueryOptions } from '@tanstack/react-query';
 
 import { useFetch } from '@/hooks/useFetch';
 
 import { CreateParticipantData, Participant, UpdateParticipantData } from '@/domains/participant/interface';
+import { IDashboard } from '@/domains/race/interface';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -106,8 +107,8 @@ export const useDeleteParticipant = () => {
     },
   });
 }
-export const useDashboard = (raceId:string) => {
+export const useDashboard = (raceId:string, config?:UseQueryOptions<IDashboard> ) => {
   const url = `${API_BASE_URL}/races/${raceId}/dashboard`;
-  return useFetch<Participant>(["dashboard", raceId], url);
+  return useFetch<IDashboard>(["dashboard", raceId], url, config);
 
 };;

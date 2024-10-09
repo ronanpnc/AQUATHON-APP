@@ -1,5 +1,7 @@
 import { PropsWithChildren } from 'react';
 
+import { Participant } from '../participant/interface';
+
 // Enums
 export enum RaceStatus {
   Finished = 'finished',
@@ -85,6 +87,14 @@ export interface RaceFormData extends Omit<Race, '_id'> {
   segments: ISegment[];
 }
 
+
+export interface ParticipantStat extends Participant {
+        segmentCount: number
+}
+export interface IDashboard extends Race {
+    leaderboard: ParticipantStat[];
+}
+
 // Constants
 export const segmentTypes = [
   { value: 'swimming', label: 'Swimming' },
@@ -95,3 +105,4 @@ export const segmentTypes = [
 
 // Type for segment types
 export type SegmentType = (typeof segmentTypes)[number]['value'];
+

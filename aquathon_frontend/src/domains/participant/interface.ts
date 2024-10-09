@@ -11,7 +11,7 @@ export interface Participant {
   dateOfBirth: string;
   school: string;
   colour: string;
-  timeTracking: ITimeTracking;
+  timeTrackings: ITimeTracking[];
 }
 
 export type CreateParticipantData = Omit<Participant, '_id'>;

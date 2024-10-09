@@ -19,8 +19,6 @@ interface SegmentsListProps {
 
 export const SegmentSchema = z.object({
   type: z.string(),
-  mode: z.string(),
-  timeTrackId: z.array(z.string()),
 });
 export type Segment = z.infer<typeof SegmentSchema>;
 export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
@@ -35,7 +33,7 @@ export const SegmentsList = forwardRef(({ form }: SegmentsListProps, ref) => {
   }));
 
   const addSegment = () => {
-    append({ mode: '1-step', type: 'swimming', timeTrackId: [] });
+    append({ type: 'swimming' });
   };
 
   const onDragEnd = (value:DropResult) => {

@@ -34,7 +34,6 @@ import { db } from '../configs/db'
 export interface ISegment extends Document {
   name?: string
   type: string
-  mode: string
   totalCompleted: number
   timeTrackId?: string[]
   status?:string,
@@ -44,10 +43,6 @@ export interface ISegment extends Document {
 const SegmentSchema = new Schema<ISegment>({
   name: String,
   type: {
-    type: String,
-    required: true
-  },
-  mode: {
     type: String,
     required: true
   },
